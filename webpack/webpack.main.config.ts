@@ -2,6 +2,7 @@ import type { Configuration } from 'webpack';
 
 import { rules } from './webpack.rules';
 import { plugins } from './webpack.plugins';
+const path = require('path');
 
 export const mainConfig: Configuration = {
   /**
