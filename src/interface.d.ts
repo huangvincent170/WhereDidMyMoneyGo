@@ -1,5 +1,5 @@
 import { Dirent } from "original-fs";
-import { Transaction } from "./transaction";
+import { Transaction } from "./class/transaction";
 
 export interface IElectronAPI {
     // openDialogSelectDir: () => Promise<string>,

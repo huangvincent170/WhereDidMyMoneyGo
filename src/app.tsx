@@ -1,8 +1,7 @@
 import { createRoot } from 'react-dom/client';
 import TransactionsView from './components/transactions-view';
-import { Dirent } from 'original-fs';
 import { useState } from 'react';
-import { Transaction } from './transaction';
+import { Transaction } from './class/transaction';
 
 function App() {
     const [rowDatas, setRowData] = useState<Transaction[]>(null);

@@ -1,9 +1,8 @@
 import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import "ag-grid-community/styles/ag-theme-quartz.css";
-import { useCallback, useRef, useState } from 'react';
-import { Transaction } from '../transaction';
-import { GridOptions, RowSelectedEvent } from 'ag-grid-community';
+import { useState } from 'react';
+import { Transaction } from '../class/transaction';
 
 export default function TransactionsView(props: {transactions: Transaction[]}) {
 
