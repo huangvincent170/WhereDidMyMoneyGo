@@ -5,6 +5,12 @@ import { Transaction } from './class/transaction';
 import { Source } from './class/source';
 import localStorage = require('local-storage');
 import SourcesView from './components/sources-view';
+import {
+  Route,
+  HashRouter,
+  Routes,
+} from "react-router-dom";
+import SidebarNav from "./components/sidebar-nav";
 
 function App() {
     const [rowDatas, setRowData] = useState<Transaction[]>(null);
@@ -15,17 +21,25 @@ function App() {
         setSourceData(storedSourceData);
     }
 
-    async function onClickOpenFile() {
-        const transactions: Transaction[] = await window.electronAPI.handleOpenDialogReadCsvs();
-        setRowData(transactions);
-    }
+    // async function onClickOpenFile() {
+    //     const transactions: Transaction[] = await window.electronAPI.handleOpenDialogReadCsvs();
+    //     setRowData(transactions);
+    // }
 
-    return <div>
-        <SourcesView sources={sourceData} setSourceData={setSourceData}/>
-        <button type="button" id="btn" onClick={onClickOpenFile}>Open a File</button>
-        File path: <strong id="filePath"></strong>
-        <TransactionsView transactions={rowDatas}/>
-    </div>;
+    // return <div>
+    //     <SourcesView sources={sourceData} setSourceData={setSourceData}/>
+    //     <button type="button" id="btn" onClick={onClickOpenFile}>Open a File</button>
+    //     File path: <strong id="filePath"></strong>
+    //     <TransactionsView transactions={rowDatas}/>
+    // </div>;
+
+    return <HashRouter>
+    <SidebarNav/>
+    <Routes>
+      <Route path="/" element={<TransactionsView transactions={rowDatas}/>}/>
+      <Route path="/sources" element={<SourcesView sources={sourceData} setSourceData={setSourceData}/>}/>
+    </Routes>
+  </HashRouter>;
 }
 
 const root = createRoot(document.body);

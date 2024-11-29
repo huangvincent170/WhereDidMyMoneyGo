@@ -1,6 +1,6 @@
 import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
-import "ag-grid-community/styles/ag-theme-quartz.css";
+import "ag-grid-community/styles/ag-theme-balham.css";
 import { useState } from 'react';
 import { Transaction } from '../class/transaction';
 
@@ -21,7 +21,7 @@ export default function TransactionsView(props: {transactions: Transaction[]}) {
 
     return (
     <div
-        className="ag-theme-quartz"
+        className="ag-theme-balham-dark"
         style={{ height: 500 }}
     >
         <AgGridReact<ITransactionDisplayColumns>
