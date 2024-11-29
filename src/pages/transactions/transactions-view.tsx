@@ -2,9 +2,9 @@ import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import "ag-grid-community/styles/ag-theme-balham.css";
 import { useState } from 'react';
-import { Transaction } from '../class/transaction';
+import { Transaction } from '../../classes/transaction';
 
-export default function TransactionsView(props: {transactions: Transaction[]}) {
+export default function TransactionsView(props: {transactionData: Transaction[]}) {
 
     // Column Definitions: Defines the columns to be displayed.
     const [colDefs, setColDefs]: [any, any] = useState([
@@ -25,7 +25,7 @@ export default function TransactionsView(props: {transactions: Transaction[]}) {
         style={{ height: 500 }}
     >
         <AgGridReact<ITransactionDisplayColumns>
-            rowData={props.transactions}
+            rowData={props.transactionData}
             columnDefs={colDefs}
         />
     </div>
