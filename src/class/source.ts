@@ -8,4 +8,16 @@ export class Source {
 
     // If true, amounts with a positive value represent debt, and negative represents credit.
     isDebt: boolean;
+
+    constructor(
+        path: string,
+        name: string,
+        fieldIndexMap: Record<string, number>,
+        isDebt: boolean
+    ) {
+        this.path = path;
+        this.name = name;
+        this.fieldIndexMap = fieldIndexMap;
+        this.isDebt = isDebt;
+    }
 }

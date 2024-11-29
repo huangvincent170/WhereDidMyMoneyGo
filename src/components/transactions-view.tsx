@@ -13,8 +13,7 @@ export default function TransactionsView(props: {transactions: Transaction[]}) {
         { field: "amount" },
     ]);
 
-    interface ITransaction {
-        // sourcePath: string;
+    interface ITransactionDisplayColumns {
         amount: number;
         date: Date;
         description: string;
@@ -25,7 +24,7 @@ export default function TransactionsView(props: {transactions: Transaction[]}) {
         className="ag-theme-quartz"
         style={{ height: 500 }}
     >
-        <AgGridReact<ITransaction>
+        <AgGridReact<ITransactionDisplayColumns>
             rowData={props.transactions}
             columnDefs={colDefs}
         />
