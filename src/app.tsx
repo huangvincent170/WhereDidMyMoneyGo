@@ -14,13 +14,18 @@ import SidebarNav from "./components/sidebar-nav";
 
 function App() {
     const [transactionsData, setTransactionsData] = useState<Transaction[]>(null);
-    const [sourceData, setSourceData] = useState<Source[]>(null);
 
+    // localStorage.clear();
     const storedSourceData: Source[] = JSON.parse(localStorage.get('source-data-config'));
     if (storedSourceData != null) {
-        setSourceData(storedSourceData);
+        console.log(storedSourceData);
     }
+    const [sourceData, setSourceData] = useState<Source[]>(storedSourceData);
 
+    function setAndStoreSourceData(sourceData: Source[]) {
+        setSourceData(sourceData);
+        localStorage.set('source-data-config', JSON.stringify(sourceData));
+    }
     // async function onClickOpenFile() {
     //     const transactions: Transaction[] = await window.electronAPI.handleOpenDialogReadCsvs();
     //     setRowData(transactions);
@@ -34,12 +39,19 @@ function App() {
     // </div>;
 
     return <HashRouter>
-    <SidebarNav/>
-    <Routes>
-      <Route path="/" element={<TransactionsView transactionData={transactionsData}/>}/>
-      <Route path="/sources" element={<SourcesView sourceData={sourceData} setSourceData={setSourceData}/>}/>
-    </Routes>
-  </HashRouter>;
+        <SidebarNav/>
+        <Routes>
+            <Route path="/" element={
+            <TransactionsView
+                transactionData={transactionsData}/>
+            }/>
+            <Route path="/sources" element={
+            <SourcesView
+                sourceData={sourceData}
+                setSourceData={(sourceData: Source[]) => setAndStoreSourceData(sourceData)}/>
+            }/>
+        </Routes>
+    </HashRouter>;
 }
 
 const root = createRoot(document.body);

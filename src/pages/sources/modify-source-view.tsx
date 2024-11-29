@@ -16,14 +16,15 @@ export default function ModifySourcesView(props: {
 
         // todo validate data
 
-        if (props.sourceData == null ||
-            props.sourceData.every(existing => existing.name != source.name && existing.path != source.path)) {
-            const newSourceData = props.sourceData == null ? [source] : props.sourceData.concat(source);
-            props.setSourceData(newSourceData);
-        } else {
+        if (props.sourceData != null &&
+            props.sourceData.some(existing => existing.name == source.name || existing.path == source.path)) {
             // todo user error
             console.log("source already exists!");
+            return;
         }
+
+        const newSourceData = props.sourceData == null ? [source] : props.sourceData.concat(source);
+        props.setSourceData(newSourceData);
     }
 
     // todo window modal for path

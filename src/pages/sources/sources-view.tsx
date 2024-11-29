@@ -6,7 +6,7 @@ import "ag-grid-community/styles/ag-theme-balham.css";
 import ModifySourcesView from "./modify-source-view";
 
 export default function SourcesView(props: {sourceData: Source[], setSourceData: Function}) {
-    // Column Definitions: Defines the columns to be displayed.
+    // todo set actual source columns
     const [colDefs, setColDefs]: [any, any] = useState([
         { field: "name" },
         { field: "path" },
@@ -21,19 +21,10 @@ export default function SourcesView(props: {sourceData: Source[], setSourceData:
         amountIdx: number;
     }
 
-    // const testRecord: Record<string, number> = {
-    //     amount: 0,
-    //     date: 2
-    // }
-
+    // todo make popup look nice
     function onClickAddSource() {
-        // const newSource = new Source("test1", "test2", testRecord, false, false);
-        // const newSource2 = new Source("test3", "test4", testRecord, false, false);
-        
-        // props.setSourceData([newSource, newSource2]);
         setShowModifySources(true);
     }
-
 
     return <div>
         <ModifySourcesView
