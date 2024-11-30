@@ -23,25 +23,17 @@ const SidebarData = [
 
 
 export default function SidebarNav() {
-  const [sidebarShown, setSidebarShown] = useState(false);
   return (
     <>
       <IconContext.Provider value={{ color: "undefined" }}>
-        <div className="navbar">
-          <Link to="#" className="menu-bars">
-            <FaIcons.FaBars onClick={() => setSidebarShown(!sidebarShown)} />
-          </Link>
-        </div>
-        <nav className={sidebarShown ? "nav-menu active" : "nav-menu"}>
-          <ul className="nav-menu-items" onClick={() => setSidebarShown(!sidebarShown)}>
-            <li className="navbar-toggle">
-              <Link to="#" className="menu-bars">
-                <AiIcons.AiOutlineClose />
-              </Link>
+        <nav className={"nav-menu"}>
+          <ul className="nav-menu-items">
+            <li className="nav-text">
+              <b>Where Did My Money Go?</b>
             </li>
             {SidebarData.map((item, index) => {
               return (
-                <li key={index} className={item.cName}>
+                <li key={index} className="nav-text">
                   <Link to={item.path}>
                     {item.icon}
                     <span>{item.title}</span>
