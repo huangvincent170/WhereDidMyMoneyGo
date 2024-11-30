@@ -13,35 +13,25 @@ import {
 import SidebarNav from "./components/sidebar-nav";
 
 function App() {
+    const [sourceData, setSourceData] = useState<Source[]>(null);
     const [transactionsData, setTransactionsData] = useState<Transaction[]>(null);
-
-    // localStorage.clear();
-    const storedSourceData: Source[] = JSON.parse(localStorage.get('source-data-config'));
-    if (storedSourceData != null) {
-        console.log(storedSourceData);
-    }
-    const [sourceData, setSourceData] = useState<Source[]>(storedSourceData);
 
     function setAndStoreSourceData(sourceData: Source[]) {
         setSourceData(sourceData);
         localStorage.set('source-data-config', JSON.stringify(sourceData));
     }
-    // async function onClickOpenFile() {
-    //     const transactions: Transaction[] = await window.electronAPI.handleOpenDialogReadCsvs();
-    //     setRowData(transactions);
-    // }
-
-    // return <div>
-    //     <SourcesView sources={sourceData} setSourceData={setSourceData}/>
-    //     <button type="button" id="btn" onClick={onClickOpenFile}>Open a File</button>
-    //     File path: <strong id="filePath"></strong>
-    //     <TransactionsView transactions={rowDatas}/>
-    // </div>;
 
     async function refreshTransactionData(sourceData: Source[]) {
-        const transactionData: Transaction[] = await window.electronAPI.handleReadDataFromSources(sourceData);
-        setTransactionsData(transactionData);
+        setTransactionsData(await window.electronAPI.handleReadDataFromSources(sourceData));
     }
+
+    window.electronAPI.onAppLoaded(async () => {
+        const storedSourceData: Source[] = JSON.parse(localStorage.get('source-data-config'));;
+        if (storedSourceData != null) {
+            setSourceData(storedSourceData);
+            await refreshTransactionData(storedSourceData);
+        }
+    });
 
     return <HashRouter>
         <SidebarNav/>
@@ -49,7 +39,7 @@ function App() {
             <Route path="/" element={
             <TransactionsView
                 transactionData={transactionsData}
-                refreshTransactionData={() => refreshTransactionData(sourceData)}/>
+                refreshTransactionData={async () => refreshTransactionData(sourceData)}/>
             }/>
             <Route path="/sources" element={
             <SourcesView

@@ -27,6 +27,10 @@ const createWindow = (): void => {
   mainWindow.maximize();
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
   mainWindow.webContents.openDevTools();
+
+  mainWindow.addListener('ready-to-show', () => {
+    mainWindow.webContents.send('appLoaded');
+  });
 };
 
 // IPC handlers
@@ -81,14 +85,14 @@ const createWindow = (): void => {
 // }
 
 // todo error handling
-async function handleReadDataFromSources(sources: Source[]): Promise<Transaction[]> {
+function handleReadDataFromSources(sources: Source[]): Transaction[] {
     let transactions: Transaction[] = [];
     for (var i = 0; i < sources.length; i++) {
       const source = sources[i];
       const dirEntries: Dirent[] = readdirSync(source.path, {withFileTypes: true})
         .filter((dirEnt: Dirent) => dirEnt.isFile());
-      const fileData: string[] = await Promise.all(dirEntries
-        .map(async dirEnt => await readFileSync(`${dirEnt.parentPath}/${dirEnt.name}`, 'utf-8')));
+      const fileData: string[] = dirEntries
+        .map(dirEnt => readFileSync(`${dirEnt.parentPath}/${dirEnt.name}`, 'utf-8'));
       const records: string[][] = fileData
         .map(data => parse(data, {bom: true, relax_quotes: true}))
         .reduce((acc, val) => acc.concat(val), []);
