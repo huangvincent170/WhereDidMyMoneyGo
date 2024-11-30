@@ -38,8 +38,8 @@ export class Source {
             Number(formDataMap.get('amountIdx') as string),
             Number(formDataMap.get('descriptionIdx') as string),
             Number(formDataMap.get('dateIdx') as string),
-            !Boolean(formDataMap.get('isDebt') as string),
-            !Boolean(formDataMap.get('hasHeader') as string),
+            Boolean(formDataMap.get('isDebt') as string),
+            Boolean(formDataMap.get('hasHeader') as string),
         );
     }
 }

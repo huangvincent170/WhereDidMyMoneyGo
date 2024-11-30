@@ -20,7 +20,9 @@ export default function TransactionsView(props: {transactionData: Transaction[]}
     }
 
     return (
-    <div
+        <div className="mainContent">
+        <div className="sourceViewContainer">
+        <div
         className="ag-theme-balham-dark"
         style={{ height: 500 }}
     >
@@ -29,5 +31,8 @@ export default function TransactionsView(props: {transactionData: Transaction[]}
             columnDefs={colDefs}
         />
     </div>
+        </div>
+        </div>
+    
     )
 }
