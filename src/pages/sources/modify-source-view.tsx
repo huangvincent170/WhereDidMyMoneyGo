@@ -38,7 +38,7 @@ export default function ModifySourcesView(props: {
             <label>Amount column index: <input name="amountIdx" /></label><br />
             <label>Is amount debt? <input type="checkbox" name="isDebt" /></label><br />
             <label>Date column index: <input name="dateIdx" /></label><br />
-            <label>Description column index: <input name="desciptionIdx" /></label><br />
+            <label>Description column index: <input name="descriptionIdx" /></label><br />
             <br />
             <button type="submit">Save Changes</button>
         </form>

@@ -38,12 +38,18 @@ function App() {
     //     <TransactionsView transactions={rowDatas}/>
     // </div>;
 
+    async function refreshTransactionData(sourceData: Source[]) {
+        const transactionData: Transaction[] = await window.electronAPI.handleReadDataFromSources(sourceData);
+        setTransactionsData(transactionData);
+    }
+
     return <HashRouter>
         <SidebarNav/>
         <Routes>
             <Route path="/" element={
             <TransactionsView
-                transactionData={transactionsData}/>
+                transactionData={transactionsData}
+                refreshTransactionData={() => refreshTransactionData(sourceData)}/>
             }/>
             <Route path="/sources" element={
             <SourcesView

@@ -1,19 +1,20 @@
-
 export class Transaction {
-    sourcePath: string;
-    amount: number;
+    sourceName: string;
     date: Date;
     description: string;
+    category: string;
+    amount: number;
 
     constructor(
-        sourcePath: string,
+        sourceName: string,
         amount: number,
         date: Date,
         description: string
     ) {
-        this.sourcePath = sourcePath;
-        this.amount = amount;
+        this.sourceName = sourceName;
         this.date = date;
         this.description = description;
+        this.category = "UNCATEGORIZED";
+        this.amount = amount;
     }
 }
