@@ -5,7 +5,7 @@ import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the 
 import "ag-grid-community/styles/ag-theme-balham.css";
 import ModifySourcesView from "./modify-source-view";
 
-export default function SourcesView(props: {sourceData: Source[], setSourceData: Function}) {
+export function SourcesView(props: {sourceData: Source[], setSourceData: Function}) {
     function actionCellRenderer() {
         // todo make look nice
         return <div>

@@ -7,7 +7,7 @@ export interface IElectronAPI {
     // readFile: (path: string) => Promise<string>,
     // readDir: (path: string) => Promise<Dirent[]>,
     // handleOpenDialogReadCsvs: () => Promise<Transaction[]>
-    handleReadDataFromSources: (sourceData: Source[]) => Promise<Transaction[]>,
+    readDataFromSources: (sourceData: Source[]) => Promise<Transaction[]>,
     onAppLoaded: (callback: Function) => void,
 }
   

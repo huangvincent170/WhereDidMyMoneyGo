@@ -4,7 +4,7 @@ import "ag-grid-community/styles/ag-theme-balham.css";
 import { useState } from 'react';
 import { Transaction } from '../../classes/transaction';
 
-export default function TransactionsView(props: {
+export function TransactionsView(props: {
     transactionData: Transaction[],
     refreshTransactionData: Function
 }) {
@@ -38,7 +38,10 @@ export default function TransactionsView(props: {
     }
 
     return <div className="mainContent">
-        <div className="sourceViewContainer">
+        <div className="transactionsViewContainer">
+            <div>
+                <div className="pageTitle"><b>Transactions</b></div>
+            </div>
             <div>
                 <button onClick={() => props.refreshTransactionData()}>refresh</button>
             </div>

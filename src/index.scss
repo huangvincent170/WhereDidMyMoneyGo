@@ -57,9 +57,19 @@ body {
     margin-right: 20px;
     margin-top: 40px;
     position: relative;
-    // display: flex;
     width: 100%;
     z-index: 1;
+}
+
+.analyticsViewContainer,
+.categoriesViewContainer,
+.rulesViewContainer,
+.transactionsViewContainer {
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-top: 40px;
+    position: relative;
+    width: 100%;
 }
 
 
@@ -175,3 +185,61 @@ align-items: center;
 span {
 margin-left: 16px;
 }
+
+
+
+
+// // category css
+// .inner-cell {
+//     // --ag-row-border-width: 0;
+//     --ag-borders: none;
+
+
+//     // --ag-row-border-style: solid;
+//     // --ag-row-border-width: 1px;
+//     // --ag-row-border-color: white;
+//     // --ag-row-border-color: #c05a5a;
+//     // height: calc(100% - 28px);
+//     // height: calc(100%);
+//     --ag-borders-secondary: none;
+//     // --ag-cell-horizontal-padding: 0;
+//     --ag-cell-horizontal-border: 0;
+//     --ag-header-height: 0;
+//     --ag-header-background-color: none;
+//     --ag-border-radius: 0;
+//     --ag-row-border-width: 0;
+// }
+
+// .outer-cell {
+//     --ag-borders: none;
+//     // --ag-borders-secondary: none;
+//     --ag-cell-horizontal-border: 0;
+//     // --ag-cell-horizontal-padding: 0;
+//     --ag-border-radius: 0;
+//     --ag-row-border-width: 0;
+//     // --ag-row-border-width: 0;
+//     // --ag-borders: none;
+//     // --ag-row-border-color: #c05a5a;
+//     // height: calc(100% - 28px);
+//     // height: calc(100%);
+// }
+
+// .notleftmost-cell {
+//     padding-left: 0;
+//     --ag-cell-horizontal-padding: 0;
+// }
+
+// .data-cell {
+//     height: 28px;
+//     display: flex;
+//     align-items: center;
+// }
+
+// .notleftmost-datacell {
+//     justify-content: right;
+// }
+
+// // .ag-center-cols-container {
+// //     height: 100% !important;
+// //     width: 100% !important;
+// // }

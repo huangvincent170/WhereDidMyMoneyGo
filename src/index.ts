@@ -112,7 +112,7 @@ function handleReadDataFromSources(sources: Source[]): Transaction[] {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   createWindow();
-  ipcMain.handle('handleReadDataFromSources', (_event, sources: Source[]) => handleReadDataFromSources(sources));
+  ipcMain.handle('readDataFromSources', (_event, sources: Source[]) => handleReadDataFromSources(sources));
   // ipcMain.handle('handleOpenDialogReadCsvs', handleOpenDialogReadCsvs);
   // ipcMain.handle('dialog:openDialogSelectDir', handleOpenDialogSelectDir);
   // ipcMain.handle('fs:readFile', (_event, path: string) => handleReadFile(path));
