@@ -22,26 +22,30 @@ function App() {
         localStorage.set('source-data-config', JSON.stringify(sourceData));
     }
 
+    function setAndStoreCategoryData(categoryData: Category[]) {
+        setCategoryData(categoryData);
+        localStorage.set('category-config', JSON.stringify(categoryData));
+    }
+
     async function refreshTransactionData(sourceData: Source[]) {
         setTransactionsData(await window.electronAPI.readDataFromSources(sourceData));
     }
 
-    // window.electronAPI.onAppLoaded(async () => {
-    //     const storedSourceData: Source[] = JSON.parse(localStorage.get('source-data-config'));;
-    //     if (storedSourceData != null) {
-    //         setSourceData(storedSourceData);
-    //         await refreshTransactionData(storedSourceData);
-    //         setCategoryData([]);
-    //     }
-    // });
-
     useEffect(() => {
         async function getDataAndRefreshAsync() {
-            const storedSourceData: Source[] = JSON.parse(localStorage.get('source-data-config'));;
+            const storedCategoryData: Category[] = JSON.parse(localStorage.get('category-config'));
+            if (storedCategoryData != null) {
+                setCategoryData(storedCategoryData);
+            } else {
+                setAndStoreCategoryData([]);
+            }
+
+            const storedSourceData: Source[] = JSON.parse(localStorage.get('source-data-config'));
             if (storedSourceData != null) {
                 setSourceData(storedSourceData);
                 await refreshTransactionData(storedSourceData);
-                setCategoryData([]);
+            } else {
+                setAndStoreSourceData([]);
             }
         };
 
@@ -67,7 +71,7 @@ function App() {
                 <CategoriesView
                     transactionData={transactionsData}
                     categoryData={categoryData}
-                    setCategoryData={setCategoryData}/>
+                    setCategoryData={setAndStoreCategoryData}/>
             }/>
             <Route path="/rules" element={
                 <RulesView/>

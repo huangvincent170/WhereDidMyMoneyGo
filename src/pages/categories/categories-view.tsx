@@ -36,7 +36,7 @@ export function CategoriesView(props: {transactionData: Transaction[], categoryD
 
         let displayedCategories: DisplayedCategory[] = [];
         for (const category of categories) {
-            const splitCategoryNames: string[] = category.getParentCategories();
+            const splitCategoryNames: string[] = Category.getParentCategories(category);
             let parentDisplayedCategoryChildren = displayedCategories;
             for (let i = 0; i < splitCategoryNames.length; i++) {
                 let curCategoryName = splitCategoryNames.slice(1, i+1).reduce((nameStr, subName) => nameStr + '/' + subName, splitCategoryNames[0]);

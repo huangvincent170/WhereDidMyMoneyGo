@@ -7,11 +7,12 @@ export class Category {
         this.amount = amount;
     }
 
-    getParentCategories(): string[] {
-        return this.id.split('/');
+    static getParentCategories(category: Category): string[] {
+        return category.id.split('/');
     }
-    getDisplayName(): string {
-        const categories = this.getParentCategories();
+
+    static getDisplayName(category: Category): string {
+        const categories = Category.getParentCategories(category);
         return categories[categories.length - 1];
     }
 }
