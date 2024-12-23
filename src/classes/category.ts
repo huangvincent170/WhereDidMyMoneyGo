@@ -1,10 +1,13 @@
+import { Transaction } from "./transaction";
+
+
 export class Category {
     id: string;
     amount: number;
 
-    constructor(id: string, amount: number) {
+    constructor(id: string) {
         this.id = id;
-        this.amount = amount;
+        this.amount = 0;
     }
 
     static getParentCategories(category: Category): string[] {
@@ -14,6 +17,21 @@ export class Category {
     static getDisplayName(category: Category): string {
         const categories = Category.getParentCategories(category);
         return categories[categories.length - 1];
+    }
+
+    static setCategoryAmounts(categories: Category[], transactions: Transaction[]) {
+        if (categories == null || transactions == null) {
+            return;
+        }
+
+        for (let transaction of transactions) {
+            for (let category of categories) {
+                if (transaction.category == category.id) {
+                    category.amount += transaction.amount;
+                    continue;
+                }
+            }
+        }
     }
 }
 

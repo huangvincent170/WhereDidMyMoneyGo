@@ -84,8 +84,11 @@ const createWindow = (): void => {
 //   return null;
 // }
 
-// todo error handling
 function handleReadDataFromSources(sources: Source[]): Transaction[] {
+    if (sources == null) {
+        return [];
+    }
+
     let transactions: Transaction[] = [];
     for (var i = 0; i < sources.length; i++) {
       const source = sources[i];
@@ -95,6 +98,7 @@ function handleReadDataFromSources(sources: Source[]): Transaction[] {
         .map(dirEnt => readFileSync(`${dirEnt.parentPath}/${dirEnt.name}`, 'utf-8'));
       const records: string[][] = fileData
         .map(data => parse(data, {bom: true, relax_quotes: true}))
+        .map(parsedData => parsedData.slice(source.hasHeader ? 1 : 0))
         .reduce((acc, val) => acc.concat(val), []);
       const sourceTransactions: Transaction[] = records.map(record => new Transaction(
         source.name,

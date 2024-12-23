@@ -76,8 +76,17 @@ body {
 .ag-theme-balham-dark {
     // --ag-background-color: $background-color-main;
     // --ag-background-color: white;
-    --ag-odd-row-background-color: $--ag-background-color;
+    // --ag-odd-row-background-color: $--ag-background-color;
 }
+
+// .rules-odd-row {
+//     background-color: #262c2e;
+//     // color: red;
+// }
+
+// .rules-even-row {
+//     background-color: #2d3436;
+// }
 
 .addSourceForm {
     display: inline-block;
@@ -99,6 +108,29 @@ body {
 }
 
 .addSource {
+    width: 35%;
+    height: 55%;
+    background-color: white;
+    border-radius: 25px;
+    padding: 20px 30px 20px 30px;
+}
+
+.addRuleViewContainerActive {
+    position: absolute;
+    z-index: 2;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(100, 100, 100, .5);
+}
+
+.addRuleViewContainerHidden {
+    display: none;
+}
+
+.addRule {
     width: 35%;
     height: 55%;
     background-color: white;
@@ -182,9 +214,9 @@ justify-content: flex-start;
 align-items: center;
 }
 
-span {
-margin-left: 16px;
-}
+// span {
+// margin-left: 16px;
+// }
 
 
 
@@ -243,3 +275,7 @@ margin-left: 16px;
 // //     height: 100% !important;
 // //     width: 100% !important;
 // // }
+
+.show-cell {
+    background-color: #ff0000;
+}

@@ -8,8 +8,6 @@ export function TransactionsView(props: {
     transactionData: Transaction[],
     refreshTransactionData: Function
 }) {
-
-    // Column Definitions: Defines the columns to be displayed.
     const [colDefs, setColDefs]: [any, any] = useState([
         {
             field: "date",
@@ -29,7 +27,6 @@ export function TransactionsView(props: {
         },
     ]);
 
-    //TODO
     interface ITransactionDisplayColumns {
         date: Date;
         description: string;

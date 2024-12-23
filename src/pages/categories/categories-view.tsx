@@ -6,14 +6,14 @@ import { Transaction } from "../../classes/transaction";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 export function CategoriesView(props: {transactionData: Transaction[], categoryData: Category[], setCategoryData: Function}) {
-    const testCategoryData: Category[] = [
-        new Category("Needs/Food/Chipotle", 111.11),
-        new Category("Needs/Food/Other", 7),
-        new Category("Needs/Rent", 1234),
-        new Category("Wants/Video Games", 0),
-        new Category("Wants/Other", 0),
-        new Category("Misc", 123.45),
-    ]
+    // const testCategoryData: Category[] = [
+    //     new Category("Needs/Food/Chipotle", 111.11),
+    //     new Category("Needs/Food/Other", 7),
+    //     new Category("Needs/Rent", 1234),
+    //     new Category("Wants/Video Games", 0),
+    //     new Category("Wants/Other", 0),
+    //     new Category("Misc", 123.45),
+    // ]
 
     class DisplayedCategory {
         name: string;
@@ -116,7 +116,7 @@ export function CategoriesView(props: {transactionData: Transaction[], categoryD
 
     function onCellEditingStopped(e: CellEditingStoppedEvent<DisplayedCategory>) {
         console.log(e);
-        if (e.newValue == "") {
+        if (e.newValue == "" || e.newValue == null) {
             console.log("name must be nonempty!");
             setDisplayedCategoryData(createDisplayedCategories(props.categoryData));
             return;
@@ -134,7 +134,7 @@ export function CategoriesView(props: {transactionData: Transaction[], categoryD
             return;
         }
 
-        props.setCategoryData(props.categoryData.concat([new Category(e.newValue, 0)]));
+        props.setCategoryData(props.categoryData.concat([new Category(e.newValue)]));
     }
 
     function onComponentStateChanged() {

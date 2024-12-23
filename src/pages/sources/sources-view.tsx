@@ -9,8 +9,8 @@ export function SourcesView(props: {sourceData: Source[], setSourceData: Functio
     function actionCellRenderer() {
         // todo make look nice
         return <div>
-            <button   data-action="edit" > edit  </button>
-            <button  data-action="delete" > delete </button>
+            <button data-action="edit" > edit  </button>
+            <button data-action="delete" > delete </button>
         </div>;
     }
 

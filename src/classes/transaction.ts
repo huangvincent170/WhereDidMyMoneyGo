@@ -9,12 +9,13 @@ export class Transaction {
         sourceName: string,
         amount: number,
         date: Date,
-        description: string
+        description: string,
+        category?: string,
     ) {
         this.sourceName = sourceName;
         this.date = date;
         this.description = description;
-        this.category = "UNCATEGORIZED";
+        this.category = category ?? "UNCATEGORIZED";
         this.amount = amount;
     }
 }
