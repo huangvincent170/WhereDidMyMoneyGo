@@ -30,7 +30,7 @@ export default function ModifySourcesView(props: {
 
     // todo window modal for path
     // todo make popup look nice
-    return (<div className="addSource" hidden={!props.showModifySources}>
+    return (<div className="addView" hidden={!props.showModifySources}>
         <form className="addSourceForm" method="post" onSubmit={handleSubmit}>
             <label>Source name: <input name="name" /></label><br />
             <label>Directory path: <input name="path" /></label><br />

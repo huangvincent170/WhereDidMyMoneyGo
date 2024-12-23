@@ -35,11 +35,11 @@ export function TransactionsView(props: {
     }
 
     return <div className="mainContent">
-        <div className="transactionsViewContainer">
-            <div>
-                <div className="pageTitle"><b>Transactions</b></div>
+        <div className="viewContainer">
+            <div className="pageTitle">
+                <h1>Transactions</h1>
             </div>
-            <div>
+            <div className="gridHeader">
                 <button onClick={() => props.refreshTransactionData()}>refresh</button>
             </div>
             <div className="ag-theme-balham-dark" style={{ height: 500 }}>

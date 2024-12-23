@@ -1,7 +1,8 @@
 import { Rule, Field, CheckOp, FieldToFieldType, ValidFieldTypeValidOps, RuleOpType, RuleOp, FieldType, SetRuleOp, SplitRuleOp, RuleTest } from "../../classes/rule";
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
+import { ModifyRuleCheck } from "./modify-rule-check";
 
-export default function ModifyRulesView(props: {
+export function ModifyRulesView(props: {
     showModifyRules: boolean,
     setShowModifyRules: Function,
     rulesData: Rule[],
@@ -121,23 +122,18 @@ export default function ModifyRulesView(props: {
 
     // todo window modal for path
     // todo make popup look nice
-    return (<div className="addRule" hidden={!props.showModifyRules}>
+    return (<div className="addView" hidden={!props.showModifyRules}>
         <form className="addRuleForm" method="post" onSubmit={handleSubmit}>
-            If&nbsp;
-            <FieldSelector
-                selectedField={checkField}
-                setSelectedField={setCheckField}/> 
-            <FieldOpSelector
-                field={checkField}
+            If all of the following conditions match:<br/>
+            <ModifyRuleCheck
+                checkField={checkField}
+                setCheckField={setCheckField}
                 checkOp={checkOp}
-                setCheckOp={setCheckOp}/>
-            <FieldValueInput
-                fieldType={checkField}
-                fieldValue={checkValue}
-                setFieldValue={setCheckValue}/> 
-            <button></button>
-            <br />
-            Then&nbsp;
+                setCheckOp={setCheckOp}
+                checkValue={checkValue}
+                setCheckValue={setCheckValue}/>
+            <br/>
+            Then perform the following actions:<br/>
             <RuleOpSelector
                 ruleOpType={ruleOpType}
                 setRuleOpType={setRuleOpType} /> 

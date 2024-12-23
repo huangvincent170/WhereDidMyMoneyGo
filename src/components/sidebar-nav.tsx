@@ -34,15 +34,14 @@ const SidebarData = [
 
 
 export function SidebarNav() {
-    return <nav className="nav-menu">
-        <ul className="nav-menu-items">
-            <li className="nav-title">
-                <b>Where Did My Money Go</b>
-            </li>
+    return <nav className="navMenu">
+        <ul>
+            <li className="navTitle">Where Did My Money Go</li>
             {SidebarData.map((item, index) => {
-                return <li key={index} className="nav-text">
+                return <li key={index} className="navText">
                     <Link to={item.path}>
                         {item.icon}
+                        &nbsp;
                         <span>{item.title}</span>
                     </Link>
                 </li>;

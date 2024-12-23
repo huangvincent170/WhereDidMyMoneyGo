@@ -33,7 +33,6 @@ export function SourcesView(props: {sourceData: Source[], setSourceData: Functio
     const [colDefs, setColDefs]: [any, any] = useState([
         { field: "name" },
         { field: "path" },
-        { field: "fieldIndexMap" },
         { field: "amountIdx" },
         { field: "descriptionIdx" },
         { field: "dateIdx" },
@@ -61,7 +60,7 @@ export function SourcesView(props: {sourceData: Source[], setSourceData: Functio
     }
 
     return <>
-        <div className={showModifySources ? "addSourceViewContainerActive" : "addSourceViewContainerHidden"}>
+        <div className={showModifySources ? "addViewContainerActive" : "addViewContainerHidden"}>
             <ModifySourcesView
                 showModifySources={showModifySources}
                 setShowModifySources={setShowModifySources}
@@ -70,21 +69,19 @@ export function SourcesView(props: {sourceData: Source[], setSourceData: Functio
             />
         </div>
         <div className="mainContent">
-            <div className="sourceViewContainer">
-                <div>
-                    <div className="pageTitle"><b>Sources</b></div>
-                    <div className="pageTitleDescription">Here you can edit the configurations of each spending source.</div>
+            <div className="viewContainer">
+                <div className="pageTitle">
+                    <h1>Sources</h1>
+                    <h2>Here you can edit the configurations of each spending source.</h2>
                 </div>
-                <button type="button" id="btn" onClick={() => setShowModifySources(true)}>Add a source</button>
-                <div
-                    className="ag-theme-balham-dark"
-                    style={{ height: 500 }}
-                >
+                <div className="gridHeader">
+                    <button onClick={() => setShowModifySources(true)}>Add a source</button>
+                </div>
+                <div className="ag-theme-balham-dark" style={{ height: 500 }}>
                     <AgGridReact<ISourceDisplayColumns>
                         rowData={props.sourceData}
                         columnDefs={colDefs}
-                        onCellClicked={onCellClicked}
-                    />
+                        onCellClicked={onCellClicked}/>
                 </div>
             </div>
         </div>

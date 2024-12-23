@@ -155,12 +155,14 @@ export function CategoriesView(props: {transactionData: Transaction[], categoryD
     }, [props.categoryData]);
     
     return <div className="mainContent">
-        <div className="categoriesViewContainer">
-            <div>
-                <div className="pageTitle"><b>Categories</b></div>
-                <div className="pageTitleDescription">Here you can view and edit transaction categories.</div>
+        <div className="viewContainer">
+            <div className="pageTitle">
+                <h1>Categories</h1>
+                <h2>Here you can view and edit transaction categories.</h2>
             </div>
-            <button type="button" id="btn" onClick={addNewCategory}>Add a category</button>
+            <div className="gridHeader">
+                <button onClick={addNewCategory}>Add a category</button>
+            </div>
             <div className="ag-theme-balham-dark outer-cell" style={{ height: 1000 }}>
                 <AgGridReact
                     rowData={displayedCategoryData}
