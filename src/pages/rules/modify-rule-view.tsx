@@ -2,6 +2,7 @@ import { Rule, Field, CheckOp, FieldToFieldType, ValidFieldTypeValidOps, RuleOpT
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { ModifyRuleCheck } from "./modify-rule-check";
 
+
 export function ModifyRulesView(props: {
     showModifyRules: boolean,
     setShowModifyRules: Function,
@@ -9,17 +10,18 @@ export function ModifyRulesView(props: {
     setRulesData: Function
 }) {
     
-
-    const [checkField, setCheckField] = useState(null);
-    const [checkOp, setCheckOp] = useState(null);
-    const [checkValue, setCheckValue] = useState(null);
+    const [ruleTests, setRuleTests] = useState([new RuleTest(undefined, undefined, undefined)]);
+    
+    // const [checkField, setCheckField] = useState(null);
+    // const [checkOp, setCheckOp] = useState(null);
+    // const [checkValue, setCheckValue] = useState(null);
     const [ruleOpType, setRuleOpType] = useState(null);
     const [setField, setSetField] = useState(null);
     const [setValue, setSetValue] = useState(null);
 
-    function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    function handleSubmit() {
         // Prevent the browser from reloading the page
-        event.preventDefault();
+        // event.preventDefault();
 
         let ruleOp: RuleOp;
         if (ruleOpType == RuleOpType.Set) {
@@ -30,14 +32,20 @@ export function ModifyRulesView(props: {
             throw new Error(`unknown ruleOp ${ruleOpType}`)
         }
 
-        const newRule = new Rule(
-            [
-                new RuleTest(checkField, checkOp, checkValue)
-            ],
-            ruleOp
-        );
+        for (let ruleTest of ruleTests) {
+            if (ruleTest.checkOp == null) {
+                console.log("null checkop!");
+                return;
+            } else if (ruleTest.field == null) {
+                console.log("null field!");
+                return;
+            } else if (ruleTest.value == null || ruleTest.value == "") {
+                console.log("null value!");
+                return;
+            }
+        }
 
-        props.setRulesData(props.rulesData.concat(newRule));
+        props.setRulesData(props.rulesData.concat(new Rule(ruleTests, ruleOp)));
     }
 
     function FieldSelector(props: {selectedField: Field, setSelectedField: Function, hidden?: boolean}) {
@@ -123,31 +131,27 @@ export function ModifyRulesView(props: {
     // todo window modal for path
     // todo make popup look nice
     return (<div className="addView" hidden={!props.showModifyRules}>
-        <form className="addRuleForm" method="post" onSubmit={handleSubmit}>
-            If all of the following conditions match:<br/>
-            <ModifyRuleCheck
-                checkField={checkField}
-                setCheckField={setCheckField}
-                checkOp={checkOp}
-                setCheckOp={setCheckOp}
-                checkValue={checkValue}
-                setCheckValue={setCheckValue}/>
-            <br/>
-            Then perform the following actions:<br/>
-            <RuleOpSelector
-                ruleOpType={ruleOpType}
-                setRuleOpType={setRuleOpType} /> 
-            <FieldSelector
-                selectedField={setField}
-                setSelectedField={setSetField}
-                hidden={ruleOpType == RuleOpType.Split}/> 
-            <FieldValueInput
-                fieldType={setField}
-                fieldValue={setValue}
-                setFieldValue={setSetValue}/> 
-            <br />
-            <button type="submit">Save Changes</button>
-        </form>
+        If all of the following conditions match:
+        <br/>
+        <ModifyRuleCheck
+            ruleTests={ruleTests}
+            setRuleTests={setRuleTests}/>
+        <br/>
+        Then perform the following actions:
+        <br/>
+        <RuleOpSelector
+            ruleOpType={ruleOpType}
+            setRuleOpType={setRuleOpType}/>
+        <FieldSelector
+            selectedField={setField}
+            setSelectedField={setSetField}
+            hidden={ruleOpType == RuleOpType.Split}/>
+        <FieldValueInput
+            fieldType={setField}
+            fieldValue={setValue}
+            setFieldValue={setSetValue}/>
+        <br />
+        <button onClick={handleSubmit}>Save Changes</button>
         <button onClick={() => props.setShowModifyRules(false)}>Close</button>
     </div>);
 }

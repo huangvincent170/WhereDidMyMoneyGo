@@ -35,6 +35,27 @@ button:hover {
     background-color: $buttonHoverColor;
 }
 
+.iconButton {
+    background-color: transparent;
+    // padding: 0;
+}
+
+input {
+    border-radius: 5px;
+    padding: 5px;
+    border: none;
+    background-color: $buttonColor;
+    color: $textColor;
+}
+
+input:focus {
+    outline-color: $buttonHoverColor;
+}
+
+.icon {
+    vertical-align: bottom;
+}
+
 .pageTitle {
     h1 {
         color: $titleTextColor;
@@ -114,11 +135,48 @@ button:hover {
         border: none;
         border-radius: 5px;
         background-color: $buttonColor;
+        height: 100%;
+        margin: 0px 5px 0px 0px;
     }
 
-    // button {
-    //     margin: 0px 0px 5px 0px;
-    // }
+    .ruleCheckContainer {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+    .ruleCheck {
+        height:25px;
+        margin: 2.5px 0px 2.5px 0px;
+        width: 100%;
+        display: flex;
+        align-items: center;
+    }
+
+    .fieldValue {
+        border: 1px;
+        width: calc(100% - 280px); //todo use flexbox
+    }
+
+    .fieldSelector {
+        width: 90px;
+        vertical-align: middle;
+    }
+
+    .fieldOpSelector {
+        width: 130px;
+        vertical-align: middle;
+    }
+
+    .iconButton {
+        height: 100%;
+        width: 25px;
+        padding: 0;
+        border-radius: 5px;
+        align-items: center;
+        justify-content: center;
+    }
 }
 
 .navMenu {
