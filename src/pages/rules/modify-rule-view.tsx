@@ -3,7 +3,6 @@ import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { ModifyRuleCheck } from "./modify-rule-check";
 import { ModifyRuleOp } from "./modify-rule-op"
 
-
 export function ModifyRulesView(props: {
     showModifyRules: boolean,
     setShowModifyRules: Function,
