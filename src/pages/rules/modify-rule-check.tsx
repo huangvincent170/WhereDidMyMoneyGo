@@ -5,12 +5,11 @@ export function ModifyRuleCheck(props: {
     ruleTests: RuleTest[],
     setRuleTests: Function,
 }) {
-    function FieldSelector(props: {checkField: Field, setCheckField: Function, hidden?: boolean}) {
+    function FieldSelector(props: {checkField: Field, setCheckField: Function}) {
         return <select
         className="fieldSelector"
             onChange={(e) => props.setCheckField(e.target.value)}
-            defaultValue={props.checkField ?? "_select"}
-            hidden={props.hidden ?? false}>
+            defaultValue={props.checkField ?? "_select"}>
             <option hidden disabled key="_select" value="_select">select field</option>
             {
                 Object.values(Field).map((field) => 
@@ -47,7 +46,7 @@ export function ModifyRuleCheck(props: {
         // todo field into fieldtype, change input based on fieldtype
         // todo date picker
         return <input
-            className="fieldValue"
+            className="checkFieldValue"
             defaultValue={(props.fieldValue) as number | string}
             onBlur={(e) => props.setFieldValue(e.target.value)}/>
         // if (props.fieldType == FieldType.Date) {
@@ -93,7 +92,7 @@ export function ModifyRuleCheck(props: {
 
     return <div className="ruleCheckContainer">
         {
-            props.ruleTests.map((ruleTest, i) => <div className="ruleCheck">
+            props.ruleTests.map((ruleTest, i) => <div className="ruleCheck" key={i}>
                 <FieldSelector
                     checkField={ruleTest.field}
                     setCheckField={(checkField: Field) => SetRuleTest(ruleTest, i, checkField, undefined, undefined)}/>

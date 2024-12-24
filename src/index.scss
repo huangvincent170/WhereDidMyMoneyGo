@@ -146,17 +146,30 @@ input:focus {
         justify-content: center;
         width: 100%;
     }
+
+    .setRuleOpContainer {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: calc(100% - 95px);
+    }
+
+    .ruleOp,
     .ruleCheck {
-        height:25px;
+        height: 25px;
         margin: 2.5px 0px 2.5px 0px;
         width: 100%;
         display: flex;
         align-items: center;
     }
 
-    .fieldValue {
-        border: 1px;
+    .checkFieldValue {
         width: calc(100% - 280px); //todo use flexbox
+    }
+
+    .setRuleFieldValue {
+        width: calc(100% - 140px); //todo use flexbox
     }
 
     .fieldSelector {
@@ -167,6 +180,11 @@ input:focus {
     .fieldOpSelector {
         width: 130px;
         vertical-align: middle;
+    }
+
+    .ruleOpTypeSelector {
+        height: 25px;
+        width: 90px;
     }
 
     .iconButton {

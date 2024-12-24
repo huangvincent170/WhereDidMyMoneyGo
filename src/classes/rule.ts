@@ -83,30 +83,30 @@ export class RuleTest {
 }
 
 export interface RuleOp {
-    setField: string;
-    setValue: any;
+    // setFields: Field[];
+    // setValues: any;
 }
 
 export class SetRuleOp implements RuleOp {
-    setField: Field;
-    setValue: string | number | Date;
+    setFieldValues: [Field, string | number | Date][];
 
-    constructor(setField: Field, setValue: string | number | Date) {
-        this.setField = setField;
-        this.setValue = setValue;
+    constructor(setFieldValues: [Field, string | number | Date][]) {
+        this.setFieldValues = setFieldValues;
     }
 
     static Execute(ruleOp: SetRuleOp, transaction: Transaction): Transaction[] {
-        if (ruleOp.setField == Field.Amount) {
-            transaction.amount = ruleOp.setValue as number;
-        } else if (ruleOp.setField == Field.Category) {
-            transaction.category = ruleOp.setValue as string;
-        } else if (ruleOp.setField == Field.Description) {
-            transaction.description = ruleOp.setValue as string;
-        } else if (ruleOp.setField == Field.Source) {
-            transaction.sourceName = ruleOp.setValue as string;
-        } else {
-            throw Error(`Unexpected setField ${ruleOp.setField}`);
+        for (let [field, value] of ruleOp.setFieldValues) {
+            if (field == Field.Amount) {
+                transaction.amount = value as number;
+            } else if (field == Field.Category) {
+                transaction.category = value as string;
+            } else if (field == Field.Description) {
+                transaction.description = value as string;
+            } else if (field == Field.Source) {
+                transaction.sourceName = value as string;
+            } else {
+                throw Error(`Unexpected setField ${field}`);
+            }
         }
 
         return [];
@@ -114,11 +114,11 @@ export class SetRuleOp implements RuleOp {
 }
 
 export class SplitRuleOp implements RuleOp {
-    setField: string = "Category and Amount";
-    setValue: [string, number][];
+    setFields: Field[] = null;
+    setValues: [string, number][];
 
-    constructor(setValue: [string, number][]) {
-        this.setValue = setValue;
+    constructor(setValues: [string, number][]) {
+        this.setValues = setValues;
     }
 
     static Execute (ruleOp: SplitRuleOp, transaction: Transaction): Transaction[] {
@@ -126,7 +126,7 @@ export class SplitRuleOp implements RuleOp {
 
         // todo dont split if already split
 
-        return ruleOp.setValue.map((setValue: [string, number]) => new Transaction(
+        return ruleOp.setValues.map((setValue: [string, number]) => new Transaction(
             transaction.sourceName,
             setValue[1],
             transaction.date,

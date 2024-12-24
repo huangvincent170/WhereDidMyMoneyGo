@@ -13,22 +13,22 @@ export function RulesView(props: {
     setRulesData: Function,
 }) {
 
-    const testRuleData = [
-        new Rule(
-            [
-                new RuleTest(Field.Description, CheckOp.Contains, "Chipotle"),
-                new RuleTest(Field.Amount, CheckOp.Equals, 12)
-            ],
-            new SetRuleOp(Field.Category, "Food")
-        ),
-        new Rule(
-            [
-                new RuleTest(Field.Source, CheckOp.Equals, "Bilt"),
-                new RuleTest(Field.Amount, CheckOp.Equals, 2.8)
-            ],
-            new SplitRuleOp([["Food", 7], ["Gifts", 4]])
-        ),
-    ];
+    // const testRuleData = [
+    //     new Rule(
+    //         [
+    //             new RuleTest(Field.Description, CheckOp.Contains, "Chipotle"),
+    //             new RuleTest(Field.Amount, CheckOp.Equals, 12)
+    //         ],
+    //         new SetRuleOp(Field.Category, "Food")
+    //     ),
+    //     new Rule(
+    //         [
+    //             new RuleTest(Field.Source, CheckOp.Equals, "Bilt"),
+    //             new RuleTest(Field.Amount, CheckOp.Equals, 2.8)
+    //         ],
+    //         new SplitRuleOp([["Food", 7], ["Gifts", 4]])
+    //     ),
+    // ];
 
 
     class DisplayedRule {
@@ -52,15 +52,25 @@ export function RulesView(props: {
 
         let displayedRules: DisplayedRule[] = [];
         for (let rule of rules) {
-            let testsString = "";
-            console.log(rule);
-            for (let i = 0; i < rule.tests.length; i++) {
-                testsString += `${i == 0 ? "If" : "and"} ${rule.tests[i].field} ${rule.tests[i].checkOp} ${rule.tests[i].value}\n`;
+            let testStrings: string[] = [];
+            for (let test of rule.tests) {
+                testStrings.push(`${test.field} ${test.checkOp} ${test.value}\n`);
+            }
+
+            let opStrings: string[] = [];
+            if (rule.opType == RuleOpType.Set) {
+                for (let [field, value] of (rule.op as SetRuleOp).setFieldValues) {
+                    opStrings.push(`${rule.opType} ${field} to ${value}\n`);
+                }
+            } else if (rule.opType == RuleOpType.Split) {
+
+            } else {
+                throw new Error (`unexpected rule op type ${rule.opType}`);
             }
 
             displayedRules.push(new DisplayedRule(
-                testsString,
-                `then ${rule.opType} ${rule.op.setField} ${rule.op.setValue}`
+                `If ${testStrings.join('and ')}`,
+                `Then ${opStrings.join('and ')}`
             ));
         }
         return displayedRules;
@@ -71,13 +81,18 @@ export function RulesView(props: {
 
     const [colDefs, setColDefs]: [any, any] = useState([
         {
+            headerName: "Tests",
             field: "testsString",
             autoHeight: true,
             wrapText: true,
-            cellStyle: {'whiteSpace': 'pre' }
+            cellStyle: {'whiteSpace': 'pre' },
         },
         {
-            field: "actionString"
+            headerName: "Operations",
+            field: "actionString",
+            autoHeight: true,
+            wrapText: true,
+            cellStyle: {'whiteSpace': 'pre' },
         },
     ]);
 
