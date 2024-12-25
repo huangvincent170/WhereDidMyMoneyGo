@@ -42,7 +42,7 @@ button:hover {
 
 input {
     border-radius: 5px;
-    padding: 5px;
+    height: 25px;
     border: none;
     background-color: $buttonColor;
     color: $textColor;
@@ -130,6 +130,10 @@ input:focus {
     padding: 20px 30px 20px 30px;
     color: $textColor;
 
+    input {
+        margin: 0px 5px 0px 0px;
+    }
+
     select {
         color: $textColor;
         border: none;
@@ -155,6 +159,14 @@ input:focus {
         width: calc(100% - 95px);
     }
 
+    .splitRuleOpContainer {
+        display: inline-flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: calc(100% - 95px);
+    }
+
     .ruleOp,
     .ruleCheck {
         height: 25px;
@@ -170,6 +182,14 @@ input:focus {
 
     .setRuleFieldValue {
         width: calc(100% - 140px); //todo use flexbox
+    }
+
+    .splitRuleCategoryFieldValue {
+        width: calc(100% - 150px); //todo use flexbox
+    }
+
+    .splitRuleAmountFieldValue {
+        width: 100px; //todo use flexbox
     }
 
     .fieldSelector {

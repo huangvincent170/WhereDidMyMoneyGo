@@ -1,65 +1,13 @@
 import { Rule, Field, CheckOp, FieldToFieldType, ValidFieldTypeValidOps, RuleOpType, RuleOp, FieldType, SetRuleOp, SplitRuleOp, RuleTest } from "../../classes/rule";
 import { FaPlus, FaMinus } from "react-icons/fa";
+import { FieldOpSelector, FieldSelector, FieldValueInput } from "./modify-rule-form-fields";
+import { Category } from "../../classes/category";
 
 export function ModifyRuleCheck(props: {
     ruleTests: RuleTest[],
     setRuleTests: Function,
+    categoryData: Category[],
 }) {
-    function FieldSelector(props: {checkField: Field, setCheckField: Function}) {
-        return <select
-        className="fieldSelector"
-            onChange={(e) => props.setCheckField(e.target.value)}
-            defaultValue={props.checkField ?? "_select"}>
-            <option hidden disabled key="_select" value="_select">select field</option>
-            {
-                Object.values(Field).map((field) => 
-                    <option
-                        key={field}
-                        value={field}>
-                        {field}
-                    </option>
-                )
-            }
-        </select>;
-    }
-
-    function FieldOpSelector(props: {field: Field, checkOp: CheckOp, setCheckOp: Function}) {
-        const validOps: CheckOp[] = props.field != null ? ValidFieldTypeValidOps[FieldToFieldType[props.field]] : Object.values(CheckOp);
-        return <select
-            className="fieldOpSelector"
-            defaultValue={props.checkOp ?? "_select"}
-            onChange={(e) => props.setCheckOp(e.target.value)}>
-            <option hidden disabled key="_select" value="_select">select check</option>
-            {
-                validOps.map((validOp) => 
-                    <option
-                        key={validOp}
-                        value={validOp}>
-                        {validOp}
-                    </option>
-                )
-            }
-        </select>;
-    }
-
-    function FieldValueInput(props: {field: Field, fieldValue: number | string | Date, setFieldValue: Function}) {
-        // todo field into fieldtype, change input based on fieldtype
-        // todo date picker
-        return <input
-            className="checkFieldValue"
-            defaultValue={(props.fieldValue) as number | string}
-            onBlur={(e) => props.setFieldValue(e.target.value)}/>
-        // if (props.fieldType == FieldType.Date) {
-        //     return <input
-        //     name="todo"
-        //     />
-        // } else {
-        //     return <input
-        //     name="todo"
-        //     />
-        // }
-    }
-
     function SetRuleTest(
         oldRuleTest: RuleTest,
         i: number,
@@ -94,13 +42,15 @@ export function ModifyRuleCheck(props: {
         {
             props.ruleTests.map((ruleTest, i) => <div className="ruleCheck" key={i}>
                 <FieldSelector
-                    checkField={ruleTest.field}
-                    setCheckField={(checkField: Field) => SetRuleTest(ruleTest, i, checkField, undefined, undefined)}/>
+                    field={ruleTest.field}
+                    setField={(checkField: Field) => SetRuleTest(ruleTest, i, checkField, undefined, undefined)}/>
                 <FieldOpSelector
                     field={ruleTest.field}
                     checkOp={ruleTest.checkOp}
                     setCheckOp={(checkOp: CheckOp) => SetRuleTest(ruleTest, i, undefined, checkOp, undefined)}/>
                 <FieldValueInput
+                    categories={props.categoryData}
+                    className="checkFieldValue"
                     field={ruleTest.field}
                     fieldValue={ruleTest.value}
                     setFieldValue={(fieldValue: string | number | Date) => SetRuleTest(ruleTest, i, undefined, undefined, fieldValue)}/>

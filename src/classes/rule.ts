@@ -83,8 +83,6 @@ export class RuleTest {
 }
 
 export interface RuleOp {
-    // setFields: Field[];
-    // setValues: any;
 }
 
 export class SetRuleOp implements RuleOp {
@@ -114,11 +112,10 @@ export class SetRuleOp implements RuleOp {
 }
 
 export class SplitRuleOp implements RuleOp {
-    setFields: Field[] = null;
-    setValues: [string, number][];
+    splits: [string, number][];
 
-    constructor(setValues: [string, number][]) {
-        this.setValues = setValues;
+    constructor(splits: [string, number][]) {
+        this.splits = splits;
     }
 
     static Execute (ruleOp: SplitRuleOp, transaction: Transaction): Transaction[] {
@@ -126,7 +123,7 @@ export class SplitRuleOp implements RuleOp {
 
         // todo dont split if already split
 
-        return ruleOp.setValues.map((setValue: [string, number]) => new Transaction(
+        return ruleOp.splits.map((setValue: [string, number]) => new Transaction(
             transaction.sourceName,
             setValue[1],
             transaction.date,
@@ -141,7 +138,6 @@ export class Rule {
     op: RuleOp;
     // restoring data from storage wipes class data, so we need to separately store optype
     opType: RuleOpType;
-    
 
     constructor(tests: RuleTest[], op: RuleOp) {
         this.tests = tests;
@@ -183,6 +179,3 @@ export class Rule {
         return transactions.concat(addedTransactions);
     }
 }
-
-
-

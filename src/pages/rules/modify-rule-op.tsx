@@ -1,68 +1,17 @@
 import { Rule, Field, CheckOp, RuleOpType, RuleOp, FieldType, SetRuleOp, SplitRuleOp, RuleTest } from "../../classes/rule";
 import { FaPlus, FaMinus } from "react-icons/fa";
+import { FieldSelector, FieldValueInput, RuleOpTypeSelector } from "./modify-rule-form-fields";
+import { Category } from "../../classes/category";
 
 export function ModifyRuleOp(props: {
+    categoryData: Category[],
     ruleOpType: RuleOpType,
     setRuleOpType: Function,
     setRuleOp: SetRuleOp,
     setSetRuleOp: Function,
     splitRuleOp: SplitRuleOp,
-    setSplitRuleOp: Function
+    setSplitRuleOp: Function,
 }) {
-    function RuleOpTypeSelector(props: {ruleOpType: RuleOpType, setRuleOpType: Function}) {
-        return <select
-            className="ruleOpTypeSelector"
-            onChange={(e) => props.setRuleOpType(e.target.value)}
-            defaultValue={props.ruleOpType ?? "_select"}>
-            <option hidden disabled key="_select" value="_select">select op</option>
-            {
-                Object.values(RuleOpType).map((field) => 
-                    <option
-                        key={field}
-                        value={field}>
-                        {field}
-                    </option>
-                )
-            }
-        </select>;
-    }
-
-    function FieldSelector(props: {setField: Field, setSetField: Function}) {
-        return <select
-        className="fieldSelector"
-            onChange={(e) => props.setSetField(e.target.value)}
-            defaultValue={props.setField ?? "_select"}>
-            <option hidden disabled key="_select" value="_select">select field</option>
-            {
-                Object.values(Field).map((field) => 
-                    <option
-                        key={field}
-                        value={field}>
-                        {field}
-                    </option>
-                )
-            }
-        </select>;
-    }
-
-    function FieldValueInput(props: {field: Field, fieldValue: number | string | Date, setFieldValue: Function}) {
-        // todo field into fieldtype, change input based on fieldtype
-        // todo date picker
-        return <input
-            className="setRuleFieldValue"
-            defaultValue={(props.fieldValue) as number | string}
-            onBlur={(e) => props.setFieldValue(e.target.value)}/>
-        // if (props.fieldType == FieldType.Date) {
-        //     return <input
-        //     name="todo"
-        //     />
-        // } else {
-        //     return <input
-        //     name="todo"
-        //     />
-        // }
-    }
-
     function SetSetRuleOp(i: number, setField?: Field, setValue?: string | number | Date) {
         props.setSetRuleOp(new SetRuleOp(props.setRuleOp.setFieldValues.map((_setFieldValue, _i) =>
             _i == i ? [setField ?? _setFieldValue[0], setValue ?? _setFieldValue[1]] : _setFieldValue)));
@@ -83,6 +32,26 @@ export function ModifyRuleOp(props: {
         ]));
     }
 
+    function SetSplitRuleOp(i: number, category?: string, amount?: number) {
+        props.setSplitRuleOp(new SplitRuleOp(props.splitRuleOp.splits.map((_split, _i) =>
+            _i == i ? [category ?? _split[0], amount ?? _split[1]] : _split)));
+    }
+
+    function AddSplitRuleOp(i: number) {
+        props.setSplitRuleOp(new SplitRuleOp([
+            ...props.splitRuleOp.splits.slice(0, i+1),
+            [undefined, undefined],
+            ...props.splitRuleOp.splits.slice(i+1)
+        ]));
+    }
+
+    function RemoveSplitRuleOp(i: number) {
+        props.setSplitRuleOp(new SplitRuleOp([
+            ...props.splitRuleOp.splits.slice(0, i),
+            ...props.splitRuleOp.splits.slice(i+1)
+        ]));
+    }
+
     return <div className="ruleOpContainer">
         <RuleOpTypeSelector
             ruleOpType={props.ruleOpType}
@@ -92,9 +61,11 @@ export function ModifyRuleOp(props: {
             props.setRuleOp.setFieldValues.map((_setFieldValue, i) =>
                 <div className="ruleOp" key={i}>
                     <FieldSelector
-                        setField={_setFieldValue[0]}
-                        setSetField={(setField: Field) => SetSetRuleOp(i, setField, undefined)}/>
+                        field={_setFieldValue[0]}
+                        setField={(setField: Field) => SetSetRuleOp(i, setField, undefined)}/>
                     <FieldValueInput
+                        categories={props.categoryData}
+                        className="setRuleFieldValue"
                         field={_setFieldValue[0]}
                         fieldValue={_setFieldValue[1]}
                         setFieldValue={(value: string | number | Date) => SetSetRuleOp(i, undefined, value)}/>
@@ -114,7 +85,36 @@ export function ModifyRuleOp(props: {
             )
         }
         </div>
-        <div hidden={props.ruleOpType != RuleOpType.Split}>
+        <div className="splitRuleOpContainer" style={(props.ruleOpType != RuleOpType.Split) ? {display:'none'} : {}}>
+        {
+            props.splitRuleOp.splits.map((_split, i) =>
+                <div className="ruleOp" key={i}>
+                    <FieldValueInput
+                        categories={props.categoryData}
+                        className="splitRuleCategoryFieldValue"
+                        field={Field.Category}
+                        fieldValue={_split[0]}
+                        setFieldValue={(categoryId: string) => SetSplitRuleOp(i, categoryId, undefined)}/>
+                    <FieldValueInput
+                        className="splitRuleAmountFieldValue"
+                        field={Field.Amount}
+                        fieldValue={_split[1]}
+                        setFieldValue={(amount: number) => SetSplitRuleOp(i, undefined, amount)}/>
+                    <button
+                        className="iconButton"
+                        disabled={props.ruleOpType == null}
+                        onClick={() => AddSplitRuleOp(i)}>
+                        <FaPlus style={props.ruleOpType == null ? {color: 'grey'} : {}}/>
+                    </button>
+                    <button
+                        className="iconButton"
+                        disabled={props.ruleOpType == null || props.setRuleOp.setFieldValues.length <= 1}
+                        onClick={() => RemoveSplitRuleOp(i)}>
+                        <FaMinus style={props.ruleOpType == null || props.setRuleOp.setFieldValues.length <= 1 ? {color: 'grey'} : {}}/>
+                    </button>
+                </div>
+            )
+        }
         </div>
     </div>
 }

@@ -2,8 +2,10 @@ import { Rule, Field, CheckOp, FieldToFieldType, ValidFieldTypeValidOps, RuleOpT
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { ModifyRuleCheck } from "./modify-rule-check";
 import { ModifyRuleOp } from "./modify-rule-op"
+import { Category } from "../../classes/category";
 
 export function ModifyRulesView(props: {
+    categoryData: Category[]
     showModifyRules: boolean,
     setShowModifyRules: Function,
     rulesData: Rule[],
@@ -13,7 +15,7 @@ export function ModifyRulesView(props: {
     const [ruleTests, setRuleTests] = useState([new RuleTest(undefined, undefined, undefined)]);
     const [ruleOpType, setRuleOpType] = useState(null);
     const [setRuleOp, setSetRuleOp] = useState(new SetRuleOp([[undefined, undefined]]));
-    const [splitRuleOp, setSplitRuleOp] = useState(null);
+    const [splitRuleOp, setSplitRuleOp] = useState(new SplitRuleOp([[undefined, undefined]]));
 
     function handleSubmit() {
         // Prevent the browser from reloading the page
@@ -51,18 +53,22 @@ export function ModifyRulesView(props: {
         }
 
         props.setRulesData(props.rulesData.concat(new Rule(ruleTests, ruleOp)));
+
+        console.log(props.rulesData);
     }
 
     return <div className="addView" hidden={!props.showModifyRules}>
         If all of the following conditions match:
         <br/>
         <ModifyRuleCheck
+            categoryData={props.categoryData}
             ruleTests={ruleTests}
             setRuleTests={setRuleTests}/>
         <br/>
         Then perform the following actions:
         <br/>
             <ModifyRuleOp
+                categoryData={props.categoryData}
                 ruleOpType={ruleOpType}
                 setRuleOpType={setRuleOpType}
                 setRuleOp={setRuleOp}

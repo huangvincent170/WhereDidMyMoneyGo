@@ -12,43 +12,29 @@ export function RulesView(props: {
     rulesData: Rule[],
     setRulesData: Function,
 }) {
-
-    // const testRuleData = [
-    //     new Rule(
-    //         [
-    //             new RuleTest(Field.Description, CheckOp.Contains, "Chipotle"),
-    //             new RuleTest(Field.Amount, CheckOp.Equals, 12)
-    //         ],
-    //         new SetRuleOp(Field.Category, "Food")
-    //     ),
-    //     new Rule(
-    //         [
-    //             new RuleTest(Field.Source, CheckOp.Equals, "Bilt"),
-    //             new RuleTest(Field.Amount, CheckOp.Equals, 2.8)
-    //         ],
-    //         new SplitRuleOp([["Food", 7], ["Gifts", 4]])
-    //     ),
-    // ];
-
-
     class DisplayedRule {
         testsString: string;
         actionString: string;
+        ruleString: string;
 
         constructor(
             testsString: string,
             actionString: string,
+            rule: Rule,
         ) {
             this.testsString = testsString;
             this.actionString = actionString;
+            this.ruleString = JSON.stringify(rule);
         }
     }
-
 
     function createDisplayedRules(rules: Rule[]): DisplayedRule[] {
         if (rules == null) {
             return [];
         }
+
+        console.log("rules");
+        console.log(props.rulesData);
 
         let displayedRules: DisplayedRule[] = [];
         for (let rule of rules) {
@@ -70,7 +56,8 @@ export function RulesView(props: {
 
             displayedRules.push(new DisplayedRule(
                 `If ${testStrings.join('and ')}`,
-                `Then ${opStrings.join('and ')}`
+                `Then ${opStrings.join('and ')}`,
+                rule
             ));
         }
         return displayedRules;
@@ -78,6 +65,29 @@ export function RulesView(props: {
 
     const [displayedRuleData, setDisplayedRuleData] = useState(createDisplayedRules(props.rulesData));
     const [showModifyRules, setShowModifyRules]: [boolean, Function] = useState(false);
+
+    function onCellClicked(params: any) {
+        if (params.column.colId === "action" && params.event.target.dataset.action) {
+            let action = params.event.target.dataset.action;
+
+            // todo make edit button work
+
+            if (action === "delete") {
+                params.api.applyTransaction({
+                    remove: [params.node.data]
+                });
+                props.setRulesData(props.rulesData.filter(rule => JSON.stringify(rule) != params.node.data.ruleString));
+            }
+        }
+    }
+
+    function ActionCellRenderer() {
+        // todo make look nice
+        return <div>
+            {/* <button data-action="edit"> Add subcategory </button> */}
+            <button data-action="delete"> delete </button>
+        </div>;
+    }
 
     const [colDefs, setColDefs]: [any, any] = useState([
         {
@@ -94,9 +104,12 @@ export function RulesView(props: {
             wrapText: true,
             cellStyle: {'whiteSpace': 'pre' },
         },
+        {
+            headerName: "",
+            cellRenderer: ActionCellRenderer,
+            colId: "action"
+        }
     ]);
-
-
 
     useEffect(() => {
         setDisplayedRuleData(createDisplayedRules(props.rulesData));
@@ -106,6 +119,7 @@ export function RulesView(props: {
     return <div>
         <div className={showModifyRules ? "addViewContainerActive" : "addViewContainerHidden"}>
             <ModifyRulesView
+                categoryData={props.categoryData}
                 showModifyRules={showModifyRules}
                 setShowModifyRules={setShowModifyRules}
                 rulesData={props.rulesData}
@@ -124,7 +138,8 @@ export function RulesView(props: {
                 <div className="ag-theme-balham-dark">
                     <AgGridReact
                         rowData={displayedRuleData}
-                        columnDefs={colDefs}/>
+                        columnDefs={colDefs}
+                        onCellClicked={onCellClicked}/>
                 </div>
             </div>
         </div>

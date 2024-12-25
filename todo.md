@@ -31,6 +31,7 @@
     - 👍 no duplicate rules
     - 👍 Rules which only execute once
     - 👍 binsearch on dates for single execute rules (need to sort by date first)
+    - 👍 transactions that the rule would affect preview in create rule
     - ❔ split rule into percentages
     - ❔ Less/greater than for numbers
     - ❔ Less/greater than for dates
