@@ -3,6 +3,7 @@ import { Transaction } from "./transaction";
 export enum Field {
     Amount = "Amount",
     Category = "Category",
+    Date = "Date",
     Description = "Description",
     Source = "Source",
 }
@@ -41,6 +42,7 @@ export const ValidFieldTypeValidOps = {
 export const FieldToFieldType = {
     [Field.Amount]: FieldType.Number,
     [Field.Category]: FieldType.String,
+    [Field.Date]: FieldType.Date,
     [Field.Description]: FieldType.String,
     [Field.Source]: FieldType.String,
 }
@@ -64,10 +66,12 @@ export class RuleTest {
             fieldValue = transaction.amount;
         } else if (test.field == Field.Category) {
             fieldValue = transaction.category;
+        } else if (test.field == Field.Date) {
+            fieldValue = transaction.date;
         } else if (test.field == Field.Description) {
             fieldValue = transaction.description;
         } else if (test.field == Field.Source) {
-            fieldValue == transaction.sourceName;
+            fieldValue = transaction.sourceName;
         } else {
             throw Error(`Unexpected fieldValue ${test.field}`);
         }
@@ -82,8 +86,7 @@ export class RuleTest {
     }
 }
 
-export interface RuleOp {
-}
+export interface RuleOp {}
 
 export class SetRuleOp implements RuleOp {
     setFieldValues: [Field, string | number | Date][];
@@ -118,11 +121,10 @@ export class SplitRuleOp implements RuleOp {
         this.splits = splits;
     }
 
-    static Execute (ruleOp: SplitRuleOp, transaction: Transaction): Transaction[] {
+    static Execute(ruleOp: SplitRuleOp, transaction: Transaction): Transaction[] {
         transaction.category = "SPLIT";
 
         // todo dont split if already split
-
         return ruleOp.splits.map((setValue: [string, number]) => new Transaction(
             transaction.sourceName,
             setValue[1],
@@ -169,7 +171,7 @@ export class Rule {
                 if (rule.opType == RuleOpType.Set) {
                     SetRuleOp.Execute(rule.op as SetRuleOp, transaction);
                 } else if (rule.opType == RuleOpType.Split) {
-                    addedTransactions.concat(SplitRuleOp.Execute(rule.op as SplitRuleOp, transaction));
+                    addedTransactions = addedTransactions.concat(SplitRuleOp.Execute(rule.op as SplitRuleOp, transaction));
                 } else {
                     throw new Error("unexpected ruleoptype");
                 }

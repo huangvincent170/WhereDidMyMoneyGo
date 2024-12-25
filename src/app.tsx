@@ -35,10 +35,8 @@ function App() {
     }
 
     async function refreshTransactionData(sourceData: Source[]) {
-        // todo execute rules
         let transactions: Transaction[] = await window.electronAPI.readDataFromSources(sourceData);
-        Rule.Execute(rulesData, transactions);
-        setTransactionsData(transactions);
+        setTransactionsData(Rule.Execute(rulesData, transactions));
         Category.setCategoryAmounts(categoryData, transactions);
     }
 
@@ -80,7 +78,9 @@ function App() {
             <Route path="/" element={
                 <TransactionsView
                     transactionData={transactionsData}
-                    refreshTransactionData={async () => refreshTransactionData(sourceData)}/>
+                    refreshTransactionData={async () => refreshTransactionData(sourceData)}
+                    rulesData={rulesData}
+                    setRulesData={setAndStoreRulesData}/>
             }/>
             <Route path="/sources" element={
                 <SourcesView

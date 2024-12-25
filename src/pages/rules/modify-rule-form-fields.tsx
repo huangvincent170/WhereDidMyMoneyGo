@@ -61,8 +61,7 @@ export function FieldValueInput(props: {
                         value={category.id}>
                         {category.id}
                     </option>
-                )
-                :
+                ) :
                 <></>
             }
         </select>;
