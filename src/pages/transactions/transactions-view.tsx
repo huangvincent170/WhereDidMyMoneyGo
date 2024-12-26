@@ -47,23 +47,30 @@ export function TransactionsView(props: {
         {
             field: "date",
             filter: 'agDateColumnFilter',
+            width: 100,
         },
         {
             field: "description",
             filter: true,
+            flex: 1
         },
         {
             field: "category",
             filter: true,
+            minWidth: 320,
         },
         {
             field: "amount",
             filter: 'agNumberColumnFilter',
+            width: 90,
         },
         {
             headerName: "",
             cellRenderer: ActionCellRenderer,
-            colId: "action"
+            colId: "action",
+            width: 100,
+            resizable: false,
+            type: 'rightAligned'
         },
     ]);
 
@@ -86,8 +93,9 @@ export function TransactionsView(props: {
                         new RuleTest(Field.Source, CheckOp.Equals, params.node.data.source)
                         // todo include source
                     ],
-                    new SetRuleOp([[Field.Category, "DELETED"]])))
-                );
+                    new SetRuleOp([[Field.Category, "DELETED"]]),
+                    true
+                )));
             }
         }
     }
@@ -114,7 +122,7 @@ export function TransactionsView(props: {
             <div className="gridHeader">
                 <button onClick={() => props.refreshTransactionData()}>refresh</button>
             </div>
-            <div className="ag-theme-balham-dark" style={{ height: 500 }}>
+            <div className="ag-theme-balham-dark fullPageGrid">
                 <AgGridReact
                     rowData={displayedTransactions}
                     columnDefs={colDefs}

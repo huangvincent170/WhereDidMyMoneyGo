@@ -16,15 +16,18 @@ export function RulesView(props: {
         testsString: string;
         actionString: string;
         ruleString: string;
+        executesOnce: boolean;
 
         constructor(
             testsString: string,
             actionString: string,
             rule: Rule,
+            executesOnce: boolean,
         ) {
             this.testsString = testsString;
             this.actionString = actionString;
             this.ruleString = JSON.stringify(rule);
+            this.executesOnce = executesOnce;
         }
     }
 
@@ -33,23 +36,21 @@ export function RulesView(props: {
             return [];
         }
 
-        console.log("rules");
-        console.log(props.rulesData);
-
         let displayedRules: DisplayedRule[] = [];
         for (let rule of rules) {
             let testStrings: string[] = [];
             for (let test of rule.tests) {
-                testStrings.push(`${test.field} ${test.checkOp} ${test.value}\n`);
+                testStrings.push(`${test.field} ${test.checkOp} ${test.value} `);
             }
 
             let opStrings: string[] = [];
             if (rule.opType == RuleOpType.Set) {
                 for (let [field, value] of (rule.op as SetRuleOp).setFieldValues) {
-                    opStrings.push(`${rule.opType} ${field} to ${value}\n`);
+                    opStrings.push(`${rule.opType} ${field} to ${value} `);
                 }
             } else if (rule.opType == RuleOpType.Split) {
-
+                const splitString: string = (rule.op as SplitRuleOp).splits.map((split) => `${split[0]}: ${split[1]}`).join(', ');
+                opStrings.push(`split into ${splitString}`)
             } else {
                 throw new Error (`unexpected rule op type ${rule.opType}`);
             }
@@ -57,7 +58,8 @@ export function RulesView(props: {
             displayedRules.push(new DisplayedRule(
                 `If ${testStrings.join('and ')}`,
                 `Then ${opStrings.join('and ')}`,
-                rule
+                rule,
+                rule.executesOnce,
             ));
         }
         return displayedRules;
@@ -85,7 +87,7 @@ export function RulesView(props: {
         // todo make look nice
         return <div>
             {/* <button data-action="edit"> Add subcategory </button> */}
-            <button data-action="delete"> delete </button>
+            <button data-action="delete" className="gridButton"> delete </button>
         </div>;
     }
 
@@ -96,6 +98,7 @@ export function RulesView(props: {
             autoHeight: true,
             wrapText: true,
             cellStyle: {'whiteSpace': 'pre' },
+            flex: 3,
         },
         {
             headerName: "Operations",
@@ -103,11 +106,21 @@ export function RulesView(props: {
             autoHeight: true,
             wrapText: true,
             cellStyle: {'whiteSpace': 'pre' },
+            flex: 2
+        },
+        {
+            headerName: "Executes Once",
+            field: "executesOnce",
+            width: 111,
+            resizable: false,
         },
         {
             headerName: "",
             cellRenderer: ActionCellRenderer,
-            colId: "action"
+            colId: "action",
+            width: 100,
+            resizable: false,
+            type: 'rightAligned',
         }
     ]);
 
@@ -135,8 +148,9 @@ export function RulesView(props: {
                 <div className="gridHeader">
                     <button onClick={() => setShowModifyRules(true)}>New Rule</button>
                 </div>
-                <div className="ag-theme-balham-dark">
+                <div className="ag-theme-balham-dark fullPageGrid">
                     <AgGridReact
+                        animateRows={false}
                         rowData={displayedRuleData}
                         columnDefs={colDefs}
                         onCellClicked={onCellClicked}/>

@@ -140,8 +140,9 @@ export class Rule {
     op: RuleOp;
     // restoring data from storage wipes class data, so we need to separately store optype
     opType: RuleOpType;
+    executesOnce: boolean;
 
-    constructor(tests: RuleTest[], op: RuleOp) {
+    constructor(tests: RuleTest[], op: RuleOp, executesOnce?: boolean) {
         this.tests = tests;
         this.op = op;
         if (op instanceof SplitRuleOp) {
@@ -151,6 +152,7 @@ export class Rule {
         } else {
             throw new Error(`unexpected rule op ${op}`);
         }
+        this.executesOnce = executesOnce ?? false;
     }
 
     static Execute(rules: Rule[], transactions: Transaction[]): Transaction[] {
@@ -174,6 +176,10 @@ export class Rule {
                     addedTransactions = addedTransactions.concat(SplitRuleOp.Execute(rule.op as SplitRuleOp, transaction));
                 } else {
                     throw new Error("unexpected ruleoptype");
+                }
+
+                if (rule.executesOnce) {
+                    break;
                 }
             }
         }

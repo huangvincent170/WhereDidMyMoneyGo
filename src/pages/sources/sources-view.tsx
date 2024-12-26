@@ -8,9 +8,9 @@ import ModifySourcesView from "./modify-source-view";
 export function SourcesView(props: {sourceData: Source[], setSourceData: Function}) {
     function actionCellRenderer() {
         // todo make look nice
-        return <div>
-            <button data-action="edit" > edit  </button>
-            <button data-action="delete" > delete </button>
+        return <div className="gridButtonContainer">
+            <button data-action="edit" className="gridButton"> edit  </button>
+            <button data-action="delete" className="gridButton"> delete </button>
         </div>;
     }
 
@@ -31,33 +31,52 @@ export function SourcesView(props: {sourceData: Source[], setSourceData: Functio
     }
 
     const [colDefs, setColDefs]: [any, any] = useState([
-        { field: "name" },
-        { field: "path" },
-        { field: "amountIdx" },
-        { field: "descriptionIdx" },
-        { field: "dateIdx" },
-        { field: "isDebt" },
-        { field: "hasHeader" },
+        {
+            headerName: "Name",
+            field: "name",
+            width: 200,
+        },
+        {
+            headerName: "Path",
+            field: "path",
+            flex: 1,
+        },
+        {
+            headerName: "Amount Idx",
+            field: "amountIdx",
+            width: 100,
+        },
+        {
+            headerName: "Descrpt Idx",
+            field: "descriptionIdx",
+            width: 100,
+        },
+        {
+            headerName: "Date Idx",
+            field: "dateIdx",
+            width: 100,
+        },
+        {
+            headerName: "Is Debt",
+            field: "isDebt",
+            width: 100,
+        },
+        {
+            headerName: "Has Header",
+            field: "hasHeader",
+            width: 100,
+        },
         {
             headerName: "",
-            minWidth: 150,
+            width: 110,
             cellRenderer: actionCellRenderer,
-            editable: false,
-            colId: "action"
+            resizable: false,
+            colId: "action",
+            type: 'rightAligned',
         }
     ]);
 
     const [showModifySources, setShowModifySources]: [boolean, Function] = useState(false);
-
-    interface ISourceDisplayColumns {
-        name: string;
-        path: string;
-        amountIdx: number;
-        descriptionIdx: number;
-        dateIdx: number;
-        isDebt: boolean;
-        hasHeader: boolean;
-    }
 
     return <>
         <div className={showModifySources ? "addViewContainerActive" : "addViewContainerHidden"}>
@@ -77,8 +96,8 @@ export function SourcesView(props: {sourceData: Source[], setSourceData: Functio
                 <div className="gridHeader">
                     <button onClick={() => setShowModifySources(true)}>Add a source</button>
                 </div>
-                <div className="ag-theme-balham-dark" style={{ height: 500 }}>
-                    <AgGridReact<ISourceDisplayColumns>
+                <div className="ag-theme-balham-dark fullPageGrid">
+                    <AgGridReact
                         rowData={props.sourceData}
                         columnDefs={colDefs}
                         onCellClicked={onCellClicked}/>

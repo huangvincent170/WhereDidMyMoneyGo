@@ -16,6 +16,7 @@ export function ModifyRulesView(props: {
     const [ruleOpType, setRuleOpType] = useState(null);
     const [setRuleOp, setSetRuleOp] = useState(new SetRuleOp([[undefined, undefined]]));
     const [splitRuleOp, setSplitRuleOp] = useState(new SplitRuleOp([[undefined, undefined]]));
+    const [executesOnce, setExecutesOnce] = useState(false);
 
     function handleSubmit() {
         // Prevent the browser from reloading the page
@@ -52,7 +53,7 @@ export function ModifyRulesView(props: {
             }
         }
 
-        props.setRulesData(props.rulesData.concat(new Rule(ruleTests, ruleOp)));
+        props.setRulesData(props.rulesData.concat(new Rule(ruleTests, ruleOp, executesOnce)));
 
         console.log(props.rulesData);
     }
@@ -76,7 +77,19 @@ export function ModifyRulesView(props: {
                 splitRuleOp={splitRuleOp}
                 setSplitRuleOp={setSplitRuleOp}/>
         <br />
-        <button onClick={handleSubmit}>Save Changes</button>
-        <button onClick={() => props.setShowModifyRules(false)}>Close</button>
+        <div className="addViewFooter">
+            <div className="addViewFooterLeft">
+                <input
+                    className="inputCheckbox"
+                    type="checkbox"
+                    checked={executesOnce}
+                    onChange={() => setExecutesOnce(!executesOnce)}/>
+                Rule executes once
+            </div>
+            <div className="addViewFooterRight">
+                <button onClick={handleSubmit}>Save Changes</button>
+                <button onClick={() => props.setShowModifyRules(false)}>Close</button>
+            </div>
+        </div>
     </div>;
 }

@@ -75,6 +75,10 @@ export function CategoriesView(props: {transactionData: Transaction[], categoryD
             // todo make edit button work
 
             if (action === "delete") {
+                console.log(props.categoryData);
+                if (props.categoryData.every(category => category.id != params.node.data.name)) {
+                    console.log("Cannot delete ");
+                }
                 params.api.applyTransaction({
                     remove: [params.node.data]
                 });
@@ -163,7 +167,7 @@ export function CategoriesView(props: {transactionData: Transaction[], categoryD
             <div className="gridHeader">
                 <button onClick={addNewCategory}>Add a category</button>
             </div>
-            <div className="ag-theme-balham-dark outer-cell" style={{ height: 1000 }}>
+            <div className="ag-theme-balham-dark outer-cell fullPageGrid">
                 <AgGridReact
                     rowData={displayedCategoryData}
                     columnDefs={colDefs}

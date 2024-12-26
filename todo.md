@@ -6,13 +6,12 @@
 
 
 - Transactions
-    - ❗ add "delete" button to transaction to create rule
+    - ❗ Add split button to split transaction
     - 👍 Error handling for reading transactions from source to check type of Dates/Numbers/strings/etc
-
+    - 👍 Edit transaction
 
 - Sources
     - 👍 Last time source was updated
-
 
 - Categories
     - ❗ Edit category
@@ -22,16 +21,13 @@
     - ❗ disable delete button for non leaf cats
     - 👍 Change category add to be grid based
 
-
 - Rules
-    - ❗ Data mod rules, split rules, categorization rules
-    - ❗ Split category works
-    - ⚠️ Category selector
-    - ⚠️ create rule popup looks nice
+    - ❗ Date picker
+    - ⚠️ transactions that the rule would affect preview in create rule
     - 👍 no duplicate rules
-    - 👍 Rules which only execute once
+    - 👍 Rules which only execute once sorted first
     - 👍 binsearch on dates for single execute rules (need to sort by date first)
-    - 👍 transactions that the rule would affect preview in create rule
+    - 👍 add scroll bar/ fix many tests/ops out of bounds
     - ❔ split rule into percentages
     - ❔ Less/greater than for numbers
     - ❔ Less/greater than for dates
