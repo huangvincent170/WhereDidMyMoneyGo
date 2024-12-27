@@ -48,11 +48,11 @@ export function AnalyticsSelector(props: {
         <div className="analyticsSelectorCategories">
             {
                 props.categoryData?.map((category, i) => 
-                    <div className="analyticsSelectorCategorySelector">
+                    <div key={i} className="analyticsSelectorCategorySelector">
                         <input
                             type="checkbox"
                             className="inputCheckbox"
-                            checked={props.enabledCategories?.has(category)}
+                            checked={props.enabledCategories?.has(category) ?? true}
                             onChange={() => props.enabledCategories?.has(category) ? props.enabledCategories?.delete(category) : props.enabledCategories?.add(category)}
                             />
                         &nbsp;{category}

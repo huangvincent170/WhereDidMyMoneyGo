@@ -67,16 +67,8 @@ export function CategoriesView(props: {transactionData: Transaction[], categoryD
             return "name must be nonempty";
         }
 
-        if (categoryId.toLocaleLowerCase() == "deleted") {
-            return "name cannot be deleted";
-        }
-
-        if (categoryId.toLocaleLowerCase() == "split") {
-            return "name cannot be split";
-        }
-        
-        if (categoryId.toLocaleLowerCase() == "uncategorized") {
-            return "name cannot be uncategorized";
+        if (Transaction.IsHiddenCategory(categoryId)) {
+            return "name cannot be deleted, split, or uncategorized";
         }
 
         if (categoryId.includes("//")) {

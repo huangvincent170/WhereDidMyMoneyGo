@@ -15,7 +15,7 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
-const createWindow = (): void => {
+const createWindow = (): BrowserWindow => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     webPreferences: {
@@ -31,6 +31,8 @@ const createWindow = (): void => {
   mainWindow.addListener('ready-to-show', () => {
     mainWindow.webContents.send('appLoaded');
   });
+
+  return mainWindow;
 };
 
 // IPC handlers
@@ -116,7 +118,7 @@ function handleReadDataFromSources(sources: Source[]): Transaction[] {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-  createWindow();
+  const mainWindow: BrowserWindow = createWindow();
   ipcMain.handle('readDataFromSources', (_event, sources: Source[]) => handleReadDataFromSources(sources));
   // ipcMain.handle('handleOpenDialogReadCsvs', handleOpenDialogReadCsvs);
   // ipcMain.handle('dialog:openDialogSelectDir', handleOpenDialogSelectDir);

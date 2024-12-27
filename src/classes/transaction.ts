@@ -18,4 +18,9 @@ export class Transaction {
         this.category = category ?? "UNCATEGORIZED";
         this.amount = amount;
     }
+
+    static IsHiddenCategory(categoryId: string): boolean {
+        const lowerCat = categoryId.toLocaleLowerCase();
+        return categoryId == "uncategorized" || categoryId == "deleted" || categoryId == "split";
+    }
 }

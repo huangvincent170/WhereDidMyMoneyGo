@@ -4,84 +4,9 @@ import { AgGridReact, CustomCellRendererProps } from 'ag-grid-react'; // React D
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import { useEffect, useRef, useState } from "react";
 import { AnalyticsSelector } from "./analytics-selector";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { LineGraph } from "./rechart-components";
 
-export function calculateGraphData(
-    transactionData: Transaction[],
-    enabledCategories: string[]
-): any[] {
-    if (transactionData == null || enabledCategories == null) {
-        return;
-    }
-
-    const displayedCategoryKeys = enabledCategories
-        .filter((ec: string) => enabledCategories.filter((_ec: string) => _ec.startsWith(ec)).length == 1);
-    const displayedCategories: Map<string, Map<string, number>> = new Map<string, Map<string, number>>();
-    for (let dck of displayedCategoryKeys) {
-        displayedCategories.set(dck, new Map<string, number>());
-    }
-
-    for (let transaction of transactionData) {
-        if (transaction.category == "UNCATEGORIZED") {
-            continue;
-        }
-        const categoryKeys = displayedCategoryKeys.filter((dck: string) => transaction.category.startsWith(dck));
-        if (categoryKeys.length > 1) {
-            console.log(`more than one cat key ${categoryKeys}`);
-            return;
-        }
-        if (categoryKeys.length == 0) {
-            console.log(`no cat key ${transaction.category}`);
-            continue;
-        }
-
-        const categoryKey = categoryKeys[0];
-        const dateMap = displayedCategories.get(categoryKey);
-        const yearMonthStr = `${transaction.date.getFullYear()}-${transaction.date.getMonth()}`;
-        if (!dateMap.has(yearMonthStr)) {
-            dateMap.set(yearMonthStr, 0);
-        }
-        dateMap.set(yearMonthStr, dateMap.get(yearMonthStr) + transaction.amount);
-    }
-
-    console.log(displayedCategories);
-
-    // if (timePeriod == "MONTHLY") {
-
-    // } else if (timePeriod == "YEARLY") {
-
-    // } else if (timePeriod == "SINGLE") {
-
-    // } else {
-    //     throw new Error(`unexpected time period ${timePeriod}`);
-    // }
-
-    const firstDate: Date = transactionData[0].date; // assumes transactions are sorted by date
-    const lastDate: Date = transactionData[transactionData.length - 1].date;
-    lastDate.setDate(1);
-    const months: Date[] = [];
-    let curDate = new Date(firstDate);
-    curDate.setDate(1);
-    do {
-        months.push(curDate);
-        curDate = new Date(curDate.getFullYear(), curDate.getMonth() + 1, 1);
-    } while (curDate < lastDate);
-    console.log(months);
-
-    const data: any[] = [
-        ["Time"].concat(Array.from(displayedCategoryKeys))
-    ];
-    for (let month of months) {
-        let curRow: any[] = [month];
-        const yearMonthStr = `${month.getFullYear()}-${month.getMonth()}`;
-        for (let [catKey, dateMap] of displayedCategories) {
-            curRow.push(dateMap.get(yearMonthStr) ?? 0);
-        }
-        data.push(curRow);
-    }
-    console.log(data);
-    
-    return data;
-}
 
 export function AnalyticsView(props: {
     categoryData: string[],
@@ -89,11 +14,98 @@ export function AnalyticsView(props: {
 }) {
 
     const [enabledCategories, setEnabledCategories] = useState(null);
-    // const [displayedCategories, setDisplayedCategories] = useState(null);
+    const [displayedCategories, setDisplayedCategories] = useState(null);
     const [graphData, setGraphData] = useState(null);
     const [timePeriod, setTimePeriod] = useState("MONTHLY");
 
+    function GetDisplayedCategoryKey(transaction: Transaction) {
+        const categoryKeys = displayedCategories.filter((dck: string) => transaction.category.startsWith(dck));
+        if (categoryKeys.length > 1) {
+            throw new Error(`transaction ${transaction} more than one cat key ${categoryKeys}`);
+        }
+
+        if (categoryKeys.length == 0) {
+            throw new Error(`transaction ${transaction} no cat key`);
+        }
+
+        return categoryKeys[0];
+    }
+
+    function getDateMapKey(date: Date) {
+        if (timePeriod == "MONTHLY") {
+            return `${date.getFullYear()}-${date.getMonth()}`;
+        } else if (timePeriod == "YEARLY") {
+            return `${date.getFullYear()}`;
+        } else if (timePeriod == "SINGLE") {
+            return "SINGLEDATEMAPKEY";
+        }
+
+        throw new Error(`Unsupported timePeriod ${timePeriod}`);
+    }
+
+    function normalizeDate(date: Date) {
+        return new Date(
+            timePeriod == "YEARLY" || timePeriod == "MONTHLY" ? date.getFullYear() : 1,
+            timePeriod == "MONTHLY" ? date.getMonth() : 1,
+            1
+        );
+    }
+
+    function incrementDate(date: Date) {
+        if (timePeriod == "MONTHLY") {
+            return new Date(date.getFullYear(), date.getMonth() + 1, 1);
+        } else if (timePeriod == "YEARLY") {
+            return new Date(date.getFullYear() + 1, 1, 1);
+        } else if (timePeriod == "SINGLE") {
+            return new Date(9999, 1, 1);
+        }
+
+        throw new Error(`Unsupported timePeriod ${timePeriod}`);
+    }
+
+    function calculateGraphData() {
+        if (props.transactionData == null || displayedCategories == null) {
+            return;
+        }
+
+        const displayedCategoriesMap = new Map<string, Map<string, number>>(
+            displayedCategories.map((displayedCategory: string) => [displayedCategory, new Map<string, number>()])
+        );
     
+        for (let transaction of props.transactionData) {
+            if (Transaction.IsHiddenCategory(transaction.category)) {
+                continue;
+            }
+
+            const categoryKey = GetDisplayedCategoryKey(transaction);
+            const dateMap = displayedCategoriesMap.get(categoryKey);
+            const dateMapKey = getDateMapKey(transaction.date);
+            dateMap.set(dateMapKey, dateMap.has(dateMapKey) ? dateMap.get(dateMapKey) + transaction.amount : transaction.amount);
+        }
+        console.log(displayedCategories);
+
+        const firstDate: Date = props.transactionData[0].date; // assumes transactions are sorted by date
+        const lastDate: Date = props.transactionData[props.transactionData.length - 1].date;
+        const dateKeyDates: Date[] = [];
+        for (let curDate = normalizeDate(firstDate); curDate <= normalizeDate(lastDate); curDate = incrementDate(curDate)) {
+            dateKeyDates.push(curDate);
+        }
+        console.log(dateKeyDates);
+
+        const data: any[] = [];
+        for (let dateKeyDate of dateKeyDates) {
+            const dataEntry: any = { date: dateKeyDate };
+            for (let [catKey, dateMap] of displayedCategoriesMap) {
+                dataEntry[catKey] = dateMap.get(getDateMapKey(dateKeyDate)) ?? 0;
+            }
+            data.push(dataEntry);
+        }
+        console.log(data);
+
+        setGraphData(data);
+    }
+
+
     const [colDefs, setColDefs]: [any, any] = useState([
         {
             field: "name",
@@ -113,22 +125,17 @@ export function AnalyticsView(props: {
         setEnabledCategories(new Set<string>(props.categoryData));
     }, [props.categoryData]);
 
+    useEffect(calculateGraphData, [props.transactionData, displayedCategories]);
+
     useEffect(() => {
-        if (enabledCategories != null) {
-            setGraphData(calculateGraphData(props.transactionData, Array.from(enabledCategories)));
+        if (enabledCategories == null) {
+            return;
         }
-    }, [props.transactionData, enabledCategories]);
 
-    // useEffect(() => {
-    //     setDisplayedCategories(enabledCategories.filter((ec: string) => ec.startsWith(ec)).length == 1);
-    // }, enabledCategories);
-
-    // function displayCategory(idx: number, display: boolean) {
-    //     setDisplayedCategoryData(displayedCategoryData.map((dc: DisplayedCategory, i: number) =>
-    //         i == idx ?
-    //         new DisplayedCategory(dc.name, dc.amount, display) :
-    //         dc));
-    // }
+        const enabledCategoriesArr: string[] = Array.from(enabledCategories);
+        setDisplayedCategories(enabledCategoriesArr
+            .filter((ec: string) => enabledCategoriesArr.filter((_ec: string) => _ec.startsWith(ec)).length == 1));
+    }, [enabledCategories]);
 
     return <div className="mainContent">
         <div className="viewContainer">
@@ -149,6 +156,11 @@ export function AnalyticsView(props: {
                         rowData={enabledCategories}
                         columnDefs={colDefs}/>
                 </div> */}
+                <div className="analyticsGrid">
+                    <LineGraph
+                        graphData={graphData}
+                        displayedCategories={displayedCategories}/>
+                </div>
             </div>
         </div>
     </div>;

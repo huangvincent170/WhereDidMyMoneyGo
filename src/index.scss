@@ -304,7 +304,7 @@ select {
     height: calc(100% - 60px);
 
     .analyticsGrid {
-        width: 75%
+        width: calc(100% - 190px)
     }
 
     .analyticsSidebar {
@@ -338,6 +338,17 @@ select {
 
     select {
         height: 25px;
+    }
+}
+
+.tooltip {
+    background-color: rgba(175, 175, 175, 0.4);
+    border-radius: 5px;
+    padding: 5px;
+
+    p {
+        font-size: small;
+        color: $textColor;
     }
 }
 
