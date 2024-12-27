@@ -8,7 +8,7 @@ import { Route, HashRouter, Routes } from "react-router-dom";
 import { SidebarNav } from "./components/sidebar-nav";
 import { RulesView } from './pages/rules/rules-view';
 import { CategoriesView } from './pages/categories/categories-view';
-import { AnalyticsView } from './pages/analytics/analytics-view';
+import { AnalyticsView, calculateGraphData } from './pages/analytics/analytics-view';
 import localStorage = require('local-storage');
 import { Rule } from './classes/rule';
 
@@ -33,9 +33,11 @@ function App() {
         localStorage.set('source-data', JSON.stringify(sourceData));
     }
 
-    async function refreshTransactionData(sourceData: Source[]) {
+    async function refreshTransactionData(sourceData: Source[], rulesData: Rule[]) {
         let transactions: Transaction[] = await window.electronAPI.readDataFromSources(sourceData);
+        console.log(`refreshing with rules ${rulesData}`);
         setTransactionsData(Rule.Execute(rulesData, transactions));
+        // calculateGraphData(transactionsData, categoryData);
         // Category.setCategoryAmounts(categoryData, transactions);
     }
 
@@ -63,7 +65,8 @@ function App() {
                 setAndStoreRulesData([]);
             }
 
-            await refreshTransactionData(storedSourceData);
+            await refreshTransactionData(storedSourceData, storedRulesData);
+            // calculateGraphData(transactionsData, categoryData)
         };
 
         window.electronAPI.onAppLoaded(async () => {
@@ -77,7 +80,7 @@ function App() {
             <Route path="/" element={
                 <TransactionsView
                     transactionData={transactionsData}
-                    refreshTransactionData={async () => refreshTransactionData(sourceData)}
+                    refreshTransactionData={async () => refreshTransactionData(sourceData, rulesData)}
                     rulesData={rulesData}
                     setRulesData={setAndStoreRulesData}/>
             }/>

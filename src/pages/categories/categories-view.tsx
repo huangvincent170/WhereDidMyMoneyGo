@@ -52,28 +52,46 @@ export function CategoriesView(props: {transactionData: Transaction[], categoryD
     const gridRef = useRef<AgGridReact<DisplayedCategory>>();
 
     function addNewCategory() {
+        if (displayedCategoryData == null) {
+            return;
+        }
+
         if (!displayedCategoryData.some((dc: DisplayedCategory) => dc.name == "" || dc.name == null)) {
             setDisplayedCategoryData(displayedCategoryData.concat(new DisplayedCategory("")));
         }
     }
 
+    // returns null if valid
+    function validateCategoryId(categoryId: string): string {
+        if (categoryId == null || categoryId == "" || categoryId.endsWith("/")) {
+            return "name must be nonempty";
+        }
+
+        if (categoryId.toLocaleLowerCase() == "deleted") {
+            return "name cannot be deleted";
+        }
+
+        if (categoryId.toLocaleLowerCase() == "split") {
+            return "name cannot be split";
+        }
+        
+        if (categoryId.toLocaleLowerCase() == "uncategorized") {
+            return "name cannot be uncategorized";
+        }
+
+        if (categoryId.includes("//")) {
+            return "name cannot contain empty parent category";
+        }
+
+        return null;
+    }
+
     function onCellEditingStopped(e: CellEditingStoppedEvent<DisplayedCategory>) {
         console.log(e);
 
-        if (e.newValue == "" || e.newValue == null) {
-            console.log("name must be nonempty!");
-            setDisplayedCategoryData(createDisplayedCategories(props.categoryData));
-            return;
-        }
-
-        if (e.newValue.toUpperCase() == "DELETED") {
-            console.log("name cannot be DELETED!");
-            setDisplayedCategoryData(createDisplayedCategories(props.categoryData));
-            return;
-        }
-
-        if (e.newValue.toUpperCase() == "SPLIT") {
-            console.log("name cannot be SPLIT!");
+        const validateError: string = validateCategoryId(e.newValue);
+        if (validateError != null) {
+            console.log(validateError);
             setDisplayedCategoryData(createDisplayedCategories(props.categoryData));
             return;
         }

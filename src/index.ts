@@ -108,6 +108,7 @@ function handleReadDataFromSources(sources: Source[]): Transaction[] {
       ));
       transactions = transactions.concat(sourceTransactions);
     }
+    transactions.sort((a: Transaction, b: Transaction) => a.date < b.date ? -1 : 1)
     return transactions;
 }
 

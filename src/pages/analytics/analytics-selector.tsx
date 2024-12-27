@@ -2,13 +2,14 @@ import { Transaction } from "../../classes/transaction";
 import { AgGridReact, CustomCellRendererProps } from 'ag-grid-react'; // React Data Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import { useCallback, useEffect, useRef, useState } from "react";
-import { DisplayedCategory } from "./analytics-view";
+
 
 export function AnalyticsSelector(props: {
     // categoryData: Category[],
     // transactionData: Transaction[]
-    displayedCategoryData: DisplayedCategory[],
-    setDisplayed: Function,
+    categoryData: string[],
+    enabledCategories: Set<string>,
+    setEnabledCategories: Function,
 }) {
     
 
@@ -46,15 +47,15 @@ export function AnalyticsSelector(props: {
         </div>
         <div className="analyticsSelectorCategories">
             {
-                props.displayedCategoryData?.map((dc, i) => 
+                props.categoryData?.map((category, i) => 
                     <div className="analyticsSelectorCategorySelector">
                         <input
                             type="checkbox"
                             className="inputCheckbox"
-                            checked={dc.displayed}
-                            onChange={() => props.setDisplayed(i, !dc.displayed)}
+                            checked={props.enabledCategories?.has(category)}
+                            onChange={() => props.enabledCategories?.has(category) ? props.enabledCategories?.delete(category) : props.enabledCategories?.add(category)}
                             />
-                        &nbsp;{dc.name}
+                        &nbsp;{category}
                     </div>
                 )
             }
