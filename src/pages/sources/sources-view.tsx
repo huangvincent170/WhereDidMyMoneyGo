@@ -9,7 +9,7 @@ export function SourcesView(props: {sourceData: Source[], setSourceData: Functio
     function actionCellRenderer() {
         // todo make look nice
         return <div className="gridButtonContainer">
-            <button data-action="edit" className="gridButton"> edit  </button>
+            <button data-action="edit" className="gridButton"> edit </button>
             <button data-action="delete" className="gridButton"> delete </button>
         </div>;
     }

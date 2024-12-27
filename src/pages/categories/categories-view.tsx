@@ -6,15 +6,6 @@ import { Transaction } from "../../classes/transaction";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 export function CategoriesView(props: {transactionData: Transaction[], categoryData: Category[], setCategoryData: Function}) {
-    // const testCategoryData: Category[] = [
-    //     new Category("Needs/Food/Chipotle", 111.11),
-    //     new Category("Needs/Food/Other", 7),
-    //     new Category("Needs/Rent", 1234),
-    //     new Category("Wants/Video Games", 0),
-    //     new Category("Wants/Other", 0),
-    //     new Category("Misc", 123.45),
-    // ]
-
     class DisplayedCategory {
         name: string;
         amount: number;

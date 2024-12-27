@@ -97,16 +97,17 @@ export function RulesView(props: {
             field: "testsString",
             autoHeight: true,
             wrapText: true,
-            cellStyle: {'whiteSpace': 'pre' },
+            // cellStyle: {'whiteSpace': 'pre' },
             flex: 3,
+            resizable: true,
         },
         {
             headerName: "Operations",
             field: "actionString",
             autoHeight: true,
             wrapText: true,
-            cellStyle: {'whiteSpace': 'pre' },
-            flex: 2
+            // cellStyle: {'whiteSpace': 'pre' },
+            flex: 1
         },
         {
             headerName: "Executes Once",

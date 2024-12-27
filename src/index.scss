@@ -70,7 +70,7 @@ input:focus {
 }
 
 .inputCheckbox:not(:checked){
-    opacity:0.2;
+    opacity: 0.2;
 }
 
 ::-webkit-scrollbar {
@@ -102,6 +102,15 @@ input:focus {
 
 .gridButton:hover {
     background-color: $gridButtonHoverColor;
+}
+
+select {
+    color: $textColor;
+    border: none;
+    border-radius: 5px;
+    background-color: $buttonColor;
+    height: 100%;
+    // margin: 0px 5px 0px 0px;
 }
 
 .pageTitle {
@@ -208,11 +217,11 @@ input:focus {
     }
 
     select {
-        color: $textColor;
-        border: none;
-        border-radius: 5px;
-        background-color: $buttonColor;
-        height: 100%;
+        // color: $textColor;
+        // border: none;
+        // border-radius: 5px;
+        // background-color: $buttonColor;
+        // height: 100%;
         margin: 0px 5px 0px 0px;
     }
 
@@ -289,6 +298,49 @@ input:focus {
         justify-content: center;
     }
 }
+
+.analyticsContainer {
+    display: flex;
+    height: calc(100% - 60px);
+
+    .analyticsGrid {
+        width: 75%
+    }
+
+    .analyticsSidebar {
+        width: 190px;
+        height: calc(100% - 90px);
+        // background-color: #777777;
+        color: $textColor;
+        font-size: small;
+        margin: 40px 20px 0px 0px;
+        overflow: hidden;
+    }
+
+    .analyticsSelectorOption {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0px 0px 5px 0px;
+    }
+
+    .analyticsSelectorCategories {
+        max-height: calc(100% - 90px);
+        overflow-y: auto;
+        margin: 20px 0px 0px 0px;
+    }
+
+    .analyticsSelectorCategorySelector {
+        display: flex;
+        align-items: center;
+    }
+
+    select {
+        height: 25px;
+    }
+}
+
 
 .navMenu {
     background-color: $backgroundColor3;

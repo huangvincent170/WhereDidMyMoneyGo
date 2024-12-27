@@ -100,7 +100,9 @@ function App() {
                     setRulesData={setAndStoreRulesData}/>
             }/>
             <Route path="/analytics" element={
-                <AnalyticsView/>
+                <AnalyticsView
+                categoryData={categoryData}
+                transactionData={transactionsData}/>
             }/>
         </Routes>
     </HashRouter>;

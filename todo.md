@@ -7,27 +7,28 @@
 
 - Transactions
     - ❗ Add split button to split transaction
+    - ❗ Fix transactions not refreshing on startup
+    - ⚠️ Edit transaction
     - 👍 Error handling for reading transactions from source to check type of Dates/Numbers/strings/etc
-    - 👍 Edit transaction
+
 
 - Sources
     - 👍 Last time source was updated
 
 - Categories
     - ❗ Edit category
-    - ❗ add deleted/split category
-        - ❗ deleted/split transactions hidden from transactions view
-        - ❗ deleted/split transactions hidden from analytics view
     - ❗ disable delete button for non leaf cats
-    - 👍 Change category add to be grid based
+    - ❗ disable creating deleted or split category
+    - ❗ Remove amount, move to analytics
 
 - Rules
     - ❗ Date picker
     - ⚠️ transactions that the rule would affect preview in create rule
+    - 👍 Rule grid filters
     - 👍 no duplicate rules
-    - 👍 Rules which only execute once sorted first
-    - 👍 binsearch on dates for single execute rules (need to sort by date first)
+    - 👍 Rules which only execute once sorted/executed first
     - 👍 add scroll bar/ fix many tests/ops out of bounds
+    - ❔ binsearch on dates for single execute rules (need to sort by date first)
     - ❔ split rule into percentages
     - ❔ Less/greater than for numbers
     - ❔ Less/greater than for dates
@@ -35,9 +36,21 @@
 
 
 - ❗ analytics
-    - ❗ graph for spending by category
-        - ⚠️ monthly/yearly/total
-        - 👍 custom date range
+    - ❗ deleted/split transactions hidden from analytics view
+    - ❗ Single time period analytics by category
+        - Types
+            - ❗ bar graph
+            - ❗ sankey chart
+            - 👍 pie graph
+            - 👍 Table
+        - period types
+            - ❗ monthly
+            - ❗total
+            - ⚠️ yearly
+            - 👍 custom date range
+    - Spending over time
+        - ❗ Line graph for spending by category over periods (daily/weekly/monthly)
+        - Table
 
 - Misc
     - ⚠️ Fix memory leak, remove listeners when unused
