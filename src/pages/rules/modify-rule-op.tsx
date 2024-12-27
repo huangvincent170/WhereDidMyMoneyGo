@@ -1,10 +1,9 @@
 import { Rule, Field, CheckOp, RuleOpType, RuleOp, FieldType, SetRuleOp, SplitRuleOp, RuleTest } from "../../classes/rule";
 import { FaPlus, FaMinus } from "react-icons/fa";
 import { FieldSelector, FieldValueInput, RuleOpTypeSelector } from "./modify-rule-form-fields";
-import { Category } from "../../classes/category";
 
 export function ModifyRuleOp(props: {
-    categoryData: Category[],
+    categoryData: string[],
     ruleOpType: RuleOpType,
     setRuleOpType: Function,
     setRuleOp: SetRuleOp,

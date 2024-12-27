@@ -1,88 +1,36 @@
-import { Category } from "../../classes/category";
 import { GridOptions, ICellRendererComp, ICellRendererParams, RowHeightParams, GridApi, Column, CellValueChangedEvent, CellEditingStoppedEvent } from "ag-grid-community";
 import { AgGridReact, CustomCellRendererProps } from 'ag-grid-react'; // React Data Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import { Transaction } from "../../classes/transaction";
 import { useCallback, useEffect, useRef, useState } from "react";
 
-export function CategoriesView(props: {transactionData: Transaction[], categoryData: Category[], setCategoryData: Function}) {
+export function CategoriesView(props: {transactionData: Transaction[], categoryData: string[], setCategoryData: Function}) {
     class DisplayedCategory {
         name: string;
-        amount: number;
-        children: DisplayedCategory[];
-
-        constructor(
-            name: string
-        ) {
+        constructor(name: string) {
             this.name = name;
-            this.amount = 0;
-            this.children = [];
         }
     }
 
-    function createDisplayedCategories(categories: Category[]): DisplayedCategory[] {
-        if (categories == null) {
-            return null;
-        }
-
-        let displayedCategories: DisplayedCategory[] = [];
-        for (const category of categories) {
-            const splitCategoryNames: string[] = Category.getParentCategories(category);
-            let parentDisplayedCategoryChildren = displayedCategories;
-            for (let i = 0; i < splitCategoryNames.length; i++) {
-                let curCategoryName = splitCategoryNames.slice(1, i+1).reduce((nameStr, subName) => nameStr + '/' + subName, splitCategoryNames[0]);
-                let curDisplayedCategory = parentDisplayedCategoryChildren.find(displayedCategory => displayedCategory.name == curCategoryName);
-                if (curDisplayedCategory == null) {
-                    curDisplayedCategory = new DisplayedCategory(curCategoryName);
-                    parentDisplayedCategoryChildren.push(curDisplayedCategory)
-                }
-                curDisplayedCategory.amount += category.amount;
-                parentDisplayedCategoryChildren = curDisplayedCategory.children;
-            }
-        }
-
-        // flatten categories
-        function dfs(categories: DisplayedCategory[]): DisplayedCategory[] {
-            let traversal: DisplayedCategory[] = [];
-            for (let category of categories) {
-                traversal.push(category);
-                if (category.children.length != 0) {
-                    traversal = traversal.concat(dfs(category.children));
-                }
-            }
-            return traversal;
-        }
-
-        let flattenedDisplayedCategories: DisplayedCategory[] = dfs(displayedCategories);
-        console.log(flattenedDisplayedCategories);
-
-        return flattenedDisplayedCategories;
+    function createDisplayedCategories(categories: string[]): DisplayedCategory[] {
+        return categories?.map((c: string) => new DisplayedCategory(c));
     }
 
     function onCellClicked(params: any) {
         if (params.column.colId === "action" && params.event.target.dataset.action) {
-            let action = params.event.target.dataset.action;
-
-            // todo make edit button work
-
+            const action = params.event.target.dataset.action;
             if (action === "delete") {
-                console.log(props.categoryData);
-                if (props.categoryData.every(category => category.id != params.node.data.name)) {
-                    console.log("Cannot delete ");
+                if (props.categoryData.filter(c => c.startsWith(params.node.data.name)).length > 1) {
+                    console.log("have to delete parent first!");
+                    return;
                 }
-                params.api.applyTransaction({
-                    remove: [params.node.data]
-                });
-                const newCategoryData = props.categoryData.filter(category => category.id != params.node.data.name);
-                props.setCategoryData(newCategoryData);
+                props.setCategoryData(props.categoryData.filter(category => category != params.node.data.name));
             }
         }
     }
     
     function ActionCellRenderer() {
-        // todo make look nice
         return <div>
-            {/* <button data-action="edit"> Add subcategory </button> */}
             <button data-action="delete"> delete </button>
         </div>;
     }
@@ -90,9 +38,8 @@ export function CategoriesView(props: {transactionData: Transaction[], categoryD
     const [colDefs, setColDefs]: [any, any] = useState([
         {
             field: "name",
-            editable: true
+            editable: (params: any) => params.data.name == "" || params.data.name == null
         },
-        { field: "amount" },
         {
             headerName: "",
             cellRenderer: ActionCellRenderer,
@@ -101,35 +48,59 @@ export function CategoriesView(props: {transactionData: Transaction[], categoryD
         }
     ]);
 
+    const [displayedCategoryData, setDisplayedCategoryData] = useState(null);
     const gridRef = useRef<AgGridReact<DisplayedCategory>>();
 
     function addNewCategory() {
-        if (!displayedCategoryData.some((dc: DisplayedCategory) => dc.name == "")) {
+        if (!displayedCategoryData.some((dc: DisplayedCategory) => dc.name == "" || dc.name == null)) {
             setDisplayedCategoryData(displayedCategoryData.concat(new DisplayedCategory("")));
         }
     }
 
     function onCellEditingStopped(e: CellEditingStoppedEvent<DisplayedCategory>) {
         console.log(e);
+
         if (e.newValue == "" || e.newValue == null) {
             console.log("name must be nonempty!");
             setDisplayedCategoryData(createDisplayedCategories(props.categoryData));
             return;
         }
+
+        if (e.newValue.toUpperCase() == "DELETED") {
+            console.log("name cannot be DELETED!");
+            setDisplayedCategoryData(createDisplayedCategories(props.categoryData));
+            return;
+        }
+
+        if (e.newValue.toUpperCase() == "SPLIT") {
+            console.log("name cannot be SPLIT!");
+            setDisplayedCategoryData(createDisplayedCategories(props.categoryData));
+            return;
+        }
         
-        if (e.oldValue != "") {
+        if (e.oldValue != "" && e.oldValue != null) {
             console.log("renames not supported right now");
             setDisplayedCategoryData(createDisplayedCategories(props.categoryData));
             return;
         }
 
-        if (displayedCategoryData.filter((dc: DisplayedCategory) => dc.name == e.newValue).length > 1) {
+        if (props.categoryData.some((c: string) => c == e.newValue)) {
             console.log("category already exists!");
             setDisplayedCategoryData(createDisplayedCategories(props.categoryData));
             return;
         }
 
-        props.setCategoryData(props.categoryData.concat([new Category(e.newValue)]));
+        const splitCategoryNames: string[] = e.newValue.split('/');
+        let categoriesToAdd: string[] = []
+        for (let i = 0; i < splitCategoryNames.length; i++) {
+            const parentCategoryName: string = splitCategoryNames.slice(0, i+1).join('/');
+            if (!props.categoryData.some((c: string) => c == parentCategoryName)) {
+                categoriesToAdd.push(parentCategoryName);
+            }
+        }
+        const newCategories = props.categoryData.concat(categoriesToAdd);
+        newCategories.sort();
+        props.setCategoryData(newCategories);
     }
 
     function onComponentStateChanged() {
@@ -142,8 +113,6 @@ export function CategoriesView(props: {transactionData: Transaction[], categoryD
             }
         }
     }
-
-    const [displayedCategoryData, setDisplayedCategoryData] = useState(null);
 
     useEffect(() => {
         setDisplayedCategoryData(createDisplayedCategories(props.categoryData));
@@ -164,9 +133,9 @@ export function CategoriesView(props: {transactionData: Transaction[], categoryD
                     columnDefs={colDefs}
                     ref={gridRef}
                     onCellClicked={onCellClicked}
-                    onComponentStateChanged={onComponentStateChanged}
                     onCellEditingStopped={onCellEditingStopped}
-                />
+                    onComponentStateChanged={onComponentStateChanged}
+                    stopEditingWhenCellsLoseFocus={true}/>
             </div>
         </div>
     </div>;

@@ -1,12 +1,11 @@
 import { AgGridReact } from "ag-grid-react";
-import { Category } from "../../classes/category";
 import { Field, Rule, RuleOpType, RuleTest, SetRuleOp, SplitRuleOp, CheckOp } from "../../classes/rule";
 import { useEffect, useMemo, useState } from "react";
 import { ModifyRulesView } from "./modify-rule-view";
 import { FaRegPlusSquare } from "react-icons/fa";
 
 export function RulesView(props: {
-    categoryData: Category[],
+    categoryData: string[],
     // transactionData: Transaction[],
     // setTransactionData: Function,
     rulesData: Rule[],

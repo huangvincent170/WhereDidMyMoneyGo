@@ -1,4 +1,3 @@
-import { Category } from "../../classes/category";
 import { Field, CheckOp, FieldToFieldType, ValidFieldTypeValidOps, RuleOpType, RuleOp, FieldType, SetRuleOp, SplitRuleOp, RuleTest } from "../../classes/rule";
 
 export function FieldSelector(props: {field: Field, setField: Function}) {
@@ -39,7 +38,7 @@ export function FieldOpSelector(props: {field: Field, checkOp: CheckOp, setCheck
 }
 
 export function FieldValueInput(props: {
-    categories?: Category[],
+    categories?: string[],
     field: Field,
     fieldValue: number | string | Date,
     setFieldValue: Function,
@@ -55,11 +54,11 @@ export function FieldValueInput(props: {
             <option hidden disabled key="_select" value="_select">select category</option>
             {
                 props.categories != null ?
-                props.categories.map((category: Category) => 
+                props.categories.map((category: string) =>
                     <option
-                        key={category.id}
-                        value={category.id}>
-                        {category.id}
+                        key={category}
+                        value={category}>
+                        {category}
                     </option>
                 ) :
                 <></>

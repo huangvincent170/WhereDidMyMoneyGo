@@ -1,4 +1,4 @@
-import { Category } from "../../classes/category";
+
 import { Transaction } from "../../classes/transaction";
 import { AgGridReact, CustomCellRendererProps } from 'ag-grid-react'; // React Data Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
@@ -25,18 +25,18 @@ export class DisplayedCategory {
 }
 
 export function AnalyticsView(props: {
-    categoryData: Category[],
+    categoryData: string[],
     transactionData: Transaction[]
 }) {
 
-    function createDisplayedCategories(categories: Category[]): DisplayedCategory[] {
+    function createDisplayedCategories(categories: string[]): DisplayedCategory[] {
         if (categories == null) {
             return null;
         }
 
         let displayedCategories: DisplayedCategory[] = [];
         for (const category of categories) {
-            const splitCategoryNames: string[] = Category.getParentCategories(category);
+            const splitCategoryNames: string[] = category.split('/');
             let parentDisplayedCategoryChildren = displayedCategories;
             for (let i = 0; i < splitCategoryNames.length; i++) {
                 let curCategoryName = splitCategoryNames.slice(1, i+1).reduce((nameStr, subName) => nameStr + '/' + subName, splitCategoryNames[0]);
@@ -45,7 +45,7 @@ export function AnalyticsView(props: {
                     curDisplayedCategory = new DisplayedCategory(curCategoryName);
                     parentDisplayedCategoryChildren.push(curDisplayedCategory)
                 }
-                curDisplayedCategory.amount += category.amount;
+                // curDisplayedCategory.amount += category.amount;
                 parentDisplayedCategoryChildren = curDisplayedCategory.children;
             }
         }

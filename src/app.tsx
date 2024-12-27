@@ -9,17 +9,16 @@ import { SidebarNav } from "./components/sidebar-nav";
 import { RulesView } from './pages/rules/rules-view';
 import { CategoriesView } from './pages/categories/categories-view';
 import { AnalyticsView } from './pages/analytics/analytics-view';
-import { Category } from './classes/category';
 import localStorage = require('local-storage');
 import { Rule } from './classes/rule';
 
 function App() {
-    const [categoryData, setCategoryData] = useState<Category[]>(null);
+    const [categoryData, setCategoryData] = useState<string[]>(null);
     const [rulesData, setRulesData] = useState<Rule[]>(null);
     const [sourceData, setSourceData] = useState<Source[]>(null);
     const [transactionsData, setTransactionsData] = useState<Transaction[]>(null);
 
-    function setAndStoreCategoryData(categoryData: Category[]) {
+    function setAndStoreCategoryData(categoryData: string[]) {
         setCategoryData(categoryData);
         localStorage.set('category-data', JSON.stringify(categoryData));
     }
@@ -37,13 +36,13 @@ function App() {
     async function refreshTransactionData(sourceData: Source[]) {
         let transactions: Transaction[] = await window.electronAPI.readDataFromSources(sourceData);
         setTransactionsData(Rule.Execute(rulesData, transactions));
-        Category.setCategoryAmounts(categoryData, transactions);
+        // Category.setCategoryAmounts(categoryData, transactions);
     }
 
     useEffect(() => {
         async function getDataAndRefreshAsync() {
             // localStorage.clear();
-            const storedCategoryData: Category[] = JSON.parse(localStorage.get('category-data'));
+            const storedCategoryData: string[] = JSON.parse(localStorage.get('category-data'));
             if (storedCategoryData != null) {
                 setCategoryData(storedCategoryData);
             } else {
@@ -101,8 +100,8 @@ function App() {
             }/>
             <Route path="/analytics" element={
                 <AnalyticsView
-                categoryData={categoryData}
-                transactionData={transactionsData}/>
+                    categoryData={categoryData}
+                    transactionData={transactionsData}/>
             }/>
         </Routes>
     </HashRouter>;

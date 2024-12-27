@@ -1,4 +1,3 @@
-import { Category } from "../../classes/category";
 import { Transaction } from "../../classes/transaction";
 import { AgGridReact, CustomCellRendererProps } from 'ag-grid-react'; // React Data Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid

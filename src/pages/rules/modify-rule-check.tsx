@@ -1,12 +1,11 @@
 import { Rule, Field, CheckOp, FieldToFieldType, ValidFieldTypeValidOps, RuleOpType, RuleOp, FieldType, SetRuleOp, SplitRuleOp, RuleTest } from "../../classes/rule";
 import { FaPlus, FaMinus } from "react-icons/fa";
 import { FieldOpSelector, FieldSelector, FieldValueInput } from "./modify-rule-form-fields";
-import { Category } from "../../classes/category";
 
 export function ModifyRuleCheck(props: {
     ruleTests: RuleTest[],
     setRuleTests: Function,
-    categoryData: Category[],
+    categoryData: string[],
 }) {
     function SetRuleTest(
         oldRuleTest: RuleTest,

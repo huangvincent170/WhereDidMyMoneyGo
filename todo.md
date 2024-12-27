@@ -16,10 +16,8 @@
     - 👍 Last time source was updated
 
 - Categories
-    - ❗ Edit category
-    - ❗ disable delete button for non leaf cats
-    - ❗ disable creating deleted or split category
-    - ❗ Remove amount, move to analytics
+    - ⚠️ Make look nice
+    - 👍 Edit category names
 
 - Rules
     - ❗ Date picker
@@ -33,7 +31,6 @@
     - ❔ Less/greater than for numbers
     - ❔ Less/greater than for dates
     - ❔ case sensitive equals/substring
-
 
 - ❗ analytics
     - ❗ deleted/split transactions hidden from analytics view
@@ -51,6 +48,7 @@
     - Spending over time
         - ❗ Line graph for spending by category over periods (daily/weekly/monthly)
         - Table
+        - bar chart stacked
 
 - Misc
     - ⚠️ Fix memory leak, remove listeners when unused

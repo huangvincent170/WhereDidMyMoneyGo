@@ -2,10 +2,9 @@ import { Rule, Field, CheckOp, FieldToFieldType, ValidFieldTypeValidOps, RuleOpT
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { ModifyRuleCheck } from "./modify-rule-check";
 import { ModifyRuleOp } from "./modify-rule-op"
-import { Category } from "../../classes/category";
 
 export function ModifyRulesView(props: {
-    categoryData: Category[]
+    categoryData: string[]
     showModifyRules: boolean,
     setShowModifyRules: Function,
     rulesData: Rule[],
