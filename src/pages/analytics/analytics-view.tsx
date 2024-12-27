@@ -25,7 +25,7 @@ export function AnalyticsView(props: {
         }
 
         if (categoryKeys.length == 0) {
-            throw new Error(`transaction ${transaction} no cat key`);
+            throw new Error(`transaction ${transaction.category} no cat key`);
         }
 
         return categoryKeys[0];

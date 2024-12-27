@@ -21,6 +21,6 @@ export class Transaction {
 
     static IsHiddenCategory(categoryId: string): boolean {
         const lowerCat = categoryId.toLocaleLowerCase();
-        return categoryId == "uncategorized" || categoryId == "deleted" || categoryId == "split";
+        return lowerCat == "uncategorized" || lowerCat == "deleted" || lowerCat == "split";
     }
 }
