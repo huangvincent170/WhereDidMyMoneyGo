@@ -100,17 +100,7 @@ export function CategoriesView(props: {transactionData: Transaction[], categoryD
             return;
         }
 
-        const splitCategoryNames: string[] = e.newValue.split('/');
-        let categoriesToAdd: string[] = []
-        for (let i = 0; i < splitCategoryNames.length; i++) {
-            const parentCategoryName: string = splitCategoryNames.slice(0, i+1).join('/');
-            if (!props.categoryData.some((c: string) => c == parentCategoryName)) {
-                categoriesToAdd.push(parentCategoryName);
-            }
-        }
-        const newCategories = props.categoryData.concat(categoriesToAdd);
-        newCategories.sort();
-        props.setCategoryData(newCategories);
+        props.setCategoryData(Transaction.AddParentCategories(e.newValue, props.categoryData));
     }
 
     function onComponentStateChanged() {

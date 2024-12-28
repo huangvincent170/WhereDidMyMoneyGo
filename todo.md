@@ -32,8 +32,7 @@
     - ❔ Less/greater than for dates
     - ❔ case sensitive equals/substring
 
-- ❗ analytics
-    - ❗ deleted/split transactions hidden from analytics view
+- Analytics
     - ❗ Single time period analytics by category
         - Types
             - ❗ bar graph

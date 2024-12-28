@@ -77,12 +77,16 @@ export function AnalyticsView(props: {
                 continue;
             }
 
+            if (!displayedCategories.some((displayedCategory: string) => transaction.category.startsWith(displayedCategory))) {
+                continue;
+            }
+
             const categoryKey = GetDisplayedCategoryKey(transaction);
             const dateMap = displayedCategoriesMap.get(categoryKey);
             const dateMapKey = getDateMapKey(transaction.date);
             dateMap.set(dateMapKey, dateMap.has(dateMapKey) ? dateMap.get(dateMapKey) + transaction.amount : transaction.amount);
         }
-        console.log(displayedCategories);
+        console.log("displayed " + displayedCategories);
 
         const firstDate: Date = props.transactionData[0].date; // assumes transactions are sorted by date
         const lastDate: Date = props.transactionData[props.transactionData.length - 1].date;
@@ -90,7 +94,7 @@ export function AnalyticsView(props: {
         for (let curDate = normalizeDate(firstDate); curDate <= normalizeDate(lastDate); curDate = incrementDate(curDate)) {
             dateKeyDates.push(curDate);
         }
-        console.log(dateKeyDates);
+        console.log("datekeydates " + dateKeyDates);
 
         const data: any[] = [];
         for (let dateKeyDate of dateKeyDates) {
@@ -100,7 +104,7 @@ export function AnalyticsView(props: {
             }
             data.push(dataEntry);
         }
-        console.log(data);
+        console.log("data " + data);
 
         setGraphData(data);
     }
@@ -122,7 +126,7 @@ export function AnalyticsView(props: {
 
 
     useEffect(() => {
-        setEnabledCategories(new Set<string>(props.categoryData));
+        setEnabledCategories(props.categoryData);
     }, [props.categoryData]);
 
     useEffect(calculateGraphData, [props.transactionData, displayedCategories]);
@@ -132,9 +136,7 @@ export function AnalyticsView(props: {
             return;
         }
 
-        const enabledCategoriesArr: string[] = Array.from(enabledCategories);
-        setDisplayedCategories(enabledCategoriesArr
-            .filter((ec: string) => enabledCategoriesArr.filter((_ec: string) => _ec.startsWith(ec)).length == 1));
+        setDisplayedCategories(enabledCategories.filter((ec: string) => enabledCategories.filter((_ec: string) => _ec.startsWith(ec)).length == 1));
     }, [enabledCategories]);
 
     return <div className="mainContent">

@@ -8,10 +8,20 @@ export function AnalyticsSelector(props: {
     // categoryData: Category[],
     // transactionData: Transaction[]
     categoryData: string[],
-    enabledCategories: Set<string>,
+    enabledCategories: string[],
     setEnabledCategories: Function,
 }) {
-    
+    function toggleCategory(categoryId: string): void {
+        if (props.enabledCategories == null) {
+            return;
+        }
+
+        if (props.enabledCategories.some((enabledCategory: string) => enabledCategory == categoryId)) {
+            props.setEnabledCategories(props.enabledCategories.filter((enabledCategory: string) => !enabledCategory.startsWith(categoryId)));
+        } else {
+            props.setEnabledCategories(Transaction.AddParentCategories(categoryId, props.enabledCategories));
+        }
+    }
 
     return <div className="analyticsSidebar">
         <div className="analyticsSelectorOption">
@@ -52,8 +62,8 @@ export function AnalyticsSelector(props: {
                         <input
                             type="checkbox"
                             className="inputCheckbox"
-                            checked={props.enabledCategories?.has(category) ?? true}
-                            onChange={() => props.enabledCategories?.has(category) ? props.enabledCategories?.delete(category) : props.enabledCategories?.add(category)}
+                            checked={props.enabledCategories?.some((enabledCategory: string) => enabledCategory == category) ?? true}
+                            onChange={() => toggleCategory(category)}
                             />
                         &nbsp;{category}
                     </div>
