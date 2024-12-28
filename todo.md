@@ -33,10 +33,9 @@
     - ❔ case sensitive equals/substring
 
 - Analytics
-    - ❗ Single time period analytics by category
+    - Single time period analytics by category
         - Types
             - ❗ bar graph split
-            - ❗ sankey chart
             - 👍 pie graph
             - 👍 Table
         - ❗ period selector
@@ -49,6 +48,7 @@
     - ⚠️ Color coding for categories
     - ⚠️ Fix yearly displaying month
     - ⚠️ lifetime should not display x axis tick for time
+    - ⚠️ Fix error when no categories
 
 - Misc
     - ⚠️ Fix memory leak, remove listeners when unused

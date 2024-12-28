@@ -304,7 +304,10 @@ select {
     height: calc(100% - 60px);
 
     .analyticsGrid {
-        width: calc(100% - 190px)
+        // width: calc(100% - 190px)
+        
+        width: calc(100% - 210px);
+        margin: 0px 0px 20px 0px
     }
 
     .analyticsSidebar {

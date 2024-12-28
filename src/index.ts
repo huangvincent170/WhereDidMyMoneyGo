@@ -99,12 +99,12 @@ function handleReadDataFromSources(sources: Source[]): Transaction[] {
       const fileData: string[] = dirEntries
         .map(dirEnt => readFileSync(`${dirEnt.parentPath}/${dirEnt.name}`, 'utf-8'));
       const records: string[][] = fileData
-        .map(data => parse(data, {bom: true, relax_quotes: true}))
+        .map(data => parse(data, {bom: true, relax_quotes: true, relax_column_count_less: true, skip_empty_lines: true}))
         .map(parsedData => parsedData.slice(source.hasHeader ? 1 : 0))
         .reduce((acc, val) => acc.concat(val), []);
-      const sourceTransactions: Transaction[] = records.map(record => new Transaction(
+      const sourceTransactions: Transaction[] = records.map(record =>  new Transaction(
         source.name,
-        Number(record[source.amountIdx]),
+        Number(source.isDebt ? -1 : 1) * Number(record[source.amountIdx]),
         new Date(record[source.dateIdx]),
         record[source.descriptionIdx]
       ));

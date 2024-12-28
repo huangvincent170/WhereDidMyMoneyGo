@@ -10,8 +10,11 @@ export function AnalyticsSelector(props: {
     categoryData: string[],
     enabledCategories: string[],
     setEnabledCategories: Function,
+    timePeriod: string,
     setTimePeriod: Function,
+    timeType: string,
     setTimeType: Function,
+    graphType: string,
     setGraphType: Function,
 }) {
     function toggleCategory(categoryId: string): void {
@@ -29,14 +32,18 @@ export function AnalyticsSelector(props: {
     return <div className="analyticsSidebar">
         <div className="analyticsSelectorOption">
             Time Type
-            <select onChange={(e) => props.setTimeType(e.target.value)} defaultValue={"OVERTIME"}>
+            <select
+                onChange={(e) => props.setTimeType(e.target.value)}
+                value={props.timeType ?? "OVERTIME"}>
                 <option value="SINGLE">Single period</option>
                 <option value="OVERTIME">Over Time</option>
             </select>
         </div>
         <div className="analyticsSelectorOption">
             Time Period
-            <select onChange={(e) => props.setTimePeriod(e.target.value)} defaultValue={"MONTHLY"}>
+            <select
+                onChange={(e) => props.setTimePeriod(e.target.value)}
+                value={props.timePeriod ?? "MONTHLY"}>
                 <option value="MONTHLY">Monthly</option>
                 <option value="YEARLY">Yearly</option>
                 <option value="LIFETIME">Lifetime</option>
@@ -52,12 +59,32 @@ export function AnalyticsSelector(props: {
         </div> */}
         <div className="analyticsSelectorOption">
             Graph Type
-            <select onChange={(e) => props.setGraphType(e.target.value)} defaultValue={"LINE"}>
-                <option value="TABLE">Table</option>
-                <option value="BARSTACKED">Bar (Stacked)</option>
-                <option value="BARSPLIT">Bar (Split)</option>
-                <option value="SANKEY">Sankey</option>
-                <option value="LINE">Line</option>
+            <select
+                onChange={(e) => props.setGraphType(e.target.value)}
+                value={props.graphType ?? "LINE"}>
+                <option
+                    value="TABLE">
+                    Table
+                </option>
+                <option
+                    value="BARSTACKED"
+                    hidden={props.timeType != "OVERTIME"}>
+                    Bar (Stacked)
+                </option>
+                <option
+                    value="BARSPLIT">
+                    Bar (Split)
+                </option>
+                <option
+                    value="SANKEY"
+                    hidden={props.timeType != "SINGLE"}>
+                    Sankey
+                </option>
+                <option
+                    value="LINE"
+                    hidden={props.timeType != "OVERTIME"}>
+                    Line
+                </option>
             </select>
         </div>
         <div className="analyticsSelectorCategories">
