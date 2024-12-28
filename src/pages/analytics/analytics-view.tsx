@@ -16,7 +16,10 @@ export function AnalyticsView(props: {
     const [enabledCategories, setEnabledCategories] = useState(null);
     const [displayedCategories, setDisplayedCategories] = useState(null);
     const [graphData, setGraphData] = useState(null);
+
+    const [timeType, setTimeType] = useState("OVERTIME");
     const [timePeriod, setTimePeriod] = useState("MONTHLY");
+    const [graphType, setGraphType] = useState("LINE");
 
     function GetDisplayedCategoryKey(transaction: Transaction) {
         const categoryKeys = displayedCategories.filter((dck: string) => transaction.category.startsWith(dck));
@@ -36,8 +39,8 @@ export function AnalyticsView(props: {
             return `${date.getFullYear()}-${date.getMonth()}`;
         } else if (timePeriod == "YEARLY") {
             return `${date.getFullYear()}`;
-        } else if (timePeriod == "SINGLE") {
-            return "SINGLEDATEMAPKEY";
+        } else if (timePeriod == "LIFETIME") {
+            return "LIFETIMEDATEMAPKEY";
         }
 
         throw new Error(`Unsupported timePeriod ${timePeriod}`);
@@ -56,7 +59,7 @@ export function AnalyticsView(props: {
             return new Date(date.getFullYear(), date.getMonth() + 1, 1);
         } else if (timePeriod == "YEARLY") {
             return new Date(date.getFullYear() + 1, 1, 1);
-        } else if (timePeriod == "SINGLE") {
+        } else if (timePeriod == "LIFETIME") {
             return new Date(9999, 1, 1);
         }
 
@@ -129,7 +132,7 @@ export function AnalyticsView(props: {
         setEnabledCategories(props.categoryData);
     }, [props.categoryData]);
 
-    useEffect(calculateGraphData, [props.transactionData, displayedCategories]);
+    useEffect(calculateGraphData, [props.transactionData, displayedCategories, timePeriod]);
 
     useEffect(() => {
         if (enabledCategories == null) {
@@ -152,7 +155,10 @@ export function AnalyticsView(props: {
                 <AnalyticsSelector
                     categoryData={props.categoryData}
                     enabledCategories={enabledCategories}
-                    setEnabledCategories={setEnabledCategories}/>
+                    setEnabledCategories={setEnabledCategories}
+                    setTimePeriod={setTimePeriod}
+                    setTimeType={setTimeType}
+                    setGraphType={setGraphType}/>
                 {/* <div className="ag-theme-balham-dark fullPageGrid analyticsGrid">
                     <AgGridReact
                         rowData={enabledCategories}

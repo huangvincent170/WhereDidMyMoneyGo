@@ -7,12 +7,12 @@
 
 - Transactions
     - ❗ Add split button to split transaction
-    - ❗ Fix transactions not refreshing on startup
     - ⚠️ Edit transaction
     - 👍 Error handling for reading transactions from source to check type of Dates/Numbers/strings/etc
 
 
 - Sources
+    - ⚠️ Make add source look nice
     - 👍 Last time source was updated
 
 - Categories
@@ -35,19 +35,20 @@
 - Analytics
     - ❗ Single time period analytics by category
         - Types
-            - ❗ bar graph
+            - ❗ bar graph split
             - ❗ sankey chart
             - 👍 pie graph
             - 👍 Table
+        - ❗ period selector
         - period types
-            - ❗ monthly
-            - ❗total
-            - ⚠️ yearly
-            - 👍 custom date range
+            - ⚠️ custom date range
     - Spending over time
-        - ❗ Line graph for spending by category over periods (daily/weekly/monthly)
-        - Table
-        - bar chart stacked
+        - ⚠️ Table
+        - ⚠️ bar chart stacked
+        - ⚠️ bar graph split
+    - ⚠️ Color coding for categories
+    - ⚠️ Fix yearly displaying month
+    - ⚠️ lifetime should not display x axis tick for time
 
 - Misc
     - ⚠️ Fix memory leak, remove listeners when unused

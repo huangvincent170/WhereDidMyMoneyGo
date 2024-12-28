@@ -1,7 +1,7 @@
 import { Transaction } from "../../classes/transaction";
 import { AgGridReact, CustomCellRendererProps } from 'ag-grid-react'; // React Data Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
-import { useCallback, useEffect, useRef, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
 
 
 export function AnalyticsSelector(props: {
@@ -10,6 +10,9 @@ export function AnalyticsSelector(props: {
     categoryData: string[],
     enabledCategories: string[],
     setEnabledCategories: Function,
+    setTimePeriod: Function,
+    setTimeType: Function,
+    setGraphType: Function,
 }) {
     function toggleCategory(categoryId: string): void {
         if (props.enabledCategories == null) {
@@ -26,18 +29,18 @@ export function AnalyticsSelector(props: {
     return <div className="analyticsSidebar">
         <div className="analyticsSelectorOption">
             Time Type
-            <select>
-                <option>Single period</option>
-                <option>Over Time</option>
+            <select onChange={(e) => props.setTimeType(e.target.value)} defaultValue={"OVERTIME"}>
+                <option value="SINGLE">Single period</option>
+                <option value="OVERTIME">Over Time</option>
             </select>
         </div>
         <div className="analyticsSelectorOption">
             Time Period
-            <select>
-                <option>Monthly</option>
-                <option>Yearly</option>
+            <select onChange={(e) => props.setTimePeriod(e.target.value)} defaultValue={"MONTHLY"}>
+                <option value="MONTHLY">Monthly</option>
+                <option value="YEARLY">Yearly</option>
+                <option value="LIFETIME">Lifetime</option>
                 {/* for single period only
-                <option>Lifetime</option>
                 <option>Date Range</option> */}
             </select>
         </div>
@@ -49,10 +52,12 @@ export function AnalyticsSelector(props: {
         </div> */}
         <div className="analyticsSelectorOption">
             Graph Type
-            <select>
-                <option>Table</option>
-                <option>Bar</option>
-                <option>Sankey</option>
+            <select onChange={(e) => props.setGraphType(e.target.value)} defaultValue={"LINE"}>
+                <option value="TABLE">Table</option>
+                <option value="BARSTACKED">Bar (Stacked)</option>
+                <option value="BARSPLIT">Bar (Split)</option>
+                <option value="SANKEY">Sankey</option>
+                <option value="LINE">Line</option>
             </select>
         </div>
         <div className="analyticsSelectorCategories">
