@@ -1,13 +1,23 @@
 import ReactECharts from 'echarts-for-react';
 import { Transaction } from '../../classes/transaction';
 import { calculateSingleData } from './data';
+import { CalendarDate } from 'calendar-date';
 
-export function SankeyChart(props: {transactionData: Transaction[], enabledCategories: string[]}) {
+export function SankeyChart(props: {
+    transactionData: Transaction[],
+    enabledCategories: string[],
+    startDate: CalendarDate,
+    endDate: CalendarDate,
+}) {
     if (props.transactionData == null || props.enabledCategories == null) {
         return <></>;
     }
 
-    const categoryAmountMap = calculateSingleData(props.transactionData, props.enabledCategories);
+    const categoryAmountMap = calculateSingleData(
+        props.transactionData,
+        props.enabledCategories,
+        props.startDate,
+        props.endDate);
 
     const sortedCategoryAmountMap = [...categoryAmountMap.entries()].sort();
     const transactionNodeNames: any[] = [{name: 'Transactions', depth: 0}];

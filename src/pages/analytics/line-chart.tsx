@@ -8,12 +8,20 @@ export function LineChart(props: {
     transactionData: Transaction[],
     enabledCategories: string[],
     timePeriod: string,
+    startDate: CalendarDate,
+    endDate: CalendarDate,
 }) {
     if (props.transactionData == null || props.enabledCategories == null || props.timePeriod == null) {
         return <></>;
     }
 
-    const [displayedCategoriesMap, dateKeyDates] = calculateOvertimeData(props.transactionData, props.enabledCategories, props.timePeriod);
+    const [displayedCategoriesMap, dateKeyDates] = calculateOvertimeData(
+        props.transactionData,
+        props.enabledCategories,
+        props.timePeriod,
+        props.startDate,
+        props.endDate);
+
     const series: any[] = [];
 
     for (let [categoryId, dateMap] of displayedCategoriesMap) {

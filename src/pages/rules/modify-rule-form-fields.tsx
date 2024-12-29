@@ -48,44 +48,41 @@ export function FieldValueInput(props: {
     className?: string,
 }) {
     // todo field into fieldtype, change input based on fieldtype
-    // todo date picker
     if (props.field == Field.Category) {
-        return <select
-            className={props.className}
-            defaultValue={props.fieldValue as string ?? "_select"}
-            onChange={(e) => props.setFieldValue(e.target.value)}>
-            <option hidden disabled key="_select" value="_select">select category</option>
-            {
-                props.categories != null ?
-                props.categories.map((category: string) =>
-                    <option
-                        key={category}
-                        value={category}>
-                        {category}
-                    </option>
-                ) :
-                <></>
-            }
-        </select>;
+        return <div className={props.className}>
+            <select
+                // className={props.className}
+                defaultValue={props.fieldValue as string ?? "_select"}
+                onChange={(e) => props.setFieldValue(e.target.value)}>
+                <option hidden disabled key="_select" value="_select">select category</option>
+                <option key={'DELETED'} value={'DELETED'}>DELETED</option>
+                {
+                    props.categories != null ?
+                    props.categories
+                        .filter((cat: string) =>
+                            props.categories.filter((otherCat: string) =>
+                                otherCat.startsWith(cat)).length == 1)
+                        .map((category: string) =>
+                        <option
+                            key={category}
+                            value={category}>
+                            {category}
+                        </option>
+                    ) :
+                    <></>
+                }
+            </select>
+    </div>;
     } else if (props.field == Field.Date) {
-        return <DatePicker
-            selected={props.fieldValue != null ? new CalendarDate(props.fieldValue as string).toDateUTC() : null}
-            onChange={(date: Date) => props.setFieldValue(CalendarDate.fromDateUTC(date).toString())}/>
+        return <div className={props.className}><DatePicker
+        selected={props.fieldValue != null ? new CalendarDate(props.fieldValue as string).toDateUTC() : null}
+        onChange={(date: Date) => props.setFieldValue(CalendarDate.fromDateUTC(date).toString())}/></div>
     } else {
-        return <input
-            className={props.className}
-            defaultValue={(props.fieldValue) as number | string}
-            onBlur={(e) => props.setFieldValue(e.target.value)}/>
+        return <div className={props.className}><input
+        className={props.className}
+        defaultValue={(props.fieldValue) as number | string}
+        onBlur={(e) => props.setFieldValue(e.target.value)}/></div>
     }
-    // if (props.fieldType == FieldType.Date) {
-    //     return <input
-    //     name="todo"
-    //     />
-    // } else {
-    //     return <input
-    //     name="todo"
-    //     />
-    // }
 }
 
 export function RuleOpTypeSelector(props: {ruleOpType: RuleOpType, setRuleOpType: Function}) {

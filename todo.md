@@ -20,9 +20,7 @@
     - 👍 Edit category names
 
 - Rules
-    - ❗ Disable non-leaf set categories
     - ⚠️ transactions that the rule would affect preview in create rule
-    - ⚠️ allow setting deleted category
     - ⚠️ Source selector
     - 👍 Rule grid filters
     - 👍 no duplicate rules
@@ -41,9 +39,6 @@
             - ❗ bar graph split
             - 👍 pie graph
             - 👍 Table
-        - ❗ period selector
-        - period types
-            - ⚠️ custom date range
     - Spending over time
         - ⚠️ Table
         - ⚠️ bar graph split

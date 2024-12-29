@@ -7,6 +7,7 @@ import { AnalyticsSelector } from "./analytics-selector";
 import { LineChart } from "./line-chart";
 import { SankeyChart } from "./sankey-chart";
 import { StackedBarChart } from "./stacked-bar-chart";
+import { CalendarDate } from "calendar-date";
 
 export function AnalyticsView(props: {
     categoryData: string[],
@@ -17,6 +18,8 @@ export function AnalyticsView(props: {
     const [graphType, setGraphType] = useState("LINE");
     const [timeType, setTimeType] = useState("OVERTIME");
     const [timePeriod, setTimePeriod] = useState("MONTH");
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
 
     useEffect(() => {
         setEnabledCategories(props.categoryData);
@@ -25,10 +28,27 @@ export function AnalyticsView(props: {
     useEffect(() => {
         if (graphType == 'SANKEY') {
             setTimeType('SINGLE');
+            setTimePeriod('LIFETIME');
         } else if (graphType == 'BARSTACKED' || graphType == 'LINE') {
             setTimeType('OVERTIME');
+            setTimePeriod('MONTH');
         }
     }, [graphType]);
+
+    useEffect(() => {
+        if (timeType == "SINGLE") {
+            if (timePeriod == "MONTH") {
+                setStartDate(CalendarDate.nowUTC().addMonths(-1));
+                setEndDate(CalendarDate.nowUTC());
+            } else if (timePeriod == "YEAR") {
+                setStartDate(CalendarDate.nowUTC().addMonths(-12));
+                setEndDate(CalendarDate.nowUTC());
+            } else if (timePeriod == "LIFETIME") {
+                setStartDate(null);
+                setEndDate(null);
+            }
+        }
+    }, [timePeriod, timeType]);
 
     return <div className="mainContent">
         <div className="viewContainer">
@@ -49,7 +69,11 @@ export function AnalyticsView(props: {
                     timeType={timeType}
                     setTimeType={setTimeType}
                     graphType={graphType}
-                    setGraphType={setGraphType}/>
+                    setGraphType={setGraphType}
+                    startDate={startDate}
+                    setStartDate={setStartDate}
+                    endDate={endDate}
+                    setEndDate={setEndDate}/>
                 {/* <div className="ag-theme-balham-dark fullPageGrid analyticsGrid">
                     <AgGridReact
                         rowData={enabledCategories}
@@ -60,18 +84,24 @@ export function AnalyticsView(props: {
                         <LineChart
                             transactionData={props.transactionData}
                             enabledCategories={enabledCategories}
-                            timePeriod={timePeriod}/>
+                            timePeriod={timePeriod}
+                            startDate={startDate}
+                            endDate={endDate}/>
                     </div>
                     <div className="chartContainer" style={graphType == "BARSTACKED" ? null : {display: 'none'}}>
                         <StackedBarChart
                             transactionData={props.transactionData}
                             enabledCategories={enabledCategories}
-                            timePeriod={timePeriod}/>
+                            timePeriod={timePeriod}
+                            startDate={startDate}
+                            endDate={endDate}/>
                     </div>
                     <div className="chartContainer" style={graphType == "SANKEY" ? null : {display: 'none'}}>
                         <SankeyChart
                             transactionData={props.transactionData}
-                            enabledCategories={enabledCategories}/>
+                            enabledCategories={enabledCategories}
+                            startDate={startDate}
+                            endDate={endDate}/>
                     </div>
                 </div>
             </div>

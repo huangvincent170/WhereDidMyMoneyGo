@@ -2,6 +2,8 @@ import { Transaction } from "../../classes/transaction";
 import { AgGridReact, CustomCellRendererProps } from 'ag-grid-react'; // React Data Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react";
+import DatePicker from "react-datepicker/dist";
+import { CalendarDate } from "calendar-date";
 
 
 export function AnalyticsSelector(props: {
@@ -16,6 +18,10 @@ export function AnalyticsSelector(props: {
     setTimeType: Function,
     graphType: string,
     setGraphType: Function,
+    startDate: CalendarDate,
+    setStartDate: Function,
+    endDate: CalendarDate,
+    setEndDate: Function,
 }) {
     function toggleCategory(categoryId: string): void {
         if (props.enabledCategories == null) {
@@ -66,16 +72,20 @@ export function AnalyticsSelector(props: {
         <div className="analyticsSelectorOption"
             style={props.timeType == 'SINGLE' && props.timePeriod != 'RANGE' ? {display: 'none'} : {}}>
             <span>Period Start</span>
-            <select>
-                // todo month or year or date range select
-            </select>
+            <div className="analyticsDatePickerContainer">
+                <DatePicker
+                    selected={props.startDate != null ? props.startDate.toDateUTC() : null}
+                    onChange={(date: Date) => props.setStartDate(date != null ? CalendarDate.fromDateUTC(date) : null)}/>
+            </div>
         </div>
         <div className="analyticsSelectorOption"
             style={props.timeType == 'SINGLE' && props.timePeriod != 'RANGE' ? {display: 'none'} : {}}>
             <span>Period End</span>
-            <select>
-                // todo month or year or date range select
-            </select>
+            <div className="analyticsDatePickerContainer">
+                <DatePicker
+                    selected={props.endDate != null ? props.endDate.toDateUTC() : null}
+                    onChange={(date: Date) => props.setEndDate(date != null ? CalendarDate.fromDateUTC(date) : null)}/>
+            </div>
         </div>
         <div className="analyticsSelectorCategories">
             {

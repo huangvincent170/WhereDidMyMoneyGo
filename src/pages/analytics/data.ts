@@ -14,7 +14,9 @@ export function getDateMapKey(date: CalendarDate, timePeriod: string) {
 export function calculateOvertimeData(
     transactionData: Transaction[],
     enabledCategories: string[],
-    timePeriod: string
+    timePeriod: string,
+    startDate: CalendarDate,
+    endDate: CalendarDate,
 ): [Map<string, Map<string, number>>, CalendarDate[]] {
     const displayedCategories = enabledCategories.filter((ec: string) =>
         enabledCategories.filter((_ec: string) => _ec.startsWith(ec)).length == 1);
@@ -65,8 +67,8 @@ export function calculateOvertimeData(
         dateMap.set(dateMapKey, dateMap.has(dateMapKey) ? dateMap.get(dateMapKey) + transaction.amount : transaction.amount);
     }
 
-    const firstDate: CalendarDate = new CalendarDate(transactionData[0].date); // assumes transactions are sorted by date
-    const lastDate: CalendarDate = new CalendarDate(transactionData[transactionData.length - 1].date);
+    const firstDate: CalendarDate = startDate ?? new CalendarDate(transactionData[0].date); // assumes transactions are sorted by date
+    const lastDate: CalendarDate = endDate ?? new CalendarDate(transactionData[transactionData.length - 1].date);
     const dateKeyDates: CalendarDate[] = [];
     for (let curDate = normalizeDate(firstDate); curDate <= normalizeDate(lastDate); curDate = incrementDate(curDate)) {
         dateKeyDates.push(curDate);
@@ -77,12 +79,22 @@ export function calculateOvertimeData(
 
 export function calculateSingleData(
     transactionData: Transaction[],
-    enabledCategories: string[]
+    enabledCategories: string[],
+    startDate: CalendarDate,
+    endDate: CalendarDate,
 ): Map<string, number> {
     const categoryAmountMap: Map<string, number> = new Map<string, number>(
         enabledCategories.map((enabledCategory: string) => [enabledCategory, 0])
     );
     for (let transaction of transactionData) {
+        if (startDate != null && new CalendarDate(transaction.date) < startDate) {
+            continue;
+        }
+
+        if (endDate != null && new CalendarDate(transaction.date) > endDate) {
+            continue;
+        }
+
         for (let enabledCategory of enabledCategories) {
             if (transaction.category.startsWith(enabledCategory)) {
                 categoryAmountMap.set(enabledCategory, categoryAmountMap.get(enabledCategory) + transaction.amount);
