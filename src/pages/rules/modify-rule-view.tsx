@@ -53,8 +53,6 @@ export function ModifyRulesView(props: {
         }
 
         props.setRulesData(props.rulesData.concat(new Rule(ruleTests, ruleOp, executesOnce)));
-
-        console.log(props.rulesData);
     }
 
     return <div className="addView" hidden={!props.showModifyRules}>

@@ -52,16 +52,16 @@ export const FieldToFieldType = {
 export class RuleTest {
     field: Field;
     checkOp: CheckOp;
-    value: string | number | Date;
+    value: string | number;
 
-    constructor(field: Field, checkOp: CheckOp, value: string | number | Date) {
+    constructor(field: Field, checkOp: CheckOp, value: string | number) {
         this.field = field;
         this.checkOp = checkOp;
         this.value = value;
     }
 
     static Test(test: RuleTest, transaction: Transaction): boolean {
-        let fieldValue: string | number | Date;
+        let fieldValue: string | number;
         if (test.field == Field.Amount) {
             fieldValue = transaction.amount;
         } else if (test.field == Field.Category) {
@@ -89,9 +89,9 @@ export class RuleTest {
 export interface RuleOp {}
 
 export class SetRuleOp implements RuleOp {
-    setFieldValues: [Field, string | number | Date][];
+    setFieldValues: [Field, string | number][];
 
-    constructor(setFieldValues: [Field, string | number | Date][]) {
+    constructor(setFieldValues: [Field, string | number][]) {
         this.setFieldValues = setFieldValues;
     }
 

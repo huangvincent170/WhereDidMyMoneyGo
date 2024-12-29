@@ -258,8 +258,15 @@ select {
         align-items: center;
     }
 
+    .react-datepicker-wrapper,
     .checkFieldValue {
-        width: calc(100% - 280px); //todo use flexbox
+        width: calc(100% - 285px); //todo use flexbox
+        margin: 0px 5px 0px 0px;
+
+        input {
+            width: 100%;
+            margin: 0px 5px 0px 0px;
+        }
     }
 
     .setRuleFieldValue {

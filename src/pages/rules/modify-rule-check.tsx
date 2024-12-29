@@ -12,7 +12,7 @@ export function ModifyRuleCheck(props: {
         i: number,
         checkField?: Field,
         checkOp?: CheckOp,
-        checkValue?: string | number | Date
+        checkValue?: string | number
     ) {
         const newRuleTest = new RuleTest(
             checkField ?? oldRuleTest.field,
@@ -52,7 +52,7 @@ export function ModifyRuleCheck(props: {
                     className="checkFieldValue"
                     field={ruleTest.field}
                     fieldValue={ruleTest.value}
-                    setFieldValue={(fieldValue: string | number | Date) => SetRuleTest(ruleTest, i, undefined, undefined, fieldValue)}/>
+                    setFieldValue={(fieldValue: string | number) => SetRuleTest(ruleTest, i, undefined, undefined, fieldValue)}/>
                 <button
                     className="iconButton"
                     onClick={() => AddRuleTest(i)}>

@@ -11,7 +11,7 @@ export function ModifyRuleOp(props: {
     splitRuleOp: SplitRuleOp,
     setSplitRuleOp: Function,
 }) {
-    function SetSetRuleOp(i: number, setField?: Field, setValue?: string | number | Date) {
+    function SetSetRuleOp(i: number, setField?: Field, setValue?: string | number) {
         props.setSetRuleOp(new SetRuleOp(props.setRuleOp.setFieldValues.map((_setFieldValue, _i) =>
             _i == i ? [setField ?? _setFieldValue[0], setValue ?? _setFieldValue[1]] : _setFieldValue)));
     } 
@@ -67,7 +67,7 @@ export function ModifyRuleOp(props: {
                         className="setRuleFieldValue"
                         field={_setFieldValue[0]}
                         fieldValue={_setFieldValue[1]}
-                        setFieldValue={(value: string | number | Date) => SetSetRuleOp(i, undefined, value)}/>
+                        setFieldValue={(value: string | number) => SetSetRuleOp(i, undefined, value)}/>
                     <button
                         className="iconButton"
                         disabled={props.ruleOpType == null}

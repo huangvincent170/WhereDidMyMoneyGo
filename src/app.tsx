@@ -35,7 +35,6 @@ function App() {
 
     async function refreshTransactionData(sourceData: Source[], rulesData: Rule[]) {
         let transactions: Transaction[] = await window.electronAPI.readDataFromSources(sourceData);
-        console.log(`refreshing with rules ${rulesData}`);
         setTransactionsData(Rule.Execute(rulesData, transactions));
         // calculateGraphData(transactionsData, categoryData);
         // Category.setCategoryAmounts(categoryData, transactions);

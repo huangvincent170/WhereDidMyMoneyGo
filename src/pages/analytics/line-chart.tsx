@@ -2,6 +2,7 @@ import ReactECharts from 'echarts-for-react';
 import { Transaction } from '../../classes/transaction';
 import { renderToStaticMarkup } from 'react-dom/server';
 import { calculateOvertimeData, getDateMapKey } from './data';
+import { CalendarDate } from 'calendar-date';
 
 export function LineChart(props: {
     transactionData: Transaction[],
@@ -13,12 +14,10 @@ export function LineChart(props: {
     }
 
     const [displayedCategoriesMap, dateKeyDates] = calculateOvertimeData(props.transactionData, props.enabledCategories, props.timePeriod);
-    console.log(props.enabledCategories);
-    console.log(displayedCategoriesMap);
     const series: any[] = [];
 
     for (let [categoryId, dateMap] of displayedCategoriesMap) {
-        const data = dateKeyDates.map((dateKey: Date) => dateMap.get(getDateMapKey(dateKey, props.timePeriod)) ?? 0);
+        const data = dateKeyDates.map((dateKey: CalendarDate) => dateMap.get(getDateMapKey(dateKey, props.timePeriod)) ?? 0);
         series.push({
             name: categoryId,
             type: 'line',
@@ -27,7 +26,6 @@ export function LineChart(props: {
             symbol: 'none',
         });
     }
-    console.log(series);
 
     const options: any = {
         tooltip: {
@@ -55,7 +53,7 @@ export function LineChart(props: {
         xAxis: {
             type: 'category',
             boundaryGap: false,
-            data: dateKeyDates.map((dateKey: Date) => `${dateKey.toLocaleString('default', { month: 'short' })} ${dateKey.getFullYear().toString().substring(-2)}`)
+            data: dateKeyDates.map((dateKey: CalendarDate) => `${dateKey.toFormat('MM yy')}`)
         },
         yAxis: {
             type: 'value',

@@ -1,6 +1,6 @@
 export class Transaction {
     sourceName: string;
-    date: Date;
+    date: string;
     description: string;
     category: string;
     amount: number;
@@ -8,7 +8,7 @@ export class Transaction {
     constructor(
         sourceName: string,
         amount: number,
-        date: Date,
+        date: string,
         description: string,
         category?: string,
     ) {

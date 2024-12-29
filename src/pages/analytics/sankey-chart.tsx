@@ -40,7 +40,7 @@ export function SankeyChart(props: {transactionData: Transaction[], enabledCateg
         left: '3%',
         top: 0,
         right: '8%',
-        bottom: 0,
+        bottom: '2%',
         nodeGap: 25,
         data: transactionNodeNames,
         links: links,

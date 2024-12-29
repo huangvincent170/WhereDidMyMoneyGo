@@ -20,8 +20,10 @@
     - 👍 Edit category names
 
 - Rules
-    - ❗ Date picker
+    - ❗ Disable non-leaf set categories
     - ⚠️ transactions that the rule would affect preview in create rule
+    - ⚠️ allow setting deleted category
+    - ⚠️ Source selector
     - 👍 Rule grid filters
     - 👍 no duplicate rules
     - 👍 Rules which only execute once sorted/executed first

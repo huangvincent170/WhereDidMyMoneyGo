@@ -1,4 +1,7 @@
+import DatePicker from "react-datepicker/dist";
+import "react-datepicker/dist/react-datepicker.css";
 import { Field, CheckOp, FieldToFieldType, ValidFieldTypeValidOps, RuleOpType, RuleOp, FieldType, SetRuleOp, SplitRuleOp, RuleTest } from "../../classes/rule";
+import { CalendarDate } from 'calendar-date';
 
 export function FieldSelector(props: {field: Field, setField: Function}) {
     return <select
@@ -40,7 +43,7 @@ export function FieldOpSelector(props: {field: Field, checkOp: CheckOp, setCheck
 export function FieldValueInput(props: {
     categories?: string[],
     field: Field,
-    fieldValue: number | string | Date,
+    fieldValue: number | string,
     setFieldValue: Function,
     className?: string,
 }) {
@@ -64,6 +67,10 @@ export function FieldValueInput(props: {
                 <></>
             }
         </select>;
+    } else if (props.field == Field.Date) {
+        return <DatePicker
+            selected={new CalendarDate(props.fieldValue as string).toDateLocal()}
+            onChange={(date: Date) => props.setFieldValue(CalendarDate.fromDateLocal(date))}/>
     } else {
         return <input
             className={props.className}

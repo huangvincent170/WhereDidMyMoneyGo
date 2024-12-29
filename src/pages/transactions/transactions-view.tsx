@@ -4,6 +4,7 @@ import "ag-grid-community/styles/ag-theme-balham.css";
 import { useEffect, useState } from 'react';
 import { Transaction } from '../../classes/transaction';
 import { CheckOp, Field, Rule, RuleTest, SetRuleOp } from '../../classes/rule';
+import { CalendarDate, CalendarDateRange } from 'calendar-date';
 
 export function TransactionsView(props: {
     transactionData: Transaction[],
@@ -14,14 +15,14 @@ export function TransactionsView(props: {
     class DisplayedTransaction {
         amount: number;
         category: string;
-        date: Date;
+        date: string;
         description: string;
         source: string;
 
         constructor(
             amount: number,
             category: string,
-            date: Date,
+            date: string,
             description: string,
             source: string
         ) {
@@ -88,10 +89,9 @@ export function TransactionsView(props: {
                     [
                         new RuleTest(Field.Amount, CheckOp.Equals, params.node.data.amount),
                         // new RuleTest(Field.Category, CheckOp.Equals, params.node.data.category),
-                        // new RuleTest(Field.Date, CheckOp.Equals, params.node.data.date),
+                        new RuleTest(Field.Date, CheckOp.Equals, params.node.data.date),
                         new RuleTest(Field.Description, CheckOp.Equals, params.node.data.description),
                         new RuleTest(Field.Source, CheckOp.Equals, params.node.data.source)
-                        // todo include source
                     ],
                     new SetRuleOp([[Field.Category, "DELETED"]]),
                     true
