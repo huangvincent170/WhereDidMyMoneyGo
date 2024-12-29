@@ -49,6 +49,8 @@
     - ⚠️ Fix yearly displaying month
     - ⚠️ lifetime should not display x axis tick for time
     - ⚠️ Fix error when no categories
+    - ⚠️ swap so graph is present first, disable options based on that
+    - ❔ Better way to display categories
 
 - Misc
     - ⚠️ Fix memory leak, remove listeners when unused
