@@ -28,6 +28,7 @@
     - 👍 no duplicate rules
     - 👍 Rules which only execute once sorted/executed first
     - 👍 add scroll bar/ fix many tests/ops out of bounds
+    - 👍 short text month displayed on charts
     - ❔ binsearch on dates for single execute rules (need to sort by date first)
     - ❔ split rule into percentages
     - ❔ Less/greater than for numbers

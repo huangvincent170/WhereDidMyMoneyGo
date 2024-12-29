@@ -69,8 +69,8 @@ export function FieldValueInput(props: {
         </select>;
     } else if (props.field == Field.Date) {
         return <DatePicker
-            selected={new CalendarDate(props.fieldValue as string).toDateLocal()}
-            onChange={(date: Date) => props.setFieldValue(CalendarDate.fromDateLocal(date))}/>
+            selected={props.fieldValue != null ? new CalendarDate(props.fieldValue as string).toDateUTC() : null}
+            onChange={(date: Date) => props.setFieldValue(CalendarDate.fromDateUTC(date).toString())}/>
     } else {
         return <input
             className={props.className}
