@@ -1,5 +1,6 @@
 import ReactECharts from 'echarts-for-react';
 import { Transaction } from '../../classes/transaction';
+import { renderToStaticMarkup } from 'react-dom/server';
 
 export function LineGraph(props: {
     transactionData: Transaction[],
@@ -65,7 +66,6 @@ export function LineGraph(props: {
         const dateMapKey = getDateMapKey(transaction.date);
         dateMap.set(dateMapKey, dateMap.has(dateMapKey) ? dateMap.get(dateMapKey) + transaction.amount : transaction.amount);
     }
-    console.log("displayed " + displayedCategories);
 
     const firstDate: Date = props.transactionData[0].date; // assumes transactions are sorted by date
     const lastDate: Date = props.transactionData[props.transactionData.length - 1].date;
@@ -73,7 +73,6 @@ export function LineGraph(props: {
     for (let curDate = normalizeDate(firstDate); curDate <= normalizeDate(lastDate); curDate = incrementDate(curDate)) {
         dateKeyDates.push(curDate);
     }
-    console.log("datekeydates " + dateKeyDates);
 
     const series: any[] = [];
     for (let [categoryId, dateMap] of displayedCategoriesMap) {
@@ -81,34 +80,33 @@ export function LineGraph(props: {
         series.push({
             name: categoryId,
             type: 'line',
-            // stack: 'Total',
             data: data,
             smooth: true,
+            symbol: 'none',
         });
     }
-    console.log(displayedCategoriesMap);
-
-    // const graphData: any[] = [];
-    // for (let dateKeyDate of dateKeyDates) {
-    //     const dataEntry: any = { date: dateKeyDate };
-    //     for (let [catKey, dateMap] of displayedCategoriesMap) {
-    //         dataEntry[catKey] = dateMap.get(getDateMapKey(dateKeyDate)) ?? 0;
-    //     }
-    //     graphData.push(dataEntry);
-    // }
-    // console.log("data " + graphData);
-
-    // setGraphData(data);
-    
 
     const options: any = {
         tooltip: {
-            trigger: 'axis'
+            trigger: 'axis',
+            formatter: (params: any) => {
+                return renderToStaticMarkup(<div>
+                    <p>{params[0].axisValue}</p>
+                    {
+                        params.filter((param: any) => param.value > 0)
+                            .sort((a: any, b: any) => a.value < b.value ? 1 : -1)
+                            .map((param: any) =>
+                            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                                <p style={{color: param.color}}>{param.seriesName}&emsp;</p><p>{param.value.toFixed(2)}</p>
+                            </div>)
+                    }
+                </div>);
+            },
         },
         xAxis: {
             type: 'category',
             boundaryGap: false,
-            data: dateKeyDates.map((dateKey: Date) => getDateMapKey(dateKey))
+            data: dateKeyDates.map((dateKey: Date) => `${dateKey.toLocaleString('default', { month: 'short' })} ${dateKey.getFullYear().toString().substr(-2)}`)
         },
         yAxis: {
             type: 'value'
