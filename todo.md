@@ -43,14 +43,14 @@
             - ⚠️ custom date range
     - Spending over time
         - ⚠️ Table
-        - ⚠️ bar chart stacked
         - ⚠️ bar graph split
     - ⚠️ Color coding for categories
     - ⚠️ Fix yearly displaying month
     - ⚠️ lifetime should not display x axis tick for time
     - ⚠️ Fix error when no categories
-    - ⚠️ swap so graph is present first, disable options based on that
+    - 👍 Bar chart year overflows
     - ❔ Better way to display categories
+    - ❔ Quarterly period
 
 - Misc
     - ⚠️ Fix memory leak, remove listeners when unused

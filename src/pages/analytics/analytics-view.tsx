@@ -4,9 +4,9 @@ import { AgGridReact, CustomCellRendererProps } from 'ag-grid-react'; // React D
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import { useEffect, useRef, useState } from "react";
 import { AnalyticsSelector } from "./analytics-selector";
-import { LineGraph, SankeyGraph } from "./echart-components";
-
-
+import { LineChart } from "./line-chart";
+import { SankeyChart } from "./sankey-chart";
+import { StackedBarChart } from "./stacked-bar-chart";
 
 export function AnalyticsView(props: {
     categoryData: string[],
@@ -16,11 +16,19 @@ export function AnalyticsView(props: {
     const [enabledCategories, setEnabledCategories] = useState(null);
     const [graphType, setGraphType] = useState("LINE");
     const [timeType, setTimeType] = useState("OVERTIME");
-    const [timePeriod, setTimePeriod] = useState("MONTHLY");
+    const [timePeriod, setTimePeriod] = useState("MONTH");
 
     useEffect(() => {
         setEnabledCategories(props.categoryData);
     }, [props.categoryData]);
+
+    useEffect(() => {
+        if (graphType == 'SANKEY') {
+            setTimeType('SINGLE');
+        } else if (graphType == 'BARSTACKED' || graphType == 'LINE') {
+            setTimeType('OVERTIME');
+        }
+    }, [graphType]);
 
     return <div className="mainContent">
         <div className="viewContainer">
@@ -47,15 +55,21 @@ export function AnalyticsView(props: {
                         rowData={enabledCategories}
                         columnDefs={colDefs}/>
                 </div> */}
-                <div className="analyticsGrid">
-                    <div style={graphType == "LINE" ? null : {display: 'none'}}>
-                        <LineGraph
+                <div className="chartsContainer">
+                    <div className="chartContainer" style={graphType == "LINE" ? null : {display: 'none'}}>
+                        <LineChart
                             transactionData={props.transactionData}
                             enabledCategories={enabledCategories}
                             timePeriod={timePeriod}/>
                     </div>
-                    <div style={graphType == "SANKEY" ? null : {display: 'none'}}>
-                        <SankeyGraph
+                    <div className="chartContainer" style={graphType == "BARSTACKED" ? null : {display: 'none'}}>
+                        <StackedBarChart
+                            transactionData={props.transactionData}
+                            enabledCategories={enabledCategories}
+                            timePeriod={timePeriod}/>
+                    </div>
+                    <div className="chartContainer" style={graphType == "SANKEY" ? null : {display: 'none'}}>
+                        <SankeyChart
                             transactionData={props.transactionData}
                             enabledCategories={enabledCategories}/>
                     </div>

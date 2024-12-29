@@ -31,6 +31,19 @@ export function AnalyticsSelector(props: {
 
     return <div className="analyticsSidebar">
         <div className="analyticsSelectorOption">
+            Graph Type
+            <select
+                onChange={(e) => props.setGraphType(e.target.value)}
+                value={props.graphType ?? "LINE"}>
+                <option value="TABLE">Table</option>
+                <option value="BARSTACKED">Bar (Stacked)</option>
+                <option value="BARSPLIT">Bar (Split)</option>
+                <option value="SANKEY">Sankey</option>
+                <option value="LINE">Line</option>
+            </select>
+        </div>
+        <div className="analyticsSelectorOption"
+            style={props.graphType == 'BARSTACKED' || props.graphType == 'SANKEY' || props.graphType == 'LINE' ? {display: 'none'} : {}}>
             Time Type
             <select
                 onChange={(e) => props.setTimeType(e.target.value)}
@@ -43,48 +56,25 @@ export function AnalyticsSelector(props: {
             Time Period
             <select
                 onChange={(e) => props.setTimePeriod(e.target.value)}
-                value={props.timePeriod ?? "MONTHLY"}>
-                <option value="MONTHLY">Monthly</option>
-                <option value="YEARLY">Yearly</option>
-                <option value="LIFETIME">Lifetime</option>
-                {/* for single period only
-                <option>Date Range</option> */}
+                value={props.timePeriod ?? "MONTH"}>
+                <option value="MONTH">{props.timeType == 'OVERTIME' ? 'Monthly' : 'Month'}</option>
+                <option value="YEAR">{props.timeType == 'OVERTIME' ? 'Yearly' : 'Year'}</option>
+                <option value="LIFETIME" hidden={ props.timeType != "SINGLE" }>Lifetime</option>
+                <option value="RANGE" hidden={ props.timeType != "SINGLE" }>Date Range</option>
             </select>
         </div>
-        {/* <div>
-            <span>Period Select</span>
+        <div className="analyticsSelectorOption"
+            style={props.timeType == 'SINGLE' && props.timePeriod != 'RANGE' ? {display: 'none'} : {}}>
+            <span>Period Start</span>
             <select>
                 // todo month or year or date range select
             </select>
-        </div> */}
-        <div className="analyticsSelectorOption">
-            Graph Type
-            <select
-                onChange={(e) => props.setGraphType(e.target.value)}
-                value={props.graphType ?? "LINE"}>
-                <option
-                    value="TABLE">
-                    Table
-                </option>
-                <option
-                    value="BARSTACKED"
-                    hidden={props.timeType != "OVERTIME"}>
-                    Bar (Stacked)
-                </option>
-                <option
-                    value="BARSPLIT">
-                    Bar (Split)
-                </option>
-                <option
-                    value="SANKEY"
-                    hidden={props.timeType != "SINGLE"}>
-                    Sankey
-                </option>
-                <option
-                    value="LINE"
-                    hidden={props.timeType != "OVERTIME"}>
-                    Line
-                </option>
+        </div>
+        <div className="analyticsSelectorOption"
+            style={props.timeType == 'SINGLE' && props.timePeriod != 'RANGE' ? {display: 'none'} : {}}>
+            <span>Period End</span>
+            <select>
+                // todo month or year or date range select
             </select>
         </div>
         <div className="analyticsSelectorCategories">
