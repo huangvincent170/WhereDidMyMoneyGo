@@ -32,16 +32,40 @@ export default function ModifySourcesView(props: {
     // todo make popup look nice
     return (<div className="addView" hidden={!props.showModifySources}>
         <form className="addSourceForm" method="post" onSubmit={handleSubmit}>
-            <label>Source name: <input name="name" /></label><br />
-            <label>Directory path: <input name="path" /></label><br />
-            <label>Do files have a header line? <input type="checkbox" name="hasHeader" /></label><br />
-            <label>Amount column index: <input name="amountIdx" /></label><br />
-            <label>Is amount debt? <input type="checkbox" name="isDebt" /></label><br />
-            <label>Date column index: <input name="dateIdx" /></label><br />
-            <label>Description column index: <input name="descriptionIdx" /></label><br />
-            <br />
-            <button type="submit">Save Changes</button>
+            <div className="addSourceFieldContainer">
+               <span>Source name:</span>
+               <input name="name" />
+            </div>
+            <div className="addSourceFieldContainer">
+               <span>Directory path:</span>
+            <input name="path" />
+            </div>
+            <div className="addSourceFieldContainer">
+               <span>Amount column index:</span>
+                <input name="amountIdx" />
+            </div>
+            <div className="addSourceFieldContainer">
+               <span>Date column index:</span>
+                <input name="dateIdx" />
+            </div>
+            <div className="addSourceFieldContainer">
+               <span>Description column index:</span>
+                <input name="descriptionIdx" />
+            </div>
+            <div className="addSourceFieldContainer">
+               <span>Is amount debt?</span>
+                <input type="checkbox" name="isDebt" />
+            </div>
+            <div className="addSourceFieldContainer">
+               <span>Do files have a header line?</span>
+                <input type="checkbox" name="hasHeader" />
+            </div>
+            <div className="addViewFooter">
+                <div className="addViewFooterRight">
+                    <button type="submit">Save Changes</button>
+                    <button type="button" onClick={() => props.setShowModifySources(false)}>Close</button>
+                </div>
+            </div>
         </form>
-        <button onClick={() => props.setShowModifySources(false)}>Close</button>
     </div>);
 }

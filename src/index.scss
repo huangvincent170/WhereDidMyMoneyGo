@@ -307,6 +307,32 @@ select {
     }
 }
 
+.addSourceForm {
+    .addSourceFieldContainer {
+        display: flex;
+        height: 25px;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 5px;
+    }
+
+    .addViewFooter {
+        position: absolute;
+        bottom: 200px;
+        width: calc(45% - 60px);
+        height: 25px;
+
+        .addViewFooterRight {
+            margin-left: auto;
+        }
+
+        button {
+            margin: 0px 0px 0px 5px;
+        }
+    }
+}
+
 .analyticsContainer {
     display: flex;
     height: calc(100% - 60px);

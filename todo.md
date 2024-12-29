@@ -7,12 +7,16 @@
 
 - Transactions
     - ❗ Add split button to split transaction
+    - ❗ Multiselect
+    - ❗ Remove delete button, add to dropdown on header
+    - ❗ Multi select edit/delete
     - ⚠️ Edit transaction
     - 👍 Error handling for reading transactions from source to check type of Dates/Numbers/strings/etc
 
 
 - Sources
-    - ⚠️ Make add source look nice
+    - ⚠️ Source selector
+    - 👍 Preview of source data
     - 👍 Last time source was updated
 
 - Categories
@@ -20,9 +24,10 @@
     - 👍 Edit category names
 
 - Rules
-    - ⚠️ transactions that the rule would affect preview in create rule
+    - ❗ transactions that the rule would affect preview in create rule
     - ⚠️ Source selector
     - 👍 Rule grid filters
+    - 👍 transactions after rule has been executed preview window
     - 👍 no duplicate rules
     - 👍 Rules which only execute once sorted/executed first
     - 👍 add scroll bar/ fix many tests/ops out of bounds
