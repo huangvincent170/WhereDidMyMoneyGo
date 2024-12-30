@@ -6,6 +6,7 @@ $backgroundColor: #1b2020;
 $backgroundColor2: #272727;
 $backgroundColor3: #15191a;
 $backgroundColor4: #2d3436;
+$backgroundColor5: #4e5a5e;
 
 $buttonColor: #2d3436;
 $buttonHoverColor: #3d474a;
@@ -146,11 +147,49 @@ select {
 
 .gridHeader {
     width: 100%;
-    overflow: auto;
+    // overflow: auto;
+    display: flex;
+    justify-content: flex-end;
 
     button {
-        margin: 0px 0px 5px 0px;
+        margin-bottom: 5px;
         float: right;
+        height: 25px;
+        display: flex;
+        align-items: center;
+    }
+
+    .gridHeaderDropdown {
+        position: relative;
+        display: inline-block;
+        // width: 50px;
+
+        button {
+            margin-left: 5px;
+        }
+
+        .gridHeaderDropdownOptionContainer {
+            position: absolute;
+            z-index: 10;
+            margin-top: 30px;
+            right: 0;
+            border-radius: 10px;
+            padding: 10px;
+            background-color: $backgroundColor3;
+            border: solid #929292;
+            border-width: 2px;
+
+            button {
+                margin: 0 0 5px 0;
+                white-space: nowrap;
+                float: left;
+                background-color: $backgroundColor3;
+            }
+
+            button:hover {
+                background-color: $backgroundColor4;
+            }
+        }
     }
 }
 

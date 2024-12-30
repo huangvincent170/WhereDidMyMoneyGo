@@ -1,8 +1,9 @@
-import { GridOptions, ICellRendererComp, ICellRendererParams, RowHeightParams, GridApi, Column, CellValueChangedEvent, CellEditingStoppedEvent } from "ag-grid-community";
+import { GridOptions, CellEditingStoppedEvent, IRowNode, RowSelectedEvent } from "ag-grid-community";
 import { AgGridReact, CustomCellRendererProps } from 'ag-grid-react'; // React Data Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import { Transaction } from "../../classes/transaction";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { DropdownButtonData, GridHeaderDropdown } from "../../components/grid-header-dropdown";
 
 export function CategoriesView(props: {transactionData: Transaction[], categoryData: string[], setCategoryData: Function}) {
     class DisplayedCategory {
@@ -12,44 +13,18 @@ export function CategoriesView(props: {transactionData: Transaction[], categoryD
         }
     }
 
+    const [displayedCategoryData, setDisplayedCategoryData] = useState(null);
+    const gridRef = useRef<AgGridReact<DisplayedCategory>>();
+
     function createDisplayedCategories(categories: string[]): DisplayedCategory[] {
         return categories?.map((c: string) => new DisplayedCategory(c));
     }
 
-    function onCellClicked(params: any) {
-        if (params.column.colId === "action" && params.event.target.dataset.action) {
-            const action = params.event.target.dataset.action;
-            if (action === "delete") {
-                if (props.categoryData.filter(c => c.startsWith(params.node.data.name)).length > 1) {
-                    console.log("have to delete parent first!");
-                    return;
-                }
-                props.setCategoryData(props.categoryData.filter(category => category != params.node.data.name));
-            }
-        }
+    function deleteSelectedCategories() {
+        const selectedCategories: DisplayedCategory[] = gridRef.current.api.getSelectedRows();
+        props.setCategoryData(props.categoryData.filter((category: string) =>
+            !selectedCategories.some((selectedCategory: DisplayedCategory) => category.startsWith(selectedCategory.name))));
     }
-    
-    function ActionCellRenderer() {
-        return <div>
-            <button data-action="delete"> delete </button>
-        </div>;
-    }
-
-    const [colDefs, setColDefs]: [any, any] = useState([
-        {
-            field: "name",
-            editable: (params: any) => params.data.name == "" || params.data.name == null
-        },
-        {
-            headerName: "",
-            cellRenderer: ActionCellRenderer,
-            editable: false,
-            colId: "action"
-        }
-    ]);
-
-    const [displayedCategoryData, setDisplayedCategoryData] = useState(null);
-    const gridRef = useRef<AgGridReact<DisplayedCategory>>();
 
     function addNewCategory() {
         if (displayedCategoryData == null) {
@@ -76,6 +51,18 @@ export function CategoriesView(props: {transactionData: Transaction[], categoryD
         }
 
         return null;
+    }
+
+    function onRowSelected(e: RowSelectedEvent) {
+        // console.log(e);
+        // gridRef.current.api.getSelectedRows();
+        if (e.node.isSelected()) {
+            gridRef.current.api.forEachNode((node: IRowNode) => {
+                if (node.data.name.startsWith(e.data.name)) {
+                    node.setSelected(true);
+                }
+            });
+        }
     }
 
     function onCellEditingStopped(e: CellEditingStoppedEvent<DisplayedCategory>) {
@@ -117,6 +104,14 @@ export function CategoriesView(props: {transactionData: Transaction[], categoryD
     useEffect(() => {
         setDisplayedCategoryData(createDisplayedCategories(props.categoryData));
     }, [props.categoryData]);
+
+    const [colDefs, setColDefs]: [any, any] = useState([
+        {
+            field: "name",
+            editable: (params: any) => params.data.name == "" || params.data.name == null,
+            flex: 1,
+        },
+    ]);
     
     return <div className="mainContent">
         <div className="viewContainer">
@@ -126,16 +121,22 @@ export function CategoriesView(props: {transactionData: Transaction[], categoryD
             </div>
             <div className="gridHeader">
                 <button onClick={addNewCategory}>Add a category</button>
+                <GridHeaderDropdown
+                    buttonData={[
+                        new DropdownButtonData('Delete Selected', deleteSelectedCategories),
+                        new DropdownButtonData('Edit Selected', () => {console.log('edit')}),
+                    ]}/>
             </div>
             <div className="ag-theme-balham-dark outer-cell fullPageGrid">
                 <AgGridReact
                     rowData={displayedCategoryData}
                     columnDefs={colDefs}
                     ref={gridRef}
-                    onCellClicked={onCellClicked}
                     onCellEditingStopped={onCellEditingStopped}
                     onComponentStateChanged={onComponentStateChanged}
-                    stopEditingWhenCellsLoseFocus={true}/>
+                    stopEditingWhenCellsLoseFocus={true}
+                    rowSelection={{mode: 'multiRow'}}
+                    onRowSelected={onRowSelected}/>
             </div>
         </div>
     </div>;

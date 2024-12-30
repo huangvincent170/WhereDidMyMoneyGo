@@ -1,10 +1,32 @@
 import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import "ag-grid-community/styles/ag-theme-balham.css";
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Transaction } from '../../classes/transaction';
 import { CheckOp, Field, Rule, RuleTest, SetRuleOp } from '../../classes/rule';
-import { CalendarDate, CalendarDateRange } from 'calendar-date';
+import { DropdownButtonData, GridHeaderDropdown } from '../../components/grid-header-dropdown';
+
+class DisplayedTransaction {
+    amount: number;
+    category: string;
+    date: string;
+    description: string;
+    source: string;
+
+    constructor(
+        amount: number,
+        category: string,
+        date: string,
+        description: string,
+        source: string
+    ) {
+        this.amount = Number(amount);
+        this.category = category;
+        this.date = date;
+        this.description = description;
+        this.source = source;
+    }
+}
 
 export function TransactionsView(props: {
     transactionData: Transaction[],
@@ -12,37 +34,8 @@ export function TransactionsView(props: {
     rulesData: Rule[],
     setRulesData: Function,
 }) {
-    class DisplayedTransaction {
-        amount: number;
-        category: string;
-        date: string;
-        description: string;
-        source: string;
-
-        constructor(
-            amount: number,
-            category: string,
-            date: string,
-            description: string,
-            source: string
-        ) {
-            this.amount = Number(amount);
-            this.category = category;
-            this.date = date;
-            this.description = description;
-            this.source = source;
-        }
-    }
-
-    function ActionCellRenderer() {
-        // todo make look nice
-        return <div>
-            {/* <button data-action="edit"> Add subcategory </button> */}
-            <button data-action="delete"> delete </button>
-        </div>;
-    }
-
     const [displayedTransactions, setDisplayedTransactions] = useState(null);
+    const gridRef = useRef<AgGridReact<DisplayedTransaction>>();
 
     const [colDefs, setColDefs]: [any, any] = useState([
         {
@@ -64,40 +57,26 @@ export function TransactionsView(props: {
             field: "amount",
             filter: 'agNumberColumnFilter',
             width: 90,
-        },
-        {
-            headerName: "",
-            cellRenderer: ActionCellRenderer,
-            colId: "action",
-            width: 100,
-            resizable: false,
-            type: 'rightAligned'
+            // type: 'rightAligned'
         },
     ]);
 
-    function onCellClicked(params: any) {
-        if (params.column.colId === "action" && params.event.target.dataset.action) {
-            let action = params.event.target.dataset.action;
-
-            // todo make edit button work
-
-            if (action === "delete") {
-                params.api.applyTransaction({
-                    remove: [params.node.data]
-                });
-                props.setRulesData(props.rulesData.concat(new Rule(
-                    [
-                        new RuleTest(Field.Amount, CheckOp.Equals, params.node.data.amount),
-                        // new RuleTest(Field.Category, CheckOp.Equals, params.node.data.category),
-                        new RuleTest(Field.Date, CheckOp.Equals, params.node.data.date),
-                        new RuleTest(Field.Description, CheckOp.Equals, params.node.data.description),
-                        new RuleTest(Field.Source, CheckOp.Equals, params.node.data.source)
-                    ],
-                    new SetRuleOp([[Field.Category, "DELETED"]]),
-                    true
-                )));
-            }
+    function deleteSelectedTransactions() {
+        const selectedTransactions: DisplayedTransaction[] = gridRef.current.api.getSelectedRows();
+        const newDeleteRules = [];
+        for (let displayedTransaction of selectedTransactions) {
+            newDeleteRules.push(new Rule(
+                [
+                    new RuleTest(Field.Amount, CheckOp.Equals, displayedTransaction.amount),
+                    new RuleTest(Field.Date, CheckOp.Equals, displayedTransaction.date),
+                    new RuleTest(Field.Description, CheckOp.Equals, displayedTransaction.description),
+                    new RuleTest(Field.Source, CheckOp.Equals, displayedTransaction.source)
+                ],
+                new SetRuleOp([[Field.Category, "DELETED"]]),
+                true
+            ));
         }
+        props.setRulesData(props.rulesData.concat(newDeleteRules));
     }
 
     function createDisplayedTransactions(transactions: Transaction[]): DisplayedTransaction[] {
@@ -114,6 +93,10 @@ export function TransactionsView(props: {
         setDisplayedTransactions(createDisplayedTransactions(props.transactionData));
     }, [props.transactionData]);
 
+    useEffect(() => {
+        props.refreshTransactionData();
+    }, [props.rulesData]);
+
     return <div className="mainContent">
         <div className="viewContainer">
             <div className="pageTitle">
@@ -121,12 +104,19 @@ export function TransactionsView(props: {
             </div>
             <div className="gridHeader">
                 <button onClick={() => props.refreshTransactionData()}>refresh</button>
+                <GridHeaderDropdown
+                    buttonData={[
+                        new DropdownButtonData('Delete Selected', deleteSelectedTransactions),
+                        new DropdownButtonData('Edit Selected', () => {console.log('edit')}),
+                        new DropdownButtonData('Split Selected', () => {console.log('split')}),
+                    ]}/>
             </div>
             <div className="ag-theme-balham-dark fullPageGrid">
                 <AgGridReact
                     rowData={displayedTransactions}
                     columnDefs={colDefs}
-                    onCellClicked={onCellClicked}/>
+                    ref={gridRef}
+                    rowSelection={{mode: 'multiRow'}}/>
             </div>
         </div>
     </div>;

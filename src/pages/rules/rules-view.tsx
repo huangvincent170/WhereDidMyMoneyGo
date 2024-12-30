@@ -1,8 +1,27 @@
 import { AgGridReact } from "ag-grid-react";
 import { Field, Rule, RuleOpType, RuleTest, SetRuleOp, SplitRuleOp, CheckOp } from "../../classes/rule";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { ModifyRulesView } from "./modify-rule-view";
-import { FaRegPlusSquare } from "react-icons/fa";
+import { DropdownButtonData, GridHeaderDropdown } from "../../components/grid-header-dropdown";
+
+class DisplayedRule {
+    testsString: string;
+    actionString: string;
+    ruleString: string;
+    executesOnce: boolean;
+
+    constructor(
+        testsString: string,
+        actionString: string,
+        rule: Rule,
+        executesOnce: boolean,
+    ) {
+        this.testsString = testsString;
+        this.actionString = actionString;
+        this.ruleString = JSON.stringify(rule);
+        this.executesOnce = executesOnce;
+    }
+}
 
 export function RulesView(props: {
     categoryData: string[],
@@ -11,24 +30,9 @@ export function RulesView(props: {
     rulesData: Rule[],
     setRulesData: Function,
 }) {
-    class DisplayedRule {
-        testsString: string;
-        actionString: string;
-        ruleString: string;
-        executesOnce: boolean;
-
-        constructor(
-            testsString: string,
-            actionString: string,
-            rule: Rule,
-            executesOnce: boolean,
-        ) {
-            this.testsString = testsString;
-            this.actionString = actionString;
-            this.ruleString = JSON.stringify(rule);
-            this.executesOnce = executesOnce;
-        }
-    }
+    const [displayedRuleData, setDisplayedRuleData] = useState(createDisplayedRules(props.rulesData));
+    const [showModifyRules, setShowModifyRules]: [boolean, Function] = useState(false);
+    const gridRef = useRef(null);
 
     function createDisplayedRules(rules: Rule[]): DisplayedRule[] {
         if (rules == null) {
@@ -64,31 +68,15 @@ export function RulesView(props: {
         return displayedRules;
     }
 
-    const [displayedRuleData, setDisplayedRuleData] = useState(createDisplayedRules(props.rulesData));
-    const [showModifyRules, setShowModifyRules]: [boolean, Function] = useState(false);
-
-    function onCellClicked(params: any) {
-        if (params.column.colId === "action" && params.event.target.dataset.action) {
-            let action = params.event.target.dataset.action;
-
-            // todo make edit button work
-
-            if (action === "delete") {
-                params.api.applyTransaction({
-                    remove: [params.node.data]
-                });
-                props.setRulesData(props.rulesData.filter(rule => JSON.stringify(rule) != params.node.data.ruleString));
-            }
-        }
+    function deleteSelectedRules() {
+        const selectedRules: DisplayedRule[] = gridRef.current.api.getSelectedRows();
+        props.setRulesData(props.rulesData.filter((rule: Rule) =>
+            !selectedRules.some((selectedRule: DisplayedRule) => selectedRule.ruleString == JSON.stringify(rule))));
     }
 
-    function ActionCellRenderer() {
-        // todo make look nice
-        return <div>
-            {/* <button data-action="edit"> Add subcategory </button> */}
-            <button data-action="delete" className="gridButton"> delete </button>
-        </div>;
-    }
+    useEffect(() => {
+        setDisplayedRuleData(createDisplayedRules(props.rulesData));
+    }, [props.rulesData]);
 
     const [colDefs, setColDefs]: [any, any] = useState([
         {
@@ -114,20 +102,7 @@ export function RulesView(props: {
             width: 111,
             resizable: false,
         },
-        {
-            headerName: "",
-            cellRenderer: ActionCellRenderer,
-            colId: "action",
-            width: 100,
-            resizable: false,
-            type: 'rightAligned',
-        }
     ]);
-
-    useEffect(() => {
-        setDisplayedRuleData(createDisplayedRules(props.rulesData));
-    }, [props.rulesData]);
-
 
     return <div>
         <div className={showModifyRules ? "addViewContainerActive" : "addViewContainerHidden"}>
@@ -147,13 +122,19 @@ export function RulesView(props: {
                 </div>
                 <div className="gridHeader">
                     <button onClick={() => setShowModifyRules(true)}>New Rule</button>
+                    <GridHeaderDropdown
+                        buttonData={[
+                            new DropdownButtonData('Delete Selected', deleteSelectedRules),
+                            new DropdownButtonData('Edit Selected', () => {console.log('edit')}),
+                        ]}/>
                 </div>
                 <div className="ag-theme-balham-dark fullPageGrid">
                     <AgGridReact
                         animateRows={false}
                         rowData={displayedRuleData}
                         columnDefs={colDefs}
-                        onCellClicked={onCellClicked}/>
+                        ref={gridRef}
+                        rowSelection={{mode: 'multiRow'}}/>
                 </div>
             </div>
         </div>
