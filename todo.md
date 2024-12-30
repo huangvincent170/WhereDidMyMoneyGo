@@ -18,13 +18,11 @@
 
 - Rules
     - ❗ transactions that the rule would affect preview in create rule
-    - ⚠️ Fix rule create op input ui (too short)
-    - ⚠️ Source file selector
+    - ⚠️ Disable setting certain properties
     - 👍 Rule grid filters
     - 👍 transactions after rule has been executed preview window
     - 👍 no duplicate rules
     - 👍 Rules which only execute once sorted/executed first
-    - 👍 add scroll bar/ fix many tests/ops out of bounds
     - 👍 short text month displayed on charts
     - ❔ binsearch on dates for single execute rules (need to sort by date first)
     - ❔ split rule into percentages
@@ -56,3 +54,6 @@
     - 👍 clean up unused imports
     - 👍 exporting rules/categories
     - ❔ Templates for sources
+    - ❔ Settings
+        - Export/import in settings
+        - word wrap for charts

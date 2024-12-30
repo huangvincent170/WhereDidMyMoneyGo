@@ -10,8 +10,6 @@ $backgroundColor5: #4e5a5e;
 
 $buttonColor: #2d3436;
 $buttonHoverColor: #3d474a;
-$gridButtonColor: #404a4d;
-$gridButtonHoverColor: #6b7c81;
 
 $checkboxColor: #3d3d3d;
 $checkboxHoverColor: #777777;
@@ -43,7 +41,6 @@ button:hover {
 
 .iconButton {
     background-color: transparent;
-    // padding: 0;
 }
 
 input {
@@ -88,30 +85,12 @@ input:focus {
     border-radius: 5px;
 }
 
-.gridButtonContainer {
-    display: flex;
-    align-items: center;
-}
-
-.gridButton {
-    background-color: $gridButtonColor;
-    margin: 2px 0px 0px 5px;
-    height: 20px;
-    display: flex;
-    align-items: center;
-}
-
-.gridButton:hover {
-    background-color: $gridButtonHoverColor;
-}
-
 select {
     color: $textColor;
     border: none;
     border-radius: 5px;
     background-color: $buttonColor;
     height: 100%;
-    // margin: 0px 5px 0px 0px;
 }
 
 .pageTitle {
@@ -147,7 +126,6 @@ select {
 
 .gridHeader {
     width: 100%;
-    // overflow: auto;
     display: flex;
     justify-content: flex-end;
 
@@ -162,7 +140,6 @@ select {
     .gridHeaderDropdown {
         position: relative;
         display: inline-block;
-        // width: 50px;
 
         button {
             margin-left: 5px;
@@ -222,8 +199,8 @@ select {
 }
 
 .addView {
-    width: 45%;
-    height: 65%;
+    width: 50%;
+    height: 85%;
     background-color: $backgroundColor;
     border-radius: 25px;
     padding: 20px 30px 20px 30px;
@@ -231,10 +208,10 @@ select {
 
     .addViewFooter {
         position: absolute;
-        bottom: 200px;
+        bottom: 10%;
         display: flex;
         justify-content: space-between;
-        width: calc(45% - 60px);
+        width: calc(50% - 60px);
         height: 25px;
     
         .addViewFooterLeft {
@@ -256,11 +233,6 @@ select {
     }
 
     select {
-        // color: $textColor;
-        // border: none;
-        // border-radius: 5px;
-        // background-color: $buttonColor;
-        // height: 100%;
         margin: 0px 5px 0px 0px;
     }
 
@@ -268,16 +240,20 @@ select {
         display: inline-flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
         width: 100%;
+        height: 25%;
+        overflow-y: auto;
+        margin-top: 5px;
     }
 
     .setRuleOpContainer {
         display: inline-flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
         width: calc(100% - 95px);
+        height: 25%;
+        overflow-y: auto;
+        margin-top: 5px;
     }
 
     .splitRuleOpContainer {
@@ -298,8 +274,8 @@ select {
     }
 
     .checkFieldValue {
-        width: calc(100% - 285px); //todo use flexbox
         margin: 0px 5px 0px 0px;
+        flex: 1;
 
         .react-datepicker-wrapper,
         select,
@@ -310,15 +286,30 @@ select {
     }
 
     .setRuleFieldValue {
-        width: calc(100% - 140px); //todo use flexbox
+        flex: 1;
+        margin-right: 5px;
+
+        input {
+            width: 100%;
+        }
     }
 
     .splitRuleCategoryFieldValue {
-        width: calc(100% - 150px); //todo use flexbox
+        flex: 1;
+        margin-right: 5px;
+
+        select {
+            width: 100%;
+        }
     }
 
     .splitRuleAmountFieldValue {
-        width: 100px; //todo use flexbox
+        flex: 1;
+        margin-right: 5px;
+
+        input {
+            width: 100%;
+        }
     }
 
     .fieldSelector {

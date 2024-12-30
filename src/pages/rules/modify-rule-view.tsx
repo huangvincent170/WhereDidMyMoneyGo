@@ -66,6 +66,7 @@ export function ModifyRulesView(props: {
             setRuleTests={setRuleTests}
             sourceData={props.sourceData}/>
         <br/>
+        <br/>
         Then perform the following actions:
         <br/>
             <ModifyRuleOp
