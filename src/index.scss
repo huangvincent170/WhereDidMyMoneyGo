@@ -370,6 +370,19 @@ select {
             margin: 0px 0px 0px 5px;
         }
     }
+
+    .addSourceLongInput {
+        width: 65%;
+        direction: rtl;
+        padding-right: 5px;
+        padding-left: 5px;
+    }
+
+    .addSourceShortInput {
+        width: 50px;
+        padding-right: 5px;
+        padding-left: 5px;
+    }
 }
 
 .analyticsContainer {

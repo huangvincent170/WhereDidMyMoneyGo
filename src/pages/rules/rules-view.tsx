@@ -3,6 +3,7 @@ import { Field, Rule, RuleOpType, RuleTest, SetRuleOp, SplitRuleOp, CheckOp } fr
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ModifyRulesView } from "./modify-rule-view";
 import { DropdownButtonData, GridHeaderDropdown } from "../../components/grid-header-dropdown";
+import { Source } from "../../classes/source";
 
 class DisplayedRule {
     testsString: string;
@@ -29,6 +30,7 @@ export function RulesView(props: {
     // setTransactionData: Function,
     rulesData: Rule[],
     setRulesData: Function,
+    sourceData: Source[],
 }) {
     const [displayedRuleData, setDisplayedRuleData] = useState(createDisplayedRules(props.rulesData));
     const [showModifyRules, setShowModifyRules]: [boolean, Function] = useState(false);
@@ -85,7 +87,7 @@ export function RulesView(props: {
             autoHeight: true,
             wrapText: true,
             // cellStyle: {'whiteSpace': 'pre' },
-            flex: 3,
+            flex: 2,
             resizable: true,
         },
         {
@@ -112,7 +114,7 @@ export function RulesView(props: {
                 setShowModifyRules={setShowModifyRules}
                 rulesData={props.rulesData}
                 setRulesData={props.setRulesData}
-            />
+                sourceData={props.sourceData}/>
         </div>
         <div className="mainContent">
             <div className="viewContainer">

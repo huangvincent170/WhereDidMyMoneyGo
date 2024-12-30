@@ -6,7 +6,10 @@ import "ag-grid-community/styles/ag-theme-balham.css";
 import ModifySourcesView from "./modify-source-view";
 import { DropdownButtonData, GridHeaderDropdown } from "../../components/grid-header-dropdown";
 
-export function SourcesView(props: {sourceData: Source[], setSourceData: Function}) {
+export function SourcesView(props: {
+    sourceData: Source[],
+    setSourceData: Function,
+}) {
     const [showModifySources, setShowModifySources]: [boolean, Function] = useState(false);
     const gridRef = useRef(null);
 
@@ -60,8 +63,7 @@ export function SourcesView(props: {sourceData: Source[], setSourceData: Functio
                 showModifySources={showModifySources}
                 setShowModifySources={setShowModifySources}
                 sourceData={props.sourceData}
-                setSourceData={props.setSourceData}
-            />
+                setSourceData={props.setSourceData}/>
         </div>
         <div className="mainContent">
             <div className="viewContainer">

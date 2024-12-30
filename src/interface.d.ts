@@ -8,6 +8,7 @@ export interface IElectronAPI {
     // readDir: (path: string) => Promise<Dirent[]>,
     // handleOpenDialogReadCsvs: () => Promise<Transaction[]>
     readDataFromSources: (sourceData: Source[]) => Promise<Transaction[]>,
+    openSelectDirDialog: () => Promise<string>,
     onAppLoaded: (callback: Function) => void,
 }
   

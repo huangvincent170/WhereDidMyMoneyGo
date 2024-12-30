@@ -98,7 +98,8 @@ function App() {
                 <RulesView
                     categoryData={categoryData}
                     rulesData={rulesData}
-                    setRulesData={setAndStoreRulesData}/>
+                    setRulesData={setAndStoreRulesData}
+                    sourceData={sourceData}/>
             }/>
             <Route path="/analytics" element={
                 <AnalyticsView

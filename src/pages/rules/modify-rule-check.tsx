@@ -1,11 +1,13 @@
 import { Rule, Field, CheckOp, FieldToFieldType, ValidFieldTypeValidOps, RuleOpType, RuleOp, FieldType, SetRuleOp, SplitRuleOp, RuleTest } from "../../classes/rule";
 import { FaPlus, FaMinus } from "react-icons/fa";
 import { FieldOpSelector, FieldSelector, FieldValueInput } from "./modify-rule-form-fields";
+import { Source } from "../../classes/source";
 
 export function ModifyRuleCheck(props: {
     ruleTests: RuleTest[],
     setRuleTests: Function,
     categoryData: string[],
+    sourceData: Source[],
 }) {
     function SetRuleTest(
         oldRuleTest: RuleTest,
@@ -52,7 +54,8 @@ export function ModifyRuleCheck(props: {
                     className="checkFieldValue"
                     field={ruleTest.field}
                     fieldValue={ruleTest.value}
-                    setFieldValue={(fieldValue: string | number) => SetRuleTest(ruleTest, i, undefined, undefined, fieldValue)}/>
+                    setFieldValue={(fieldValue: string | number) => SetRuleTest(ruleTest, i, undefined, undefined, fieldValue)}
+                    sourceData={props.sourceData}/>
                 <button
                     className="iconButton"
                     onClick={() => AddRuleTest(i)}>

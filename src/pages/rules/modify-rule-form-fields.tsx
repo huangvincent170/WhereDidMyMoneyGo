@@ -2,6 +2,7 @@ import DatePicker from "react-datepicker/dist";
 import "react-datepicker/dist/react-datepicker.css";
 import { Field, CheckOp, FieldToFieldType, ValidFieldTypeValidOps, RuleOpType, RuleOp, FieldType, SetRuleOp, SplitRuleOp, RuleTest } from "../../classes/rule";
 import { CalendarDate } from 'calendar-date';
+import { Source } from "../../classes/source";
 
 export function FieldSelector(props: {field: Field, setField: Function}) {
     return <select
@@ -45,43 +46,63 @@ export function FieldValueInput(props: {
     field: Field,
     fieldValue: number | string,
     setFieldValue: Function,
+    sourceData?: Source[],
     className?: string,
 }) {
     // todo field into fieldtype, change input based on fieldtype
     if (props.field == Field.Category) {
         return <div className={props.className}>
             <select
-                // className={props.className}
                 defaultValue={props.fieldValue as string ?? "_select"}
                 onChange={(e) => props.setFieldValue(e.target.value)}>
                 <option hidden disabled key="_select" value="_select">select category</option>
                 <option key={'DELETED'} value={'DELETED'}>DELETED</option>
                 {
-                    props.categories != null ?
                     props.categories
-                        .filter((cat: string) =>
+                        ?.filter((cat: string) =>
                             props.categories.filter((otherCat: string) =>
                                 otherCat.startsWith(cat)).length == 1)
                         .map((category: string) =>
-                        <option
-                            key={category}
-                            value={category}>
-                            {category}
-                        </option>
-                    ) :
-                    <></>
+                            <option
+                                key={category}
+                                value={category}>
+                                {category}
+                            </option>
+                        )
                 }
             </select>
-    </div>;
+        </div>;
     } else if (props.field == Field.Date) {
-        return <div className={props.className}><DatePicker
-        selected={props.fieldValue != null ? new CalendarDate(props.fieldValue as string).toDateUTC() : null}
-        onChange={(date: Date) => props.setFieldValue(CalendarDate.fromDateUTC(date).toString())}/></div>
+        return <div className={props.className}>
+            <DatePicker
+                selected={props.fieldValue != null ? new CalendarDate(props.fieldValue as string).toDateUTC() : null}
+                onChange={(date: Date) => props.setFieldValue(CalendarDate.fromDateUTC(date).toString())}/>
+        </div>
+    } else if (props.field == Field.Source) {
+        return <div className={props.className}>
+            <select
+                defaultValue={props.fieldValue as string ?? "_select"}
+                onChange={(e) => props.setFieldValue(e.target.value)}>
+                <option hidden disabled key="_select" value="_select">select source</option>
+                {
+                    props.sourceData
+                        .map((source: Source) =>
+                            <option
+                                key={source.name}
+                                value={source.name}>
+                                {source.name}
+                            </option>
+                        )
+                }
+            </select>
+        </div>;
     } else {
-        return <div className={props.className}><input
-        className={props.className}
-        defaultValue={(props.fieldValue) as number | string}
-        onBlur={(e) => props.setFieldValue(e.target.value)}/></div>
+        return <div className={props.className}>
+            <input
+                className={props.className}
+                defaultValue={(props.fieldValue) as number | string}
+                onBlur={(e) => props.setFieldValue(e.target.value)}/>
+        </div>
     }
 }
 

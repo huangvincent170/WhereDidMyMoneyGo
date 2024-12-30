@@ -2,13 +2,15 @@ import { Rule, Field, CheckOp, FieldToFieldType, ValidFieldTypeValidOps, RuleOpT
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { ModifyRuleCheck } from "./modify-rule-check";
 import { ModifyRuleOp } from "./modify-rule-op"
+import { Source } from "../../classes/source";
 
 export function ModifyRulesView(props: {
     categoryData: string[]
     showModifyRules: boolean,
     setShowModifyRules: Function,
     rulesData: Rule[],
-    setRulesData: Function
+    setRulesData: Function,
+    sourceData: Source[],
 }) {
     
     const [ruleTests, setRuleTests] = useState([new RuleTest(undefined, undefined, undefined)]);
@@ -61,7 +63,8 @@ export function ModifyRulesView(props: {
         <ModifyRuleCheck
             categoryData={props.categoryData}
             ruleTests={ruleTests}
-            setRuleTests={setRuleTests}/>
+            setRuleTests={setRuleTests}
+            sourceData={props.sourceData}/>
         <br/>
         Then perform the following actions:
         <br/>

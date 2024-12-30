@@ -1,11 +1,12 @@
 import { Source } from "../../classes/source";
+import { useState } from "react";
 
 export default function ModifySourcesView(props: {
     showModifySources: boolean,
     setShowModifySources: Function,
     sourceData: Source[],
-    setSourceData: Function}
-) {
+    setSourceData: Function,
+}) {
     function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         // Prevent the browser from reloading the page
         event.preventDefault();
@@ -28,29 +29,35 @@ export default function ModifySourcesView(props: {
         props.setShowModifySources(!props.showModifySources);
     }
 
+    const [dirPath, setDirPath] = useState(null);
+
     // todo window modal for path
     // todo make popup look nice
     return (<div className="addView" hidden={!props.showModifySources}>
         <form className="addSourceForm" method="post" onSubmit={handleSubmit}>
             <div className="addSourceFieldContainer">
                <span>Source name:</span>
-               <input name="name" />
+               <input className="addSourceLongInput" name="name" />
             </div>
             <div className="addSourceFieldContainer">
                <span>Directory path:</span>
-            <input name="path" />
+               <input className="addSourceLongInput"
+                    name="path"
+                    readOnly={true}
+                    value={dirPath}
+                    onClick={async () => setDirPath(await window.electronAPI.openSelectDirDialog())} />
             </div>
             <div className="addSourceFieldContainer">
                <span>Amount column index:</span>
-                <input name="amountIdx" />
+                <input className="addSourceShortInput" name="amountIdx" />
             </div>
             <div className="addSourceFieldContainer">
                <span>Date column index:</span>
-                <input name="dateIdx" />
+                <input className="addSourceShortInput" name="dateIdx" />
             </div>
             <div className="addSourceFieldContainer">
                <span>Description column index:</span>
-                <input name="descriptionIdx" />
+                <input className="addSourceShortInput" name="descriptionIdx" />
             </div>
             <div className="addSourceFieldContainer">
                <span>Is amount debt?</span>

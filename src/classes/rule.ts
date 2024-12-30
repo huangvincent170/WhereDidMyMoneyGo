@@ -9,15 +9,18 @@ export enum Field {
 }
 
 export enum FieldType {
-    String = "String",
-    Number = "Number",
     Date = "Date",
+    Number = "Number",
+    Source = "Source",
+    String = "String",
 }
 
 export enum CheckOp {
-    Equals = "equals",
     Contains = "contains substring",
-    NotEquals = "does not equal",
+    Equals = "equals",
+    // GreaterThan = "greater than",
+    // LessThan = "less than",
+    // NotEquals = "does not equal",
     StartsWith = "starts with",
 }
 
@@ -27,16 +30,19 @@ export enum RuleOpType {
 }
 
 export const ValidFieldTypeValidOps = {
-    [FieldType.String]: [
-        CheckOp.Equals,
-        CheckOp.Contains
+    [FieldType.Date]: [
+        CheckOp.Equals
     ],
     [FieldType.Number]: [
         CheckOp.Equals
     ],
-    [FieldType.Date]: [
+    [FieldType.Source]: [
         CheckOp.Equals
-    ]
+    ],
+    [FieldType.String]: [
+        CheckOp.Equals,
+        CheckOp.Contains
+    ],
 }
 
 export const FieldToFieldType = {
@@ -44,9 +50,8 @@ export const FieldToFieldType = {
     [Field.Category]: FieldType.String,
     [Field.Date]: FieldType.Date,
     [Field.Description]: FieldType.String,
-    [Field.Source]: FieldType.String,
+    [Field.Source]: FieldType.Source,
 }
-
 
 
 export class RuleTest {

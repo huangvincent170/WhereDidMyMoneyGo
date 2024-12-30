@@ -10,7 +10,6 @@
     - ❗ Edit transaction
     - 👍 Error handling for reading transactions from source to check type of Dates/Numbers/strings/etc
 
-
 - Sources
     - ⚠️ Source file selector
     - 👍 Preview of source data
@@ -33,13 +32,14 @@
     - ❔ Less/greater than for numbers
     - ❔ Less/greater than for dates
     - ❔ case sensitive equals/substring
+    - ❔ Automatically set field op if only 1 possible option
 
 - Analytics
     - Single time period analytics by category
         - Types
             - ❗ bar graph split
+            - ⚠️ Table
             - 👍 pie graph
-            - 👍 Table
     - Spending over time
         - ⚠️ Table
         - ⚠️ bar graph split
@@ -54,7 +54,6 @@
 - Misc
     - ⚠️ Fix memory leak, remove listeners when unused
     - 👍 Clean up unused comments
-    - 👍 Fix indent in index.ts
     - 👍 clean up unused imports
     - 👍 exporting rules/categories
     - ❔ Templates for sources

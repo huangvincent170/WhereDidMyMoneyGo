@@ -13,79 +13,37 @@ declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
-  app.quit();
+    app.quit();
 }
 
 const createWindow = (): BrowserWindow => {
-  // Create the browser window.
-  const mainWindow = new BrowserWindow({
-    webPreferences: {
-      preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
-    },
-  });
+    // Create the browser window.
+    const mainWindow = new BrowserWindow({
+        webPreferences: {
+            preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+        },
+    });
 
-  mainWindow.removeMenu();
-  mainWindow.maximize();
-  mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
-  mainWindow.webContents.openDevTools();
+    mainWindow.removeMenu();
+    mainWindow.maximize();
+    mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+    mainWindow.webContents.openDevTools();
 
-  mainWindow.addListener('ready-to-show', () => {
-    mainWindow.webContents.send('appLoaded');
-  });
+    mainWindow.addListener('ready-to-show', () => {
+        mainWindow.webContents.send('appLoaded');
+    });
 
-  return mainWindow;
+    return mainWindow;
 };
 
-// IPC handlers
-// async function handleOpenDialogSelectDir () {
-//   const { canceled, filePaths } = await dialog.showOpenDialog({
-//     properties: [
-//       'openDirectory'
-//     ]
-//   })
-//   if (!canceled) {
-//     return filePaths[0]
-//   }
-// }
-
-// async function handleReadFile (path: string) {
-//   return readFileSync(path, 'utf-8');
-// }
-
-// async function handleReadDir(path: string) {
-
-//   return readdirSync(path, {withFileTypes: true}).filter((dirEnt: Dirent) => dirEnt.isFile());
-// }
-
-// async function handleOpenDialogReadCsvs(): Promise<Transaction[]> {
-//   const filePaths: string[] = await dialog.showOpenDialogSync({
-//     properties: [
-//       'openDirectory'
-//     ]
-//   })
-//   const filePath = filePaths[0];
-//   const dirEntries: Dirent[] = readdirSync(filePath, {withFileTypes: true})
-//     .filter((dirEnt: Dirent) => dirEnt.isFile());
-//   const fileData: string[] = await Promise.all(dirEntries
-//     .map(async dirEnt => await readFileSync(`${dirEnt.parentPath}/${dirEnt.name}`, 'utf-8')));
-//   const records: string[][] = fileData
-//     .map(data => parse(data, {bom: true, relax_quotes: true}))
-//     .reduce((acc, val) => acc.concat(val), []);
-//   records.forEach(record => {
-//     if (record.length != 5) {
-//       console.log(record)
-//     }
-//   });
-//   // const transactions: Transaction[] = records
-//   //   .map(record => new Transaction(
-//   //     'test',
-//   //     Number(record[1]),
-//   //     new Date(record[0]),
-//   //     record[4]
-//   //   ))
-//   // return transactions;
-//   return null;
-// }
+async function handleOpenSelectDirDialog(): Promise<string> {
+    const filePaths: string[] = await dialog.showOpenDialogSync({
+        properties: [
+            'openDirectory'
+        ]
+    })
+    return filePaths != null && filePaths.length > 0 ? filePaths[0] : null;
+}
 
 function handleReadDataFromSources(sources: Source[]): Transaction[] {
     if (sources == null) {
@@ -94,22 +52,22 @@ function handleReadDataFromSources(sources: Source[]): Transaction[] {
 
     let transactions: Transaction[] = [];
     for (var i = 0; i < sources.length; i++) {
-      const source = sources[i];
-      const dirEntries: Dirent[] = readdirSync(source.path, {withFileTypes: true})
-        .filter((dirEnt: Dirent) => dirEnt.isFile());
-      const fileData: string[] = dirEntries
-        .map(dirEnt => readFileSync(`${dirEnt.parentPath}/${dirEnt.name}`, 'utf-8'));
-      const records: string[][] = fileData
-        .map(data => parse(data, {bom: true, relax_quotes: true, relax_column_count_less: true, skip_empty_lines: true}))
-        .map(parsedData => parsedData.slice(source.hasHeader ? 1 : 0))
-        .reduce((acc, val) => acc.concat(val), []);
-      const sourceTransactions: Transaction[] = records.map(record => new Transaction(
-        source.name,
-        Number(source.isDebt ? -1 : 1) * Number(record[source.amountIdx]),
-        CalendarDate.fromDateUTC(new Date(record[source.dateIdx])).toString(),
-        record[source.descriptionIdx]
-      ));
-      transactions = transactions.concat(sourceTransactions);
+        const source = sources[i];
+        const dirEntries: Dirent[] = readdirSync(source.path, {withFileTypes: true})
+            .filter((dirEnt: Dirent) => dirEnt.isFile());
+        const fileData: string[] = dirEntries
+            .map(dirEnt => readFileSync(`${dirEnt.parentPath}/${dirEnt.name}`, 'utf-8'));
+        const records: string[][] = fileData
+            .map(data => parse(data, {bom: true, relax_quotes: true, relax_column_count_less: true, skip_empty_lines: true}))
+            .map(parsedData => parsedData.slice(source.hasHeader ? 1 : 0))
+            .reduce((acc, val) => acc.concat(val), []);
+        const sourceTransactions: Transaction[] = records.map(record => new Transaction(
+            source.name,
+            Number(source.isDebt ? -1 : 1) * Number(record[source.amountIdx]),
+            CalendarDate.fromDateUTC(new Date(record[source.dateIdx])).toString(),
+            record[source.descriptionIdx]
+        ));
+        transactions = transactions.concat(sourceTransactions);
     }
     transactions.sort((a: Transaction, b: Transaction) => a.date < b.date ? -1 : 1)
     return transactions;
@@ -119,29 +77,30 @@ function handleReadDataFromSources(sources: Source[]): Transaction[] {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
-  const mainWindow: BrowserWindow = createWindow();
-  ipcMain.handle('readDataFromSources', (_event, sources: Source[]) => handleReadDataFromSources(sources));
-  // ipcMain.handle('handleOpenDialogReadCsvs', handleOpenDialogReadCsvs);
-  // ipcMain.handle('dialog:openDialogSelectDir', handleOpenDialogSelectDir);
-  // ipcMain.handle('fs:readFile', (_event, path: string) => handleReadFile(path));
-  // ipcMain.handle('fs:readDir', (_event, path: string) => handleReadDir(path));
+    const mainWindow: BrowserWindow = createWindow();
+    ipcMain.handle('readDataFromSources', (_event, sources: Source[]) => handleReadDataFromSources(sources));
+    ipcMain.handle('openSelectDirDialog', handleOpenSelectDirDialog)
+    // ipcMain.handle('handleOpenDialogReadCsvs', handleOpenDialogReadCsvs);
+    // ipcMain.handle('dialog:openDialogSelectDir', handleOpenDialogSelectDir);
+    // ipcMain.handle('fs:readFile', (_event, path: string) => handleReadFile(path));
+    // ipcMain.handle('fs:readDir', (_event, path: string) => handleReadDir(path));
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') {
-    app.quit();
-  }
+    if (process.platform !== 'darwin') {
+        app.quit();
+    }
 });
 
 app.on('activate', () => {
-  // On OS X it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (BrowserWindow.getAllWindows().length === 0) {
-    createWindow();
-  }
+    // On OS X it's common to re-create a window in the app when the
+    // dock icon is clicked and there are no other windows open.
+    if (BrowserWindow.getAllWindows().length === 0) {
+        createWindow();
+    }
 });
 
 // In this file you can include the rest of your app's specific main process
