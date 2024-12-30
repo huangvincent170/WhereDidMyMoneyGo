@@ -11,8 +11,6 @@
     - 👍 Error handling for reading transactions from source to check type of Dates/Numbers/strings/etc
 
 - Sources
-    - ⚠️ Source file selector
-    - 👍 Preview of source data
     - 👍 Last time source was updated
 
 - Categories
@@ -20,6 +18,7 @@
 
 - Rules
     - ❗ transactions that the rule would affect preview in create rule
+    - ⚠️ Fix rule create op input ui (too short)
     - ⚠️ Source file selector
     - 👍 Rule grid filters
     - 👍 transactions after rule has been executed preview window
@@ -47,7 +46,7 @@
     - ⚠️ Fix yearly displaying month
     - ⚠️ lifetime should not display x axis tick for time
     - ⚠️ Fix error when no categories
-    - 👍 Bar chart year overflows
+    - ⚠️ Bar chart overflows y axis
     - ❔ Better way to display categories
     - ❔ Quarterly period
 

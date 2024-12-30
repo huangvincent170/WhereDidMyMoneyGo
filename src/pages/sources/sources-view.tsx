@@ -31,12 +31,12 @@ export function SourcesView(props: {
             flex: 1,
         },
         {
-            headerName: "Amount Idx",
+            headerName: "Amt Idx",
             field: "amountIdx",
             width: 100,
         },
         {
-            headerName: "Descrpt Idx",
+            headerName: "Desc Idx",
             field: "descriptionIdx",
             width: 100,
         },
@@ -46,12 +46,12 @@ export function SourcesView(props: {
             width: 100,
         },
         {
-            headerName: "Is Debt",
+            headerName: "Debt",
             field: "isDebt",
             width: 100,
         },
         {
-            headerName: "Has Header",
+            headerName: "Header",
             field: "hasHeader",
             width: 100,
         }

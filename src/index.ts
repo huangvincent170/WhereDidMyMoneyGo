@@ -45,6 +45,23 @@ async function handleOpenSelectDirDialog(): Promise<string> {
     return filePaths != null && filePaths.length > 0 ? filePaths[0] : null;
 }
 
+async function handleReadDataFromDir(
+    dirPath: string,
+    readSingleFile: boolean,
+    hasHeader: boolean,
+): Promise<string[][]> {
+    const dirEntries: Dirent[] = readdirSync(dirPath, {withFileTypes: true})
+        .filter((dirEnt: Dirent) => dirEnt.isFile())
+        .filter((dirEnt: Dirent, i: number) => !readSingleFile || i != 0);
+    const fileData: string[] = dirEntries
+        .map(dirEnt => readFileSync(`${dirEnt.parentPath}/${dirEnt.name}`, 'utf-8'));
+    const records: string[][] = fileData
+        .map(data => parse(data, {bom: true, relax_quotes: true, relax_column_count_less: true, skip_empty_lines: true}))
+        .map(parsedData => parsedData.slice(hasHeader ? 1 : 0))
+        .reduce((acc, val) => acc.concat(val), []);
+    return records;
+}
+
 function handleReadDataFromSources(sources: Source[]): Transaction[] {
     if (sources == null) {
         return [];
@@ -78,6 +95,7 @@ function handleReadDataFromSources(sources: Source[]): Transaction[] {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
     const mainWindow: BrowserWindow = createWindow();
+    ipcMain.handle('readDataFromDir', (_event, dirPath: string, readSingleFile: boolean, hasHeader: boolean) => handleReadDataFromDir(dirPath, readSingleFile, hasHeader));
     ipcMain.handle('readDataFromSources', (_event, sources: Source[]) => handleReadDataFromSources(sources));
     ipcMain.handle('openSelectDirDialog', handleOpenSelectDirDialog)
     // ipcMain.handle('handleOpenDialogReadCsvs', handleOpenDialogReadCsvs);

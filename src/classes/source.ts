@@ -13,21 +13,21 @@ export class Source {
     hasHeader: boolean;
 
     constructor(
-        path?: string,
-        name?: string,
-        amountIdx?: number,
-        descriptionIdx?: number,
-        dateIdx?: number,
-        isDebt?: boolean,
-        hasHeader?: boolean,
+        path: string,
+        name: string,
+        amountIdx: number,
+        descriptionIdx: number,
+        dateIdx: number,
+        isDebt: boolean,
+        hasHeader: boolean,
     ) {
         this.path = path;
         this.name = name;
         this.amountIdx = amountIdx;
         this.descriptionIdx = descriptionIdx;
         this.dateIdx = dateIdx;
-        this.isDebt = isDebt ?? false;
-        this.hasHeader = hasHeader ?? false;
+        this.isDebt = isDebt;
+        this.hasHeader = hasHeader;
     }
 
     static fromFormData(formData: FormData): Source {
