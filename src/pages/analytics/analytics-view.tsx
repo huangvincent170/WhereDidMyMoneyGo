@@ -8,6 +8,7 @@ import { LineChart } from "./line-chart";
 import { SankeyChart } from "./sankey-chart";
 import { StackedBarChart } from "./stacked-bar-chart";
 import { CalendarDate } from "calendar-date";
+import { TableChart } from "./table-chart";
 
 export function AnalyticsView(props: {
     categoryData: string[],
@@ -98,6 +99,14 @@ export function AnalyticsView(props: {
                         <SankeyChart
                             transactionData={props.transactionData}
                             enabledCategories={enabledCategories}
+                            startDate={startDate}
+                            endDate={endDate}/>
+                    </div>
+                    <div className="graphChartContainer" style={graphType == "TABLE" ? null : {display: 'none'}}>
+                        <TableChart
+                            transactionData={props.transactionData}
+                            enabledCategories={enabledCategories}
+                            timePeriod={timePeriod}
                             startDate={startDate}
                             endDate={endDate}/>
                     </div>

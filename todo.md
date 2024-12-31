@@ -34,17 +34,15 @@
 - Analytics
     - Single time period analytics by category
         - Types
-            - ❗ bar graph split
-            - ❗ Table
+            - 👍 bar graph split
             - 👍 pie graph
-    - Spending over time
-        - ❗ Table
-        - ❔ bar graph split
     - ⚠️ Color coding for categories
     - ⚠️ Fix yearly displaying month
     - ⚠️ lifetime should not display x axis tick for time
     - ⚠️ Fix error when no categories
     - ⚠️ Bar chart overflows y axis
+    - ⚠️ Table white box in horizontal scroll bar
+    - ⚠️ Table totals for each month/category
     - ❔ Better way to display categories
     - ❔ Quarterly period
 
