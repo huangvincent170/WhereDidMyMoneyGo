@@ -47,6 +47,7 @@
     "ag-grid-react": "^32.3.3",
     "calendar-date": "^2.7.2",
     "csv-parse": "^5.6.0",
+    "dayjs": "^1.11.13",
     "echarts": "^5.6.0",
     "echarts-for-react": "^3.0.2",
     "electron-squirrel-startup": "^1.0.1",

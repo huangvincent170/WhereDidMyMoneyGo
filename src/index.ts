@@ -81,7 +81,7 @@ function handleReadDataFromSources(sources: Source[]): Transaction[] {
         const sourceTransactions: Transaction[] = records.map(record => new Transaction(
             source.name,
             Number(source.isDebt ? -1 : 1) * Number(record[source.amountIdx]),
-            CalendarDate.fromDateUTC(new Date(record[source.dateIdx])).toString(),
+            CalendarDate.fromDateLocal(new Date(record[source.dateIdx])).toString(),
             record[source.descriptionIdx]
         ));
         transactions = transactions.concat(sourceTransactions);

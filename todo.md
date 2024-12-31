@@ -9,16 +9,20 @@
     - ❗ Add split button to split transaction
     - ❗ Edit transaction
     - 👍 Error handling for reading transactions from source to check type of Dates/Numbers/strings/etc
+    - ❔ Option to see deleted/split transactions
 
 - Sources
+    - 👍 Editing sources
     - 👍 Last time source was updated
 
 - Categories
-    - 👍 Edit category names
+    - ❔ Edit category names
 
 - Rules
     - ❗ transactions that the rule would affect preview in create rule
     - ⚠️ Disable setting certain properties
+    - ⚠️ warnings for if rule affects removed source/category
+    - 👍 Editing Rule
     - 👍 Rule grid filters
     - 👍 transactions after rule has been executed preview window
     - 👍 no duplicate rules

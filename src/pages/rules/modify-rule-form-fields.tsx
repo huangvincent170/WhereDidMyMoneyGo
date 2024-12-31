@@ -3,6 +3,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import { Field, CheckOp, FieldToFieldType, ValidFieldTypeValidOps, RuleOpType, RuleOp, FieldType, SetRuleOp, SplitRuleOp, RuleTest } from "../../classes/rule";
 import { CalendarDate } from 'calendar-date';
 import { Source } from "../../classes/source";
+import { useEffect } from "react";
+import customParseFormat from 'dayjs/plugin/customParseFormat';
+import dayjs from "dayjs";
+dayjs.extend(customParseFormat);
 
 export function FieldSelector(props: {field: Field, setField: Function}) {
     return <select
@@ -75,7 +79,7 @@ export function FieldValueInput(props: {
     } else if (props.field == Field.Date) {
         return <div className={props.className}>
             <DatePicker
-                selected={props.fieldValue != null ? new CalendarDate(props.fieldValue as string).toDateUTC() : null}
+                selected={dayjs(props.fieldValue, 'YYYY-MM-DD', true).isValid() ? new CalendarDate(props.fieldValue as string).toDateLocal() : null}
                 onChange={(date: Date) => props.setFieldValue(CalendarDate.fromDateUTC(date).toString())}/>
         </div>
     } else if (props.field == Field.Source) {

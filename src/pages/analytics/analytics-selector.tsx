@@ -60,16 +60,16 @@ export function AnalyticsSelector(props: {
             <span>Period Start</span>
             <div className="analyticsDatePickerContainer">
                 <DatePicker
-                    selected={props.startDate != null ? props.startDate.toDateUTC() : null}
-                    onChange={(date: Date) => props.setStartDate(date != null ? CalendarDate.fromDateUTC(date) : null)}/>
+                    selected={props.startDate != null ? props.startDate.toDateLocal() : null}
+                    onChange={(date: Date) => props.setStartDate(date != null ? CalendarDate.fromDateLocal(date) : null)}/>
             </div>
         </div>
         <div className="analyticsSelectorOption">
             <span>Period End</span>
             <div className="analyticsDatePickerContainer">
                 <DatePicker
-                    selected={props.endDate != null ? props.endDate.toDateUTC() : null}
-                    onChange={(date: Date) => props.setEndDate(date != null ? CalendarDate.fromDateUTC(date) : null)}/>
+                    selected={props.endDate != null ? props.endDate.toDateLocal() : null}
+                    onChange={(date: Date) => props.setEndDate(date != null ? CalendarDate.fromDateLocal(date) : null)}/>
             </div>
         </div>
         <div className="analyticsSelectorCategories">

@@ -33,24 +33,6 @@ export function AnalyticsView(props: {
         }
     }, [graphType]);
 
-    // useEffect(() => {
-    //     if (timeType == "SINGLE") {
-    //         if (timePeriod == "MONTH") {
-    //             setStartDate(CalendarDate.nowUTC().addMonths(-1));
-    //             setEndDate(CalendarDate.nowUTC());
-    //         } else if (timePeriod == "YEAR") {
-    //             setStartDate(CalendarDate.nowUTC().addMonths(-12));
-    //             setEndDate(CalendarDate.nowUTC());
-    //         } else if (timePeriod == "LIFETIME") {
-    //             setStartDate(null);
-    //             setEndDate(null);
-    //         }
-    //     } else {
-    //         setStartDate(null);
-    //         setEndDate(null);
-    //     }
-    // }, [timePeriod]);
-
     return <div className="mainContent">
         <div className="viewContainer">
             <div className="pageTitle">
