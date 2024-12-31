@@ -100,11 +100,18 @@ export function FieldValueInput(props: {
                 }
             </select>
         </div>;
+    } else if (props.field == Field.Amount) {
+        return <div className={props.className}>
+            <input
+                className={props.className}
+                defaultValue={props.fieldValue == null ? null : Number(props.fieldValue)}
+                onBlur={(e) => props.setFieldValue(Number(e.target.value))}/>
+        </div>
     } else {
         return <div className={props.className}>
             <input
                 className={props.className}
-                defaultValue={(props.fieldValue) as number | string}
+                defaultValue={(props.fieldValue) as string}
                 onBlur={(e) => props.setFieldValue(e.target.value)}/>
         </div>
     }

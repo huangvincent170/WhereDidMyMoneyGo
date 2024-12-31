@@ -126,9 +126,10 @@ export function RulesView(props: {
                     <button onClick={() => setShowModifyRules(true)}>New Rule</button>
                     <GridHeaderDropdown
                         buttonData={[
-                            new DropdownButtonData('Delete Selected', deleteSelectedRules),
-                            new DropdownButtonData('Edit Selected', () => {console.log('edit')}),
-                        ]}/>
+                            new DropdownButtonData('Delete Selected', deleteSelectedRules, (numSelected) => numSelected == 0),
+                            new DropdownButtonData('Edit Selected', () => {console.log('edit')}, () => true),
+                        ]}
+                        gridRef={gridRef}/>
                 </div>
                 <div className="ag-theme-balham-dark fullPageGrid">
                     <AgGridReact

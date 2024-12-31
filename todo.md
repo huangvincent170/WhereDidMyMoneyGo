@@ -6,9 +6,6 @@
 
 
 - Transactions
-    - ❗ split transaction
-    - ❗ Edit transaction
-    - ❗ disable options in dropdown depending on selection
     - ⚠️ transactions can only be set to split category once
     - 👍 Error handling for reading transactions from source to check type of Dates/Numbers/strings/etc
     - ❔ Option to see deleted/split transactions
@@ -19,6 +16,7 @@
     - 👍 Editing sources
 
 - Categories
+    - 👍 Unselecting category needs to unselect children as well
     - ❔ Edit category names
 
 - Rules

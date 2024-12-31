@@ -4,22 +4,27 @@ import { useEffect, useRef, useState } from 'react';
 export class DropdownButtonData {
     buttonText: string;
     onClicked: Function;
+    isDisabled: (numSelected: number) => boolean;
 
     constructor(
         buttonText: string,
-        onClicked: Function
+        onClicked: Function,
+        isDisabled: (numSelected: number) => boolean, 
     ) {
         this.buttonText = buttonText;
         this.onClicked = onClicked;
+        this.isDisabled = isDisabled
     }
 }
 
 export function GridHeaderDropdown(props: {
     buttonData: DropdownButtonData[],
+    gridRef: any,
 }) {
     const [dropdownShown, setDropdownShown] = useState(false);
     const dropdownButtonRef = useRef(null);
     const dropdownInnerButtonRefs: any[] = [];
+    const [numSelected, setNumSelected] = useState(0);
 
     document.addEventListener('mousedown', (e: any) => {
         if (dropdownShown &&
@@ -33,6 +38,10 @@ export function GridHeaderDropdown(props: {
     for (let i = 0; i < props.buttonData.length; i++) {
         dropdownInnerButtonRefs.push(useRef(null));
     }
+
+    useEffect(() => {
+        setNumSelected(props.gridRef.current.api?.getSelectedRows().length);
+    }, [dropdownShown]);
 
     return <div className="gridHeaderDropdown">
         <button
@@ -48,7 +57,9 @@ export function GridHeaderDropdown(props: {
                             buttonData.onClicked();
                             setDropdownShown(false);
                         }}
-                        ref={dropdownInnerButtonRefs[idx]}>
+                        ref={dropdownInnerButtonRefs[idx]}
+                        disabled={buttonData.isDisabled(numSelected)}
+                        style={buttonData.isDisabled(numSelected) ? {color: 'gray'} : null}>
                         {buttonData.buttonText}
                     </button>
                 )

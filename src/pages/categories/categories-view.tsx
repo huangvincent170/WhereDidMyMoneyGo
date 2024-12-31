@@ -123,9 +123,10 @@ export function CategoriesView(props: {transactionData: Transaction[], categoryD
                 <button onClick={addNewCategory}>Add a category</button>
                 <GridHeaderDropdown
                     buttonData={[
-                        new DropdownButtonData('Delete Selected', deleteSelectedCategories),
-                        new DropdownButtonData('Edit Selected', () => {console.log('edit')}),
-                    ]}/>
+                        new DropdownButtonData('Delete Selected', deleteSelectedCategories, (numSelected) => numSelected == 0),
+                        new DropdownButtonData('Edit Selected', () => {console.log('edit')}, () => true),
+                    ]}
+                    gridRef={gridRef}/>
             </div>
             <div className="ag-theme-balham-dark outer-cell fullPageGrid">
                 <AgGridReact

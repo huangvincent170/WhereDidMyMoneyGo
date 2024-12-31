@@ -8,7 +8,7 @@ import { DropdownButtonData, GridHeaderDropdown } from '../../components/grid-he
 import { ModifyTransactionsView } from './modify-transactions-view';
 import { Source } from '../../classes/source';
 
-class DisplayedTransaction {
+export class DisplayedTransaction {
     amount: number;
     category: string;
     date: string;
@@ -124,16 +124,29 @@ export function TransactionsView(props: {
                     <button onClick={() => props.refreshTransactionData()}>refresh</button>
                     <GridHeaderDropdown
                         buttonData={[
-                            new DropdownButtonData('Delete Selected', deleteSelectedTransactions),
-                            new DropdownButtonData('Edit Selected', () => {
-                                setRuleOpType(RuleOpType.Set);
-                                setShowModifyTransactions(true);
-                            }),
-                            new DropdownButtonData('Split Selected', () => {
-                                setRuleOpType(RuleOpType.Split);
-                                setShowModifyTransactions(true);
-                            }),
-                        ]}/>
+                            new DropdownButtonData(
+                                'Delete Selected',
+                                deleteSelectedTransactions,
+                                (numSelected) => numSelected == 0,
+                            ),
+                            new DropdownButtonData(
+                                'Edit Selected',
+                                () => {
+                                    setRuleOpType(RuleOpType.Set);
+                                    setShowModifyTransactions(true);
+                                },
+                                (numSelected) => numSelected == 0,
+                            ),
+                            new DropdownButtonData(
+                                'Split Selected',
+                                () => {
+                                    setRuleOpType(RuleOpType.Split);
+                                    setShowModifyTransactions(true);
+                                },
+                                (numSelected) => numSelected != 1,
+                            ),
+                        ]}
+                        gridRef={gridRef}/>
                 </div>
                 <div className="ag-theme-balham-dark fullPageGrid">
                     <AgGridReact

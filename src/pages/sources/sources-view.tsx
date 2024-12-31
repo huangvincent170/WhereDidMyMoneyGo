@@ -75,9 +75,10 @@ export function SourcesView(props: {
                     <button onClick={() => setShowModifySources(true)}>Add a source</button>
                     <GridHeaderDropdown
                         buttonData={[
-                            new DropdownButtonData('Delete Selected', deleteSelectedSources),
-                            new DropdownButtonData('Edit Selected', () => {console.log('edit')}),
-                        ]}/>
+                            new DropdownButtonData('Delete Selected', deleteSelectedSources, (numSelected) => numSelected == 0),
+                            new DropdownButtonData('Edit Selected', () => {console.log('edit')}, () => true),
+                        ]}
+                        gridRef={gridRef}/>
                 </div>
                 <div className="ag-theme-balham-dark fullPageGrid">
                     <AgGridReact
