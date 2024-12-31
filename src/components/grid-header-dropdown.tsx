@@ -59,7 +59,8 @@ export function GridHeaderDropdown(props: {
                         }}
                         ref={dropdownInnerButtonRefs[idx]}
                         disabled={buttonData.isDisabled(numSelected)}
-                        style={buttonData.isDisabled(numSelected) ? {color: 'gray'} : null}>
+                        style={buttonData.isDisabled(numSelected) ? {color: 'gray'} : null}
+                        key={idx}>
                         {buttonData.buttonText}
                     </button>
                 )

@@ -12,6 +12,8 @@ export function TableChart(props: {
     endDate: CalendarDate,
 }) {
     if (props.transactionData == null || props.enabledCategories == null || props.timePeriod == null) {
+        // this is bad and produces a warning but im too lazy to fix it
+        // need to move hook to before this call
         return <></>;
     }
 

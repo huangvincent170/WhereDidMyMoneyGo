@@ -47,7 +47,7 @@ export function LineChart(props: {
                         params.filter((param: any) => param.value > 0)
                             .sort((a: any, b: any) => a.value < b.value ? 1 : -1)
                             .map((param: any) =>
-                            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                            <div style={{display: 'flex', justifyContent: 'space-between'}} key={param.seriesName}>
                                 <p style={{color: param.color}}>{param.seriesName}&emsp;</p><p>{param.value.toFixed(2)}</p>
                             </div>)
                     }

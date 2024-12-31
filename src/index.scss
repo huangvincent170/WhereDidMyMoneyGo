@@ -89,6 +89,10 @@ input:focus {
     border-radius: 5px;
 }
 
+::-webkit-scrollbar-corner {
+    background-color: #202020;
+}
+
 select {
     color: $textColor;
     border: none;
@@ -411,7 +415,7 @@ select {
             height: 60%;
         }
 
-        .graphChartContainer {
+        .tableChartContainer {
             width: 100%;
             height: 100%;
         }

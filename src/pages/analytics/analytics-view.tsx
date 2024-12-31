@@ -74,7 +74,7 @@ export function AnalyticsView(props: {
                             startDate={startDate}
                             endDate={endDate}/>
                     </div>
-                    <div className={`chartContainer ${graphType == 'TABLE' ? '' : 'hidden'}`}>
+                    <div className={`tableChartContainer ${graphType == 'TABLE' ? '' : 'hidden'}`}>
                         <TableChart
                             transactionData={props.transactionData}
                             enabledCategories={enabledCategories}
