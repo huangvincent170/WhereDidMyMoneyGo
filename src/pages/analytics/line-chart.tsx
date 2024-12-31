@@ -1,7 +1,7 @@
 import ReactECharts from 'echarts-for-react';
 import { Transaction } from '../../classes/transaction';
 import { renderToStaticMarkup } from 'react-dom/server';
-import { calculateOvertimeData, getDateMapKey } from './data';
+import { calculateData, getDateMapKey } from './data';
 import { CalendarDate } from 'calendar-date';
 
 export function LineChart(props: {
@@ -15,12 +15,14 @@ export function LineChart(props: {
         return <></>;
     }
 
-    const [displayedCategoriesMap, dateKeyDates] = calculateOvertimeData(
+    const [displayedCategoriesMap, dateKeyDates] = calculateData(
         props.transactionData,
         props.enabledCategories,
         props.timePeriod,
         props.startDate,
-        props.endDate);
+        props.endDate,
+        false
+    );
 
     const series: any[] = [];
 

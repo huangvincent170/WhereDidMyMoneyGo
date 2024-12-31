@@ -16,7 +16,6 @@ export function AnalyticsView(props: {
 
     const [enabledCategories, setEnabledCategories] = useState(null);
     const [graphType, setGraphType] = useState("LINE");
-    const [timeType, setTimeType] = useState("OVERTIME");
     const [timePeriod, setTimePeriod] = useState("MONTH");
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
@@ -27,28 +26,29 @@ export function AnalyticsView(props: {
 
     useEffect(() => {
         if (graphType == 'SANKEY') {
-            setTimeType('SINGLE');
             setTimePeriod('LIFETIME');
         } else if (graphType == 'BARSTACKED' || graphType == 'LINE') {
-            setTimeType('OVERTIME');
             setTimePeriod('MONTH');
         }
     }, [graphType]);
 
-    useEffect(() => {
-        if (timeType == "SINGLE") {
-            if (timePeriod == "MONTH") {
-                setStartDate(CalendarDate.nowUTC().addMonths(-1));
-                setEndDate(CalendarDate.nowUTC());
-            } else if (timePeriod == "YEAR") {
-                setStartDate(CalendarDate.nowUTC().addMonths(-12));
-                setEndDate(CalendarDate.nowUTC());
-            } else if (timePeriod == "LIFETIME") {
-                setStartDate(null);
-                setEndDate(null);
-            }
-        }
-    }, [timePeriod, timeType]);
+    // useEffect(() => {
+    //     if (timeType == "SINGLE") {
+    //         if (timePeriod == "MONTH") {
+    //             setStartDate(CalendarDate.nowUTC().addMonths(-1));
+    //             setEndDate(CalendarDate.nowUTC());
+    //         } else if (timePeriod == "YEAR") {
+    //             setStartDate(CalendarDate.nowUTC().addMonths(-12));
+    //             setEndDate(CalendarDate.nowUTC());
+    //         } else if (timePeriod == "LIFETIME") {
+    //             setStartDate(null);
+    //             setEndDate(null);
+    //         }
+    //     } else {
+    //         setStartDate(null);
+    //         setEndDate(null);
+    //     }
+    // }, [timePeriod]);
 
     return <div className="mainContent">
         <div className="viewContainer">
@@ -66,8 +66,6 @@ export function AnalyticsView(props: {
                     setEnabledCategories={setEnabledCategories}
                     timePeriod={timePeriod}
                     setTimePeriod={setTimePeriod}
-                    timeType={timeType}
-                    setTimeType={setTimeType}
                     graphType={graphType}
                     setGraphType={setGraphType}
                     startDate={startDate}

@@ -1,6 +1,6 @@
 import ReactECharts from 'echarts-for-react';
 import { Transaction } from '../../classes/transaction';
-import { calculateSingleData } from './data';
+import { calculateData, getDateMapKey } from './data';
 import { CalendarDate } from 'calendar-date';
 
 export function SankeyChart(props: {
@@ -13,17 +13,23 @@ export function SankeyChart(props: {
         return <></>;
     }
 
-    const categoryAmountMap = calculateSingleData(
+    const [displayedCategoriesMap, dateKeyDates] = calculateData(
         props.transactionData,
         props.enabledCategories,
+        'LIFETIME',
         props.startDate,
-        props.endDate);
+        props.endDate,
+        true
+    );
 
-    const sortedCategoryAmountMap = [...categoryAmountMap.entries()].sort();
+    console.log(displayedCategoriesMap);
+
+    // const sortedCategoryAmountMap = [...categoryAmountMap.entries()].sort();
     const transactionNodeNames: any[] = [{name: 'Transactions', depth: 0}];
     const links: any[] = [];
-    for (let [categoryId, amount] of sortedCategoryAmountMap) {
-        if (amount <= 0) {
+    for (let [categoryId, dateMap] of displayedCategoriesMap) {
+        const amount: number = dateMap.get('LIFETIME_DATEMAPKEY');
+        if (amount == null || amount <= 0) {
             continue;
         }
 

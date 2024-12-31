@@ -35,11 +35,11 @@
     - Single time period analytics by category
         - Types
             - ❗ bar graph split
-            - ⚠️ Table
+            - ❗ Table
             - 👍 pie graph
     - Spending over time
-        - ⚠️ Table
-        - ⚠️ bar graph split
+        - ❗ Table
+        - ❔ bar graph split
     - ⚠️ Color coding for categories
     - ⚠️ Fix yearly displaying month
     - ⚠️ lifetime should not display x axis tick for time

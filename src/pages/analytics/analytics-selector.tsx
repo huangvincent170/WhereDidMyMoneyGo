@@ -14,8 +14,6 @@ export function AnalyticsSelector(props: {
     setEnabledCategories: Function,
     timePeriod: string,
     setTimePeriod: Function,
-    timeType: string,
-    setTimeType: Function,
     graphType: string,
     setGraphType: Function,
     startDate: CalendarDate,
@@ -49,28 +47,16 @@ export function AnalyticsSelector(props: {
             </select>
         </div>
         <div className="analyticsSelectorOption"
-            style={props.graphType == 'BARSTACKED' || props.graphType == 'SANKEY' || props.graphType == 'LINE' ? {display: 'none'} : {}}>
-            Time Type
-            <select
-                onChange={(e) => props.setTimeType(e.target.value)}
-                value={props.timeType ?? "OVERTIME"}>
-                <option value="SINGLE">Single period</option>
-                <option value="OVERTIME">Over Time</option>
-            </select>
-        </div>
-        <div className="analyticsSelectorOption">
+            style={props.graphType == 'TABLE' || props.graphType == 'BARSTACKED' || props.graphType == 'LINE' ? {} : {display: 'none'}}>
             Time Period
             <select
                 onChange={(e) => props.setTimePeriod(e.target.value)}
                 value={props.timePeriod ?? "MONTH"}>
-                <option value="MONTH">{props.timeType == 'OVERTIME' ? 'Monthly' : 'Month'}</option>
-                <option value="YEAR">{props.timeType == 'OVERTIME' ? 'Yearly' : 'Year'}</option>
-                <option value="LIFETIME" hidden={ props.timeType != "SINGLE" }>Lifetime</option>
-                <option value="RANGE" hidden={ props.timeType != "SINGLE" }>Date Range</option>
+                <option value="MONTH">Monthly</option>
+                <option value="YEAR">Yearly</option>
             </select>
         </div>
-        <div className="analyticsSelectorOption"
-            style={props.timeType == 'SINGLE' && props.timePeriod != 'RANGE' ? {display: 'none'} : {}}>
+        <div className="analyticsSelectorOption">
             <span>Period Start</span>
             <div className="analyticsDatePickerContainer">
                 <DatePicker
@@ -78,8 +64,7 @@ export function AnalyticsSelector(props: {
                     onChange={(date: Date) => props.setStartDate(date != null ? CalendarDate.fromDateUTC(date) : null)}/>
             </div>
         </div>
-        <div className="analyticsSelectorOption"
-            style={props.timeType == 'SINGLE' && props.timePeriod != 'RANGE' ? {display: 'none'} : {}}>
+        <div className="analyticsSelectorOption">
             <span>Period End</span>
             <div className="analyticsDatePickerContainer">
                 <DatePicker
