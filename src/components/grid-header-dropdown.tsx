@@ -40,7 +40,7 @@ export function GridHeaderDropdown(props: {
             ref={dropdownButtonRef}>
             <HiDotsHorizontal />
         </button>
-        <div className="gridHeaderDropdownOptionContainer" style={dropdownShown ? {} : {display: 'none'}}>
+        <div className={`gridHeaderDropdownOptionContainer ${dropdownShown ? '' : 'hidden'}`}>
             {
                 props.buttonData.map((buttonData: DropdownButtonData, idx: number) =>
                     <button

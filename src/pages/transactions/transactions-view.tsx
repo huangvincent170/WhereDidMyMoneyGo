@@ -3,8 +3,10 @@ import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the 
 import "ag-grid-community/styles/ag-theme-balham.css";
 import { useEffect, useRef, useState } from 'react';
 import { Transaction } from '../../classes/transaction';
-import { CheckOp, Field, Rule, RuleTest, SetRuleOp } from '../../classes/rule';
+import { CheckOp, Field, Rule, RuleOpType, RuleTest, SetRuleOp } from '../../classes/rule';
 import { DropdownButtonData, GridHeaderDropdown } from '../../components/grid-header-dropdown';
+import { ModifyTransactionsView } from './modify-transactions-view';
+import { Source } from '../../classes/source';
 
 class DisplayedTransaction {
     amount: number;
@@ -33,8 +35,12 @@ export function TransactionsView(props: {
     refreshTransactionData: Function,
     rulesData: Rule[],
     setRulesData: Function,
+    categoryData: string[],
+    sourceData: Source[],
 }) {
     const [displayedTransactions, setDisplayedTransactions] = useState(null);
+    const [showModifyTransactions, setShowModifyTransactions] = useState(null);
+    const [ruleOpType, setRuleOpType] = useState(null);
     const gridRef = useRef<AgGridReact<DisplayedTransaction>>();
 
     const [colDefs, setColDefs]: [any, any] = useState([
@@ -97,26 +103,45 @@ export function TransactionsView(props: {
         props.refreshTransactionData();
     }, [props.rulesData]);
 
-    return <div className="mainContent">
-        <div className="viewContainer">
-            <div className="pageTitle">
-                <h1>Transactions</h1>
-            </div>
-            <div className="gridHeader">
-                <button onClick={() => props.refreshTransactionData()}>refresh</button>
-                <GridHeaderDropdown
-                    buttonData={[
-                        new DropdownButtonData('Delete Selected', deleteSelectedTransactions),
-                        new DropdownButtonData('Edit Selected', () => {console.log('edit')}),
-                        new DropdownButtonData('Split Selected', () => {console.log('split')}),
-                    ]}/>
-            </div>
-            <div className="ag-theme-balham-dark fullPageGrid">
-                <AgGridReact
-                    rowData={displayedTransactions}
-                    columnDefs={colDefs}
-                    ref={gridRef}
-                    rowSelection={{mode: 'multiRow'}}/>
+    return <div>
+        <div className={showModifyTransactions ? "addViewContainerActive" : "addViewContainerHidden"}>
+            <ModifyTransactionsView
+                showModifyTransactions={showModifyTransactions}
+                setShowModifyTransactions={setShowModifyTransactions}
+                ruleOpType={ruleOpType}
+                gridRef={gridRef}
+                categoryData={props.categoryData}
+                rulesData={props.rulesData}
+                setRulesData={props.setRulesData}
+                sourceData={props.sourceData}/>
+        </div>
+        <div className="mainContent">
+            <div className="viewContainer">
+                <div className="pageTitle">
+                    <h1>Transactions</h1>
+                </div>
+                <div className="gridHeader">
+                    <button onClick={() => props.refreshTransactionData()}>refresh</button>
+                    <GridHeaderDropdown
+                        buttonData={[
+                            new DropdownButtonData('Delete Selected', deleteSelectedTransactions),
+                            new DropdownButtonData('Edit Selected', () => {
+                                setRuleOpType(RuleOpType.Set);
+                                setShowModifyTransactions(true);
+                            }),
+                            new DropdownButtonData('Split Selected', () => {
+                                setRuleOpType(RuleOpType.Split);
+                                setShowModifyTransactions(true);
+                            }),
+                        ]}/>
+                </div>
+                <div className="ag-theme-balham-dark fullPageGrid">
+                    <AgGridReact
+                        rowData={displayedTransactions}
+                        columnDefs={colDefs}
+                        ref={gridRef}
+                        rowSelection={{mode: 'multiRow'}}/>
+                </div>
             </div>
         </div>
     </div>;

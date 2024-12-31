@@ -57,18 +57,20 @@ export function ModifyRulesView(props: {
         props.setRulesData(props.rulesData.concat(new Rule(ruleTests, ruleOp, executesOnce)));
     }
 
-    return <div className="addView" hidden={!props.showModifyRules}>
-        If all of the following conditions match:
-        <br/>
-        <ModifyRuleCheck
-            categoryData={props.categoryData}
-            ruleTests={ruleTests}
-            setRuleTests={setRuleTests}
-            sourceData={props.sourceData}/>
-        <br/>
-        <br/>
-        Then perform the following actions:
-        <br/>
+    return <div className="addView ruleAddView" hidden={!props.showModifyRules}>
+        <div className="addViewMain">
+            If all of the following conditions match:
+            <br/>
+            <ModifyRuleCheck
+                categoryData={props.categoryData}
+                ruleTests={ruleTests}
+                setRuleTests={setRuleTests}
+                sourceData={props.sourceData}
+                heightPercent={20}/>
+            <br/>
+            <br/>
+            Then perform the following actions:
+            <br/>
             <ModifyRuleOp
                 categoryData={props.categoryData}
                 ruleOpType={ruleOpType}
@@ -76,8 +78,10 @@ export function ModifyRulesView(props: {
                 setRuleOp={setRuleOp}
                 setSetRuleOp={setSetRuleOp}
                 splitRuleOp={splitRuleOp}
-                setSplitRuleOp={setSplitRuleOp}/>
-        <br />
+                setSplitRuleOp={setSplitRuleOp}
+                showRuleOpSelector={true}
+                heightPercent={20}/>
+        </div>
         <div className="addViewFooter">
             <div className="addViewFooterLeft">
                 <input

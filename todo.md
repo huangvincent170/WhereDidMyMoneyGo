@@ -6,28 +6,40 @@
 
 
 - Transactions
-    - ❗ Add split button to split transaction
+    - ❗ split transaction
     - ❗ Edit transaction
+    - ❗ disable options in dropdown depending on selection
+    - ⚠️ transactions can only be set to split category once
     - 👍 Error handling for reading transactions from source to check type of Dates/Numbers/strings/etc
     - ❔ Option to see deleted/split transactions
+    - ❔ Option to hide uncategorized transactions
 
 - Sources
+    - ⚠️ Last time source was updated
     - 👍 Editing sources
-    - 👍 Last time source was updated
 
 - Categories
     - ❔ Edit category names
 
 - Rules
     - ❗ transactions that the rule would affect preview in create rule
+    - ❗ canBeAffectedByOtherRules
+        - set original transaction to deleted? or remove it from list
+        - return it in addedTransactions
+        - split rules are always !canBeAffectedByOtherRules
+        - edit rules from the transaction page should be !canbeaffected by default
+        - always executes first
     - ⚠️ Disable setting certain properties
     - ⚠️ warnings for if rule affects removed source/category
     - 👍 Editing Rule
     - 👍 Rule grid filters
     - 👍 transactions after rule has been executed preview window
     - 👍 no duplicate rules
-    - 👍 Rules which only execute once sorted/executed first
+    - 👍 Rules which only execute once executed first (after preprocess)
     - 👍 short text month displayed on charts
+    - 👍 add delete op which sets category to deleted
+        - preprocess
+        - remove user set category to deleted
     - ❔ binsearch on dates for single execute rules (need to sort by date first)
     - ❔ split rule into percentages
     - ❔ Less/greater than for numbers

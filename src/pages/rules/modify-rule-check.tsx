@@ -8,6 +8,7 @@ export function ModifyRuleCheck(props: {
     setRuleTests: Function,
     categoryData: string[],
     sourceData: Source[],
+    heightPercent: number,
 }) {
     function SetRuleTest(
         oldRuleTest: RuleTest,
@@ -39,7 +40,8 @@ export function ModifyRuleCheck(props: {
         ]);
     }
 
-    return <div className="ruleCheckContainer">
+    return <div className="ruleCheckContainer"
+        style={{height: `${props.heightPercent}%`}}>
         {
             props.ruleTests.map((ruleTest, i) => <div className="ruleCheck" key={i}>
                 <FieldSelector

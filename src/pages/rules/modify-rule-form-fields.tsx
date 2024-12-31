@@ -112,7 +112,6 @@ export function FieldValueInput(props: {
 
 export function RuleOpTypeSelector(props: {ruleOpType: RuleOpType, setRuleOpType: Function}) {
     return <select
-        className="ruleOpTypeSelector"
         onChange={(e) => props.setRuleOpType(e.target.value)}
         defaultValue={props.ruleOpType ?? "_select"}>
         <option hidden disabled key="_select" value="_select">select op</option>

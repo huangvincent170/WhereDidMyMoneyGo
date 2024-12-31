@@ -10,6 +10,8 @@ export function ModifyRuleOp(props: {
     setSetRuleOp: Function,
     splitRuleOp: SplitRuleOp,
     setSplitRuleOp: Function,
+    showRuleOpSelector: boolean,
+    heightPercent: number
 }) {
     function SetSetRuleOp(i: number, setField?: Field, setValue?: string | number) {
         props.setSetRuleOp(new SetRuleOp(props.setRuleOp.setFieldValues.map((_setFieldValue, _i) =>
@@ -51,11 +53,18 @@ export function ModifyRuleOp(props: {
         ]));
     }
 
-    return <div className="ruleOpContainer">
-        <RuleOpTypeSelector
-            ruleOpType={props.ruleOpType}
-            setRuleOpType={props.setRuleOpType}/>
-        <div className="setRuleOpContainer" style={(props.ruleOpType != null && props.ruleOpType != RuleOpType.Set) ? {display:'none'} : {}}>
+    return <div className="ruleOpContainer"
+        style={{height: `${props.heightPercent}%`}}>
+        <div className={`ruleOpTypeSelectorContainer ${props.showRuleOpSelector ? '' : 'hidden'}`}>
+            <RuleOpTypeSelector
+                ruleOpType={props.ruleOpType}
+                setRuleOpType={props.setRuleOpType}/>
+        </div>
+        <div className={
+            `setRuleOpContainer
+            ${props.ruleOpType != null && props.ruleOpType != RuleOpType.Set ? 'hidden' : ''}
+            ${props.showRuleOpSelector ? 'ruleOpContainerSelectorShown' : 'ruleOpContainerSelectorHidden'}`
+            }>
         {
             props.setRuleOp.setFieldValues.map((_setFieldValue, i) =>
                 <div className="ruleOp" key={i}>

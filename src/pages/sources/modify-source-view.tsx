@@ -19,9 +19,9 @@ export default function ModifySourcesView(props: {
     const [hasHeader, setHasHeader] = useState(null);
     const gridRef = useRef(null);
 
-    function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    function handleSubmit() {
         // Prevent the browser from reloading the page
-        event.preventDefault();
+        // event.preventDefault();
 
         const source: Source = new Source(
             dirPath,
@@ -95,70 +95,72 @@ export default function ModifySourcesView(props: {
         fetchAndSetDataFromDir().catch(console.error);
     }, [dirPath, hasHeader, amountIdx, dateIdx, descIdx, isDebt]);
 
-    return (<div className="addView" hidden={!props.showModifySources}>
-        <form className="addSourceForm" method="post" onSubmit={handleSubmit}>
-            <div className="addSourceFieldContainer">
-                <span>Source name:</span>
+    return (<div className="addView sourceAddView" hidden={!props.showModifySources}>
+        <div className="addViewMain">
+            <div className="addSourceContainer">
+                <div className="addSourceFieldContainer">
+                    <span>Source name:</span>
+                    <input
+                        className="addSourceLongInput"
+                        value={sourceName}
+                        onChange={(e) => setSourceName(e.target.value)}/>
+                </div>
+                <div className="addSourceFieldContainer">
+                <span>Directory path:</span>
                 <input
-                    className="addSourceLongInput"
-                    value={sourceName}
-                    onChange={(e) => setSourceName(e.target.value)}/>
-            </div>
-            <div className="addSourceFieldContainer">
-               <span>Directory path:</span>
-               <input
-                    className="addSourceLongInput rightAlignInput"
-                    name="path"
-                    readOnly={true}
-                    value={dirPath}
-                    onClick={async () => setDirPath(await window.electronAPI.openSelectDirDialog())} />
-            </div>
-            <div className="addSourceFieldContainer">
-                <span>Amount column index:</span>
-                <input
-                    className="addSourceShortInput"
-                    value={amountIdx}
-                    onChange={(e) => setAmountIdx(e.target.value)}/>
-            </div>
-            <div className="addSourceFieldContainer">
-                <span>Date column index:</span>
-                <input className="addSourceShortInput"
-                    value={dateIdx}
-                    onChange={(e) => setDateIdx(e.target.value)}/>
-            </div>
-            <div className="addSourceFieldContainer">
-                <span>Description column index:</span>
-                <input className="addSourceShortInput"
-                    value={descIdx}
-                    onChange={(e) => setDescIdx(e.target.value)}/>
-            </div>
-            <div className="addSourceFieldContainer">
-                <span>Is amount debt?</span>
-                <input
-                    type="checkbox"
-                    value={isDebt}
-                    onChange={(e) => setIsDebt(e.target.checked)}/>
-            </div>
-            <div className="addSourceFieldContainer">
-                <span>Do files have a header line?</span>
-                <input
-                    type="checkbox"
-                    value={hasHeader}
-                    onChange={(e) => setHasHeader(e.target.checked)}/>
-            </div>
-            <div className="ag-theme-balham-dark addSourceGridContainer">
-                <AgGridReact
-                    animateRows={false}
-                    rowData={dirSourceData}
-                    columnDefs={colDefs}
-                    ref={gridRef}/>
-            </div>
-            <div className="addViewFooter">
-                <div className="addViewFooterRight">
-                    <button type="submit">Save Changes</button>
-                    <button type="button" onClick={() => props.setShowModifySources(false)}>Close</button>
+                        className="addSourceLongInput rightAlignInput"
+                        name="path"
+                        readOnly={true}
+                        value={dirPath}
+                        onClick={async () => setDirPath(await window.electronAPI.openSelectDirDialog())} />
+                </div>
+                <div className="addSourceFieldContainer">
+                    <span>Amount column index:</span>
+                    <input
+                        className="addSourceShortInput"
+                        value={amountIdx}
+                        onChange={(e) => setAmountIdx(e.target.value)}/>
+                </div>
+                <div className="addSourceFieldContainer">
+                    <span>Date column index:</span>
+                    <input className="addSourceShortInput"
+                        value={dateIdx}
+                        onChange={(e) => setDateIdx(e.target.value)}/>
+                </div>
+                <div className="addSourceFieldContainer">
+                    <span>Description column index:</span>
+                    <input className="addSourceShortInput"
+                        value={descIdx}
+                        onChange={(e) => setDescIdx(e.target.value)}/>
+                </div>
+                <div className="addSourceFieldContainer">
+                    <span>Is amount debt?</span>
+                    <input
+                        type="checkbox"
+                        value={isDebt}
+                        onChange={(e) => setIsDebt(e.target.checked)}/>
+                </div>
+                <div className="addSourceFieldContainer">
+                    <span>Do files have a header line?</span>
+                    <input
+                        type="checkbox"
+                        value={hasHeader}
+                        onChange={(e) => setHasHeader(e.target.checked)}/>
+                </div>
+                <div className="ag-theme-balham-dark addSourceGridContainer">
+                    <AgGridReact
+                        animateRows={false}
+                        rowData={dirSourceData}
+                        columnDefs={colDefs}
+                        ref={gridRef}/>
                 </div>
             </div>
-        </form>
+        </div>
+        <div className="addViewFooter">
+            <div className="addViewFooterRight">
+                <button type="submit" onClick={() => handleSubmit()}>Save Changes</button>
+                <button type="button" onClick={() => props.setShowModifySources(false)}>Close</button>
+            </div>
+        </div>
     </div>);
 }

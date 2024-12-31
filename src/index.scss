@@ -27,6 +27,10 @@ $sidebarWidth: 250px;
     font-family: "Lato", sans-serif;
 }
 
+.hidden {
+    display: none !important;
+}
+
 button {
     border-radius: 5px;
     padding: 5px;
@@ -198,21 +202,47 @@ select {
     display: none;
 }
 
-.addView {
+.sourceAddView {
     width: 50%;
-    height: 85%;
+    height: 62%;
+}
+
+.transactionAddView {
+    width: 40%;
+    height: 40%;
+}
+
+.ruleAddView {
+    width: 75%;
+    height: 90%;
+}
+
+.ruleOpContainerSelectorShown {
+    width: calc(100% - 95px);
+}
+
+.ruleOpContainerSelectorHidden {
+    width: 100%;
+}
+
+.addView {
     background-color: $backgroundColor;
     border-radius: 25px;
     padding: 20px 30px 20px 30px;
     color: $textColor;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    .addViewMain {
+        height: 90%;
+    }
 
     .addViewFooter {
-        position: absolute;
-        bottom: 10%;
         display: flex;
         justify-content: space-between;
-        width: calc(50% - 60px);
         height: 25px;
+        margin-top: 15px;
     
         .addViewFooterLeft {
             display: flex;
@@ -236,32 +266,18 @@ select {
         margin: 0px 5px 0px 0px;
     }
 
-    .ruleCheckContainer {
-        display: inline-flex;
-        flex-direction: column;
-        align-items: center;
+    .ruleCheckContainer,
+    .ruleOpContainer {
+        flex-direction: row;
         width: 100%;
-        height: 25%;
         overflow-y: auto;
         margin-top: 5px;
     }
 
-    .setRuleOpContainer {
-        display: inline-flex;
-        flex-direction: column;
-        align-items: center;
-        width: calc(100% - 95px);
-        height: 25%;
-        overflow-y: auto;
-        margin-top: 5px;
-    }
-
+    .setRuleOpContainer,
     .splitRuleOpContainer {
-        display: inline-flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: calc(100% - 95px);
+        flex-direction: row;
+        margin-top: 5px;
     }
 
     .ruleOp,
@@ -322,9 +338,20 @@ select {
         vertical-align: middle;
     }
 
-    .ruleOpTypeSelector {
-        height: 25px;
+    .ruleOpContainer {
+        display: flex;
+        width: 100%
+    }
+
+    .ruleOpTypeSelectorContainer {
         width: 90px;
+        margin-top: 7.5px;
+        margin-right: 5px;
+
+        select {
+            width: 100%;
+            height: 25px;
+        }
     }
 
     .iconButton {
@@ -337,7 +364,7 @@ select {
     }
 }
 
-.addSourceForm {
+.addSourceContainer {
     .addSourceFieldContainer {
         display: flex;
         height: 25px;
@@ -345,21 +372,6 @@ select {
         align-items: center;
         width: 100%;
         margin-bottom: 5px;
-    }
-
-    .addViewFooter {
-        position: absolute;
-        bottom: 200px;
-        width: calc(45% - 60px);
-        height: 25px;
-
-        .addViewFooterRight {
-            margin-left: auto;
-        }
-
-        button {
-            margin: 0px 0px 0px 5px;
-        }
     }
 
     .addSourceGridContainer {
@@ -408,7 +420,6 @@ select {
     .analyticsSidebar {
         width: 190px;
         height: calc(100% - 90px);
-        // background-color: #777777;
         color: $textColor;
         font-size: small;
         margin: 40px 20px 0px 0px;

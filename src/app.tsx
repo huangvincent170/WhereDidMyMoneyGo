@@ -81,7 +81,9 @@ function App() {
                     transactionData={transactionsData}
                     refreshTransactionData={async () => refreshTransactionData(sourceData, rulesData)}
                     rulesData={rulesData}
-                    setRulesData={setAndStoreRulesData}/>
+                    setRulesData={setAndStoreRulesData}
+                    categoryData={categoryData}
+                    sourceData={sourceData}/>
             }/>
             <Route path="/sources" element={
                 <SourcesView

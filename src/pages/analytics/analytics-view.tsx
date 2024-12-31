@@ -1,7 +1,5 @@
 
 import { Transaction } from "../../classes/transaction";
-import { AgGridReact, CustomCellRendererProps } from 'ag-grid-react'; // React Data Grid Component
-import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import { useEffect, useRef, useState } from "react";
 import { AnalyticsSelector } from "./analytics-selector";
 import { LineChart } from "./line-chart";
@@ -39,9 +37,6 @@ export function AnalyticsView(props: {
                 <h1>Analytics</h1>
                 <h2>Todo</h2>
             </div>
-            {/* <div className="gridHeader">
-                <button onClick={() => props.refreshTransactionData()}>refresh</button>
-            </div> */}
             <div className="analyticsContainer">
                 <AnalyticsSelector
                     categoryData={props.categoryData}
@@ -55,13 +50,8 @@ export function AnalyticsView(props: {
                     setStartDate={setStartDate}
                     endDate={endDate}
                     setEndDate={setEndDate}/>
-                {/* <div className="ag-theme-balham-dark fullPageGrid analyticsGrid">
-                    <AgGridReact
-                        rowData={enabledCategories}
-                        columnDefs={colDefs}/>
-                </div> */}
                 <div className="chartsContainer">
-                    <div className="chartContainer" style={graphType == "LINE" ? null : {display: 'none'}}>
+                    <div className={`chartContainer ${graphType == 'LINE' ? '' : 'hidden'}`}>
                         <LineChart
                             transactionData={props.transactionData}
                             enabledCategories={enabledCategories}
@@ -69,7 +59,7 @@ export function AnalyticsView(props: {
                             startDate={startDate}
                             endDate={endDate}/>
                     </div>
-                    <div className="chartContainer" style={graphType == "BARSTACKED" ? null : {display: 'none'}}>
+                    <div className={`chartContainer ${graphType == 'BARSTACKED' ? '' : 'hidden'}`}>
                         <StackedBarChart
                             transactionData={props.transactionData}
                             enabledCategories={enabledCategories}
@@ -77,14 +67,14 @@ export function AnalyticsView(props: {
                             startDate={startDate}
                             endDate={endDate}/>
                     </div>
-                    <div className="chartContainer" style={graphType == "SANKEY" ? null : {display: 'none'}}>
+                    <div className={`chartContainer ${graphType == 'SANKEY' ? '' : 'hidden'}`}>
                         <SankeyChart
                             transactionData={props.transactionData}
                             enabledCategories={enabledCategories}
                             startDate={startDate}
                             endDate={endDate}/>
                     </div>
-                    <div className="graphChartContainer" style={graphType == "TABLE" ? null : {display: 'none'}}>
+                    <div className={`chartContainer ${graphType == 'TABLE' ? '' : 'hidden'}`}>
                         <TableChart
                             transactionData={props.transactionData}
                             enabledCategories={enabledCategories}

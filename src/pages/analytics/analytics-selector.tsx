@@ -46,8 +46,10 @@ export function AnalyticsSelector(props: {
                 <option value="LINE">Line</option>
             </select>
         </div>
-        <div className="analyticsSelectorOption"
-            style={props.graphType == 'TABLE' || props.graphType == 'BARSTACKED' || props.graphType == 'LINE' ? {} : {display: 'none'}}>
+        <div className={
+            `analyticsSelectorOption
+            ${props.graphType == 'TABLE' || props.graphType == 'BARSTACKED' || props.graphType == 'LINE' ? '' : 'hidden'}`
+        }>
             Time Period
             <select
                 onChange={(e) => props.setTimePeriod(e.target.value)}
