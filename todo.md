@@ -7,6 +7,7 @@
 
 - Transactions
     - ⚠️ transactions can only be set to split category once
+    - ⚠️ Edit/split forms not cleared on submit/close
     - 👍 Error handling for reading transactions from source to check type of Dates/Numbers/strings/etc
     - ❔ Option to see deleted/split transactions
     - ❔ Option to hide uncategorized transactions
@@ -29,6 +30,7 @@
         - edit rules from the transaction page should be !canbeaffected by default
         - always executes first
     - ⚠️ Disable setting certain properties
+    - ⚠️ Rule form not cleared on close (keep form data on submit)
     - ⚠️ warnings for if rule affects removed source/category
     - 👍 Editing Rule
     - 👍 Rule grid filters

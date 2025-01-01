@@ -11,12 +11,6 @@ export function TableChart(props: {
     startDate: CalendarDate,
     endDate: CalendarDate,
 }) {
-    if (props.transactionData == null || props.enabledCategories == null || props.timePeriod == null) {
-        // this is bad and produces a warning but im too lazy to fix it
-        // need to move hook to before this call
-        return <></>;
-    }
-
     function getColDefAndRowData() {
         const [displayedCategoriesMap, dateKeyDates] = calculateData(
             props.transactionData,
@@ -64,6 +58,13 @@ export function TableChart(props: {
     const [rowData, setRowData] = useState(initialRowData);
 
     useEffect(() => {
+        if (props.transactionData == null ||
+            props.enabledCategories == null ||
+            props.timePeriod == null
+        ) {
+            return;
+        }
+
         const [newColDefs, newRowData] = getColDefAndRowData();
         gridRef.current.api?.setGridOption('columnDefs', newColDefs);
         setRowData(newRowData);
