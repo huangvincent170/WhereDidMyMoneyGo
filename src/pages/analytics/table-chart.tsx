@@ -26,7 +26,11 @@ export function TableChart(props: {
             props.endDate,
             true
         );
-    
+
+        if (displayedCategoriesMap == null || dateKeyDates == null) {
+            return [];
+        }
+
         const categoryNameCol: any[] = [
             {
                 headerName: '',
@@ -34,7 +38,7 @@ export function TableChart(props: {
                 pinned: 'left',
             }
         ];
-    
+
         const dateKeyDateHeaders: any[] = dateKeyDates
             .map((dateKeyDate: CalendarDate) => getDateMapKey(dateKeyDate, props.timePeriod))
             .map((dateKey: string) => {

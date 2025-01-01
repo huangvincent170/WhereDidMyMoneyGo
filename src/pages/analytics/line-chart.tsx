@@ -24,6 +24,10 @@ export function LineChart(props: {
         false
     );
 
+    if (displayedCategoriesMap == null || dateKeyDates == null) {
+        return <></>;
+    }
+
     const series: any[] = [];
 
     for (let [categoryId, dateMap] of displayedCategoriesMap) {

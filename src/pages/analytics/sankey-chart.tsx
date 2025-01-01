@@ -22,7 +22,9 @@ export function SankeyChart(props: {
         true
     );
 
-    console.log(displayedCategoriesMap);
+    if (displayedCategoriesMap == null || dateKeyDates == null) {
+        return <></>;
+    }
 
     // const sortedCategoryAmountMap = [...categoryAmountMap.entries()].sort();
     const transactionNodeNames: any[] = [{name: 'Transactions', depth: 0}];

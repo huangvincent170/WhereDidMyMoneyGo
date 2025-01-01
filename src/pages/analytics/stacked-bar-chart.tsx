@@ -23,6 +23,11 @@ export function StackedBarChart(props: {
         props.endDate,
         false
     );
+
+    if (displayedCategoriesMap == null || dateKeyDates == null) {
+        return <></>;
+    }
+
     const series: any[] = [];
 
     for (let [categoryId, dateMap] of displayedCategoriesMap) {

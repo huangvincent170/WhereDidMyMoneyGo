@@ -8,29 +8,38 @@ export default function ModifySourcesView(props: {
     sourceData: Source[],
     setSourceData: Function,
 }) {
-    const [sourceName, setSourceName] = useState(null);
-    const [dirPath, setDirPath] = useState(null);
     const [dirSourceData, setDirSourceData] = useState(null);
     const [colDefs, setColDefs] = useState(null);
-    const [amountIdx, setAmountIdx] = useState(null);
-    const [dateIdx, setDateIdx] = useState(null);
-    const [descIdx, setDescIdx] = useState(null);
-    const [isDebt, setIsDebt] = useState(null);
-    const [hasHeader, setHasHeader] = useState(null);
     const gridRef = useRef(null);
+    const blankForm = {
+        dirPath: '',
+        sourceName: '',
+        amountIdx: '',
+        descIdx: '',
+        dateIdx: '',
+        isDebt: false,
+        hasHeader: false,
+    };
+    const [formData, setFormData] = useState(blankForm);
 
     function handleSubmit() {
-        // Prevent the browser from reloading the page
-        // event.preventDefault();
+        if (formData.dirPath == '' ||
+            formData.sourceName == '' ||
+            formData.amountIdx == '' ||
+            formData.descIdx == '' ||
+            formData.dateIdx == ''
+        ) {
+            return;
+        }
 
         const source: Source = new Source(
-            dirPath,
-            sourceName,
-            Number(amountIdx),
-            Number(descIdx),
-            Number(dateIdx),
-            isDebt,
-            hasHeader,
+            formData.dirPath,
+            formData.sourceName,
+            Number(formData.amountIdx),
+            Number(formData.descIdx),
+            Number(formData.dateIdx),
+            formData.isDebt ?? false,
+            formData.hasHeader ?? false,
         );
         console.log(source);
 
@@ -51,25 +60,27 @@ export default function ModifySourcesView(props: {
         const newSourceData = props.sourceData == null ? [source] : props.sourceData.concat(source);
         props.setSourceData(newSourceData);
         props.setShowModifySources(!props.showModifySources);
+        
+        gridRef.current.api.setGridOption('rowData', []);
+        setFormData(blankForm);
     }
 
     useEffect(() => {
-        if (dirPath == null || dirPath == "") {
+        if (formData?.dirPath == null || formData.dirPath == '') {
             return;
         }
 
         const fetchAndSetDataFromDir = async() => {
-            console.log("calling with hasheader" + hasHeader);
-            let data = await window.electronAPI.readDataFromDir(dirPath, true, hasHeader);
+            let data = await window.electronAPI.readDataFromDir(formData.dirPath, true, formData?.hasHeader ?? false);
             // console.log(data);
             if (data != null && data.length > 0) {
                 setColDefs([...Array(data[0].length).keys()].map((i: number) => {
                     let headerName = `Col ${i} (unused)`;
-                    if (amountIdx == i) {
+                    if (Number(formData?.amountIdx) == i) {
                         headerName = "Amount"
-                    } else if (dateIdx == i) {
+                    } else if (Number(formData?.dateIdx) == i) {
                         headerName = "Date"
-                    } else if (descIdx == i) {
+                    } else if (Number(formData?.descIdx) == i) {
                         headerName = "Description"
                     }
 
@@ -85,15 +96,16 @@ export default function ModifySourcesView(props: {
                 gridRef.current.api.setGridOption('columnDefs', colDefs);
             }
 
-            if (isDebt && amountIdx != null) {
-                data = data.map((dataArr: any[]) => dataArr.map((val: any, i: number) => i == amountIdx ? -1 * (val as number) : val));
+            if (formData?.isDebt && formData?.amountIdx != null) {
+                data = data.map((dataArr: any[]) => dataArr.map((val: any, i: number) => i == Number(formData?.amountIdx) ? -1 * (val as number) : val));
             }
 
             setDirSourceData(data);
+            gridRef.current.api.setGridOption('rowData', data);
         };
 
         fetchAndSetDataFromDir().catch(console.error);
-    }, [dirPath, hasHeader, amountIdx, dateIdx, descIdx, isDebt]);
+    }, [formData]);
 
     return (<div className="addView sourceAddView" hidden={!props.showModifySources}>
         <div className="addViewMain">
@@ -102,8 +114,8 @@ export default function ModifySourcesView(props: {
                     <span>Source name:</span>
                     <input
                         className="addSourceLongInput"
-                        value={sourceName}
-                        onChange={(e) => setSourceName(e.target.value)}/>
+                        value={formData?.sourceName}
+                        onChange={(e) => setFormData({...formData, sourceName: e.target.value})}/>
                 </div>
                 <div className="addSourceFieldContainer">
                 <span>Directory path:</span>
@@ -111,41 +123,44 @@ export default function ModifySourcesView(props: {
                         className="addSourceLongInput rightAlignInput"
                         name="path"
                         readOnly={true}
-                        value={dirPath}
-                        onClick={async () => setDirPath(await window.electronAPI.openSelectDirDialog())} />
+                        value={formData?.dirPath}
+                        onClick={async () => setFormData({...formData, dirPath: await window.electronAPI.openSelectDirDialog()})} />
                 </div>
                 <div className="addSourceFieldContainer">
                     <span>Amount column index:</span>
                     <input
                         className="addSourceShortInput"
-                        value={amountIdx}
-                        onChange={(e) => setAmountIdx(e.target.value)}/>
+                        type="number"
+                        value={formData?.amountIdx}
+                        onChange={(e) => setFormData({...formData, amountIdx: e.target.value})}/>
                 </div>
                 <div className="addSourceFieldContainer">
                     <span>Date column index:</span>
                     <input className="addSourceShortInput"
-                        value={dateIdx}
-                        onChange={(e) => setDateIdx(e.target.value)}/>
+                        type="number"
+                        value={formData?.dateIdx}
+                        onChange={(e) => setFormData({...formData, dateIdx: e.target.value})}/>
                 </div>
                 <div className="addSourceFieldContainer">
                     <span>Description column index:</span>
                     <input className="addSourceShortInput"
-                        value={descIdx}
-                        onChange={(e) => setDescIdx(e.target.value)}/>
+                        type="number"
+                        value={formData?.descIdx}
+                        onChange={(e) => setFormData({...formData, descIdx: e.target.value})}/>
                 </div>
                 <div className="addSourceFieldContainer">
                     <span>Is amount debt?</span>
                     <input
                         type="checkbox"
-                        value={isDebt}
-                        onChange={(e) => setIsDebt(e.target.checked)}/>
+                        checked={formData?.isDebt}
+                        onChange={(e) => setFormData({...formData, isDebt: e.target.checked})}/>
                 </div>
                 <div className="addSourceFieldContainer">
                     <span>Do files have a header line?</span>
                     <input
                         type="checkbox"
-                        value={hasHeader}
-                        onChange={(e) => setHasHeader(e.target.checked)}/>
+                        checked={formData?.hasHeader}
+                        onChange={(e) => setFormData({...formData, hasHeader: e.target.checked})}/>
                 </div>
                 <div className="ag-theme-balham-dark addSourceGridContainer">
                     <AgGridReact

@@ -21,6 +21,10 @@ export function calculateData(
     endDate: CalendarDate,
     includeParentData: boolean,
 ): [Map<string, Map<string, number>>, CalendarDate[]] {
+    if (transactionData == null || transactionData.length == 0 || enabledCategories == null || enabledCategories.length == 0) {
+        return [null, null];
+    }
+
     // enabled category leaf nodes
     const displayedCategories = enabledCategories.filter((ec: string) =>
         enabledCategories.filter((_ec: string) => _ec.startsWith(ec)).length == 1);
