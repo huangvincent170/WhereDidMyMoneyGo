@@ -39,4 +39,14 @@ export class Transaction {
         dedupedParentCategoryNames.sort();
         return dedupedParentCategoryNames;
     }
+
+    static Clone(transaction: Transaction) {
+        return new Transaction(
+            transaction.sourceName,
+            transaction.amount,
+            transaction.date,
+            transaction.description,
+            transaction.category,
+        );
+    }
 }

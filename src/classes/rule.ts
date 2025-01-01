@@ -89,6 +89,10 @@ export class RuleTest {
             throw Error(`Unimplemented op ${test.checkOp}`);
         }
     }
+
+    static isValid(test: RuleTest): boolean {
+        return test.checkOp != null && test.field != null && test.value != null  && test.value != '';
+    }
 }
 
 export interface RuleOp {}
@@ -164,9 +168,10 @@ export class Rule {
         if (rules == null) {
             return transactions;
         }
+        const clonedTransactions = transactions.map((transaction) => Transaction.Clone(transaction));
         let addedTransactions: Transaction[] = [];
         for (let rule of rules) {
-            for (let transaction of transactions) {
+            for (let transaction of clonedTransactions) {
                 const shouldExecute: boolean = rule.tests
                     .map((t: RuleTest) => RuleTest.Test(t, transaction))
                     .reduce((prev: boolean, cur: boolean) => prev && cur, true);
@@ -189,6 +194,6 @@ export class Rule {
             }
         }
 
-        return transactions.concat(addedTransactions);
+        return clonedTransactions.concat(addedTransactions);
     }
 }

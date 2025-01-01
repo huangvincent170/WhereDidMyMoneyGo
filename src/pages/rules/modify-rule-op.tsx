@@ -11,7 +11,8 @@ export function ModifyRuleOp(props: {
     splitRuleOp: SplitRuleOp,
     setSplitRuleOp: Function,
     showRuleOpSelector: boolean,
-    heightPercent: number
+    heightPercent: number,
+    hiddenFields?: Field[],
 }) {
     function SetSetRuleOp(i: number, setField?: Field, setValue?: string | number) {
         props.setSetRuleOp(new SetRuleOp(props.setRuleOp.setFieldValues.map((_setFieldValue, _i) =>
@@ -70,7 +71,8 @@ export function ModifyRuleOp(props: {
                 <div className="ruleOp" key={i}>
                     <FieldSelector
                         field={_setFieldValue[0]}
-                        setField={(setField: Field) => SetSetRuleOp(i, setField, undefined)}/>
+                        setField={(setField: Field) => SetSetRuleOp(i, setField, undefined)}
+                        hiddenFields={props.hiddenFields}/>
                     <FieldValueInput
                         categories={props.categoryData}
                         className="setRuleFieldValue"

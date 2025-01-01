@@ -8,19 +8,21 @@ import customParseFormat from 'dayjs/plugin/customParseFormat';
 import dayjs from "dayjs";
 dayjs.extend(customParseFormat);
 
-export function FieldSelector(props: {field: Field, setField: Function}) {
+export function FieldSelector(props: {field: Field, setField: Function, hiddenFields?: Field[]}) {
     return <select
         className="fieldSelector"
         onChange={(e) => props.setField(e.target.value)}
         defaultValue={props.field ?? "_select"}>
         <option hidden disabled key="_select" value="_select">select field</option>
         {
-            Object.values(Field).map((field) => 
-                <option
-                    key={field}
-                    value={field}>
-                    {field}
-                </option>
+            Object.values(Field)
+                .filter((field) => !(props.hiddenFields?.some((hiddenField) => hiddenField == field)))
+                .map((field) =>
+                    <option
+                        key={field}
+                        value={field}>
+                        {field}
+                    </option>
             )
         }
     </select>;

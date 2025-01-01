@@ -4,6 +4,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { ModifyRulesView } from "./modify-rule-view";
 import { DropdownButtonData, GridHeaderDropdown } from "../../components/grid-header-dropdown";
 import { Source } from "../../classes/source";
+import { Transaction } from "../../classes/transaction";
 
 class DisplayedRule {
     testsString: string;
@@ -26,11 +27,10 @@ class DisplayedRule {
 
 export function RulesView(props: {
     categoryData: string[],
-    // transactionData: Transaction[],
-    // setTransactionData: Function,
     rulesData: Rule[],
     setRulesData: Function,
     sourceData: Source[],
+    transactionData: Transaction[],
 }) {
     const [displayedRuleData, setDisplayedRuleData] = useState(createDisplayedRules(props.rulesData));
     const [showModifyRules, setShowModifyRules]: [boolean, Function] = useState(false);
@@ -114,7 +114,8 @@ export function RulesView(props: {
                 setShowModifyRules={setShowModifyRules}
                 rulesData={props.rulesData}
                 setRulesData={props.setRulesData}
-                sourceData={props.sourceData}/>
+                sourceData={props.sourceData}
+                transactionData={props.transactionData}/>
         </div>
         <div className="mainContent">
             <div className="viewContainer">

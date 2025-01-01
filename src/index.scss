@@ -188,6 +188,10 @@ select {
     height: 860px;
 }
 
+.addRuleGrid {
+    height: 55%;
+}
+
 ///* Add view CSS */
 .viewContainer {
     margin-left: 20px;
@@ -233,6 +237,23 @@ select {
 
 .ruleOpContainerSelectorHidden {
     width: 100%;
+}
+
+.ruleViewCheckText {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.ruleViewOpText {
+    margin-top: 20px;
+}
+
+.addRuleGridHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 5px;
 }
 
 .addView {
@@ -281,7 +302,6 @@ select {
         flex-direction: row;
         width: 100%;
         overflow-y: auto;
-        margin-top: 5px;
     }
 
     .setRuleOpContainer,

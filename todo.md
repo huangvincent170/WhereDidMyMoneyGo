@@ -22,16 +22,15 @@
     - ❔ Edit category names
 
 - Rules
-    - ❗ transactions that the rule would affect preview in create rule
     - ❗ canBeAffectedByOtherRules
         - set original transaction to deleted? or remove it from list
         - return it in addedTransactions
         - split rules are always !canBeAffectedByOtherRules
         - edit rules from the transaction page should be !canbeaffected by default
         - always executes first
-    - ⚠️ Disable setting certain properties
     - ⚠️ Rule form not cleared on close (keep form data on submit)
     - ⚠️ warnings for if rule affects removed source/category
+    - ⚠️ setRuleOp fieldValues inputs do not take up whole width
     - 👍 Editing Rule
     - 👍 Rule grid filters
     - 👍 transactions after rule has been executed preview window

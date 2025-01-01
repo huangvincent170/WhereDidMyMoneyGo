@@ -76,12 +76,12 @@ export default function ModifySourcesView(props: {
             if (data != null && data.length > 0) {
                 setColDefs([...Array(data[0].length).keys()].map((i: number) => {
                     let headerName = `Col ${i} (unused)`;
-                    if (Number(formData?.amountIdx) == i) {
-                        headerName = "Amount"
-                    } else if (Number(formData?.dateIdx) == i) {
-                        headerName = "Date"
-                    } else if (Number(formData?.descIdx) == i) {
-                        headerName = "Description"
+                    if (formData.amountIdx != '' && Number(formData.amountIdx) == i) {
+                        headerName = "Amount";
+                    } else if (formData.dateIdx != '' && Number(formData.dateIdx) == i) {
+                        headerName = "Date";
+                    } else if (formData.descIdx != '' && Number(formData.descIdx) == i) {
+                        headerName = "Description";
                     }
 
                     return {

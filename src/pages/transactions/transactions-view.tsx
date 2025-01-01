@@ -28,6 +28,16 @@ export class DisplayedTransaction {
         this.description = description;
         this.source = source;
     }
+
+    static createDisplayedTransactions(transactions: Transaction[]): DisplayedTransaction[] {
+        if (transactions == null) {
+            return [];
+        }
+
+        return transactions
+            .map((t) =>  new DisplayedTransaction(t.amount, t.category, t.date, t.description, t.sourceName))
+            .filter((dt) => dt.category != "DELETED" && dt.category != "SPLIT");
+    }
 }
 
 export function TransactionsView(props: {
@@ -63,7 +73,6 @@ export function TransactionsView(props: {
             field: "amount",
             filter: 'agNumberColumnFilter',
             width: 90,
-            // type: 'rightAligned'
         },
     ]);
 
@@ -85,18 +94,8 @@ export function TransactionsView(props: {
         props.setRulesData(props.rulesData.concat(newDeleteRules));
     }
 
-    function createDisplayedTransactions(transactions: Transaction[]): DisplayedTransaction[] {
-        if (transactions == null) {
-            return [];
-        }
-
-        return props.transactionData
-            .map((t) =>  new DisplayedTransaction(t.amount, t.category, t.date, t.description, t.sourceName))
-            .filter((dt) => dt.category != "DELETED" && dt.category != "SPLIT")
-    }
-
     useEffect(() => {
-        setDisplayedTransactions(createDisplayedTransactions(props.transactionData));
+        setDisplayedTransactions(DisplayedTransaction.createDisplayedTransactions(props.transactionData));
     }, [props.transactionData]);
 
     useEffect(() => {

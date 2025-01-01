@@ -35,7 +35,7 @@ export function AnalyticsView(props: {
         <div className="viewContainer">
             <div className="pageTitle">
                 <h1>Analytics</h1>
-                <h2>Todo</h2>
+                <h2>Here you can view graphics for category spending.</h2>
             </div>
             <div className="analyticsContainer">
                 <AnalyticsSelector

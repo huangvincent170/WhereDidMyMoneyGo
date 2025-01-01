@@ -36,13 +36,13 @@ export function SourcesView(props: {
             width: 100,
         },
         {
-            headerName: "Desc Idx",
-            field: "descriptionIdx",
+            headerName: "Date Idx",
+            field: "dateIdx",
             width: 100,
         },
         {
-            headerName: "Date Idx",
-            field: "dateIdx",
+            headerName: "Desc Idx",
+            field: "descriptionIdx",
             width: 100,
         },
         {
