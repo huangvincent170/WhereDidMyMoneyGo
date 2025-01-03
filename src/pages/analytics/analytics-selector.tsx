@@ -41,7 +41,7 @@ export function AnalyticsSelector(props: {
                 value={props.graphType ?? "LINE"}>
                 <option value="TABLE">Table</option>
                 <option value="BARSTACKED">Bar (Stacked)</option>
-                <option value="BARSPLIT">Bar (Split)</option>
+                {/* <option value="BARSPLIT">Bar (Split)</option> */}
                 <option value="SANKEY">Sankey</option>
                 <option value="LINE">Line</option>
             </select>

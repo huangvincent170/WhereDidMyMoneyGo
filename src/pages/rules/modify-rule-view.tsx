@@ -8,6 +8,7 @@ import { AgGridReact } from 'ag-grid-react'; // React Data Grid Component
 import "ag-grid-community/styles/ag-grid.css"; // Mandatory CSS required by the Data Grid
 import "ag-grid-community/styles/ag-theme-balham.css";
 import { DisplayedTransaction } from "../transactions/transactions-view";
+import { GridHeaderDropdown, DropdownButtonData } from "../../components/grid-header-dropdown";
 
 export function ModifyRulesView(props: {
     categoryData: string[]
@@ -23,6 +24,7 @@ export function ModifyRulesView(props: {
     const [setRuleOp, setSetRuleOp] = useState(new SetRuleOp([[undefined, undefined]]));
     const [splitRuleOp, setSplitRuleOp] = useState(new SplitRuleOp([[undefined, undefined]]));
     const [executesOnce, setExecutesOnce] = useState(false);
+    const [locksTransaction, setLocksTransaction] = useState(false);
     const [displayedTransactions, setDisplayedTransactions] = useState(null);
     const [showExecutedTransactions, setShowExecutedTransactions] = useState(false);
     const gridRef = useRef(null);
@@ -31,17 +33,22 @@ export function ModifyRulesView(props: {
         {
             field: "date",
             filter: 'agDateColumnFilter',
-            width: 100,
+            width: 90,
         },
         {
             field: "description",
             filter: true,
-            flex: 5
+            flex: 4,
         },
         {
             field: "category",
             filter: true,
-            minWidth: 1,
+            flex: 1,
+        },
+        {
+            field: "source",
+            filter: true,
+            flex: 1
         },
         {
             field: "amount",
@@ -82,7 +89,17 @@ export function ModifyRulesView(props: {
             }
         }
 
-        props.setRulesData(props.rulesData.concat(new Rule(ruleTests, ruleOp, executesOnce)));
+        props.setRulesData(props.rulesData.concat(new Rule(ruleTests, ruleOp, executesOnce, locksTransaction)));
+    }
+
+    function populateChecksFromSelected() {
+        const selectedTransactions: DisplayedTransaction[] = gridRef.current.api.getSelectedRows();
+        if (selectedTransactions.length != 1) {
+            throw Error('expected only 1 selected transaction!');
+        }
+        setRuleTests(DisplayedTransaction.createMatchingRuleTests(selectedTransactions[0]));
+        setExecutesOnce(true);
+        setLocksTransaction(true);
     }
 
     useEffect(() => {
@@ -97,17 +114,17 @@ export function ModifyRulesView(props: {
         if (showExecutedTransactions && ruleOpType != null) {
             if (ruleOpType == RuleOpType.Set) {
                 const validSetFieldValues = setRuleOp.setFieldValues.filter(([field, value]) => field != null && value != null && value != '');
-                executedTransactions = Rule.Execute([new Rule(validRuleTests, new SetRuleOp(validSetFieldValues), executesOnce)], filteredTransactions);
+                executedTransactions = Rule.Execute([new Rule(validRuleTests, new SetRuleOp(validSetFieldValues), executesOnce, locksTransaction)], filteredTransactions);
             } else if (ruleOpType == RuleOpType.Split) {
                 const validSplitFieldValues = splitRuleOp.splits.filter(([cat, value]) => cat != null && cat != '' && value != null);
-                executedTransactions = Rule.Execute([new Rule(validRuleTests, new SplitRuleOp(validSplitFieldValues), executesOnce)], filteredTransactions);
+                executedTransactions = Rule.Execute([new Rule(validRuleTests, new SplitRuleOp(validSplitFieldValues), executesOnce, locksTransaction)], filteredTransactions);
             }
         }
 
         const newDisplayedTransactions = DisplayedTransaction.createDisplayedTransactions(executedTransactions ?? filteredTransactions);
         setDisplayedTransactions(newDisplayedTransactions);
         gridRef.current.api?.setGridOption('rowData', newDisplayedTransactions);
-    }, [props.transactionData, ruleTests, ruleOpType, setRuleOp, splitRuleOp, showExecutedTransactions, executesOnce]);
+    }, [props.transactionData, ruleTests, ruleOpType, setRuleOp, splitRuleOp, showExecutedTransactions, executesOnce, locksTransaction]);
 
     return <div className="addView ruleAddView" hidden={!props.showModifyRules}>
         <div className="addViewMain">
@@ -130,14 +147,7 @@ export function ModifyRulesView(props: {
                 showRuleOpSelector={true}
                 heightPercent={16}
                 hiddenFields={[Field.Source]}/>
-            <div className="addRuleGridHeader">
-                <p>
-                    {
-                        showExecutedTransactions ?
-                        'Transactions after rule effects' :
-                        'Transactions affected by this rule'
-                    }
-                </p>
+            <div className="gridHeader">
                 <button onClick={() => setShowExecutedTransactions(!showExecutedTransactions)}>
                 {
                     showExecutedTransactions ?
@@ -145,12 +155,18 @@ export function ModifyRulesView(props: {
                     'Simulate rule'
                 }
                 </button>
+                <GridHeaderDropdown
+                    buttonData={[
+                        new DropdownButtonData('Populate checks from selected', populateChecksFromSelected, (numSelected: number) => numSelected != 1),
+                    ]}
+                    gridRef={gridRef}/>
             </div>
             <div className="ag-theme-balham-dark addRuleGrid">
                 <AgGridReact
                     rowData={displayedTransactions}
                     columnDefs={colDefs}
-                    ref={gridRef}/>
+                    ref={gridRef}
+                    rowSelection={{mode: 'multiRow'}}/>
             </div>
         </div>
         <div className="addViewFooter">
@@ -160,7 +176,13 @@ export function ModifyRulesView(props: {
                     type="checkbox"
                     checked={executesOnce}
                     onChange={() => setExecutesOnce(!executesOnce)}/>
-                Rule executes once
+                <p>Rule executes once</p>
+                <input
+                    className="inputCheckbox"
+                    type="checkbox"
+                    checked={locksTransaction}
+                    onChange={() => setLocksTransaction(!locksTransaction)}/>
+                <p>Rule locks transaction</p>
             </div>
             <div className="addViewFooterRight">
                 <button onClick={handleSubmit}>Save Changes</button>

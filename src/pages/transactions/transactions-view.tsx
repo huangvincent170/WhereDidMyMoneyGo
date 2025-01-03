@@ -38,6 +38,15 @@ export class DisplayedTransaction {
             .map((t) =>  new DisplayedTransaction(t.amount, t.category, t.date, t.description, t.sourceName))
             .filter((dt) => dt.category != "DELETED" && dt.category != "SPLIT");
     }
+
+    static createMatchingRuleTests(displayedTransaction: DisplayedTransaction): RuleTest[] {
+        return [
+            new RuleTest(Field.Amount, CheckOp.Equals, displayedTransaction.amount),
+            new RuleTest(Field.Date, CheckOp.Equals, displayedTransaction.date),
+            new RuleTest(Field.Description, CheckOp.Equals, displayedTransaction.description),
+            new RuleTest(Field.Source, CheckOp.Equals, displayedTransaction.source)
+        ];
+    }
 }
 
 export function TransactionsView(props: {
@@ -57,17 +66,22 @@ export function TransactionsView(props: {
         {
             field: "date",
             filter: 'agDateColumnFilter',
-            width: 100,
+            width: 90,
         },
         {
             field: "description",
             filter: true,
-            flex: 1
+            flex: 3
         },
         {
             field: "category",
             filter: true,
-            minWidth: 320,
+            flex: 1
+        },
+        {
+            field: "source",
+            filter: true,
+            flex: 1
         },
         {
             field: "amount",
@@ -81,12 +95,7 @@ export function TransactionsView(props: {
         const newDeleteRules = [];
         for (let displayedTransaction of selectedTransactions) {
             newDeleteRules.push(new Rule(
-                [
-                    new RuleTest(Field.Amount, CheckOp.Equals, displayedTransaction.amount),
-                    new RuleTest(Field.Date, CheckOp.Equals, displayedTransaction.date),
-                    new RuleTest(Field.Description, CheckOp.Equals, displayedTransaction.description),
-                    new RuleTest(Field.Source, CheckOp.Equals, displayedTransaction.source)
-                ],
+                DisplayedTransaction.createMatchingRuleTests(displayedTransaction),
                 new SetRuleOp([[Field.Category, "DELETED"]]),
                 true,
                 true,

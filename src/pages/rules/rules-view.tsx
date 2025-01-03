@@ -91,6 +91,7 @@ export function RulesView(props: {
             autoHeight: true,
             wrapText: true,
             flex: 5,
+            filter: true,
         },
         {
             headerName: "Operations",
@@ -98,17 +99,20 @@ export function RulesView(props: {
             autoHeight: true,
             wrapText: true,
             flex: 2,
+            filter: true,
         },
         {
             headerName: "⏸️",
             field: "executesOnce",
-            width: 45,
+            width: 60,
+            filter: true,
             headerTooltip: "Rule will stop execution after affecting one transaction",
         },
         {
             headerName: "🔒",
             field: "locksTransaction",
-            width: 45,
+            width: 60,
+            filter: true,
             headerTooltip: "Transactions affected by this rule cannot be affected by other rules",
         },
     ]);

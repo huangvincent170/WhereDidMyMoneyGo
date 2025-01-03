@@ -278,6 +278,11 @@ select {
         .addViewFooterLeft {
             display: flex;
             align-items: center;
+            justify-content: center;
+
+            p {
+                margin-right: 25px;
+            }
         }
 
         .addViewFooterRight {

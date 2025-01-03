@@ -6,11 +6,13 @@
 
 
 - Transactions
-    - ⚠️ transactions can only be set to split category once
     - ⚠️ Edit/split forms not cleared on submit/close
+    - ⚠️ Show locksTransaction on editpage
+    - 👍 Options to show/hide columns in dropdown
     - 👍 Error handling for reading transactions from source to check type of Dates/Numbers/strings/etc
     - ❔ Option to see deleted/split transactions
     - ❔ Option to hide uncategorized transactions
+    - ❔ Move displayedtransactions into classes
 
 - Sources
     - ⚠️ Last time source was updated
@@ -22,19 +24,19 @@
     - ❔ Edit category names
 
 - Rules
-    - ⚠️ show locksTransaction on create rule page
     - ⚠️ Rule form not cleared on close (keep form data on submit)
     - ⚠️ warnings for if rule affects removed source/category
     - ⚠️ setRuleOp fieldValues inputs do not take up whole width
+    - 👍 Dropdown menu to set checks to affect only a singular transaction from selected
     - 👍 Editing Rule
-    - 👍 Rule grid filters
     - 👍 transactions after rule has been executed preview window
     - 👍 no duplicate rules
     - 👍 Rules which only execute once executed first (after preprocess)
-    - 👍 short text month displayed on charts
+    - 👍 fields on add rule incorrect length
     - 👍 add delete op which sets category to deleted
         - preprocess
         - remove user set category to deleted
+    - ❔ Transactions created from split should be able to be affected by other rules (assuming not locked)
     - ❔ binsearch on dates for single execute rules (need to sort by date first)
     - ❔ split rule into percentages
     - ❔ Less/greater than for numbers
@@ -52,6 +54,7 @@
     - ⚠️ lifetime should not display x axis tick for time
     - ⚠️ Bar chart overflows y axis
     - ⚠️ Table totals for each month/category
+    - 👍 short text month displayed on charts
     - ❔ Better way to display categories
     - ❔ Quarterly period
 
