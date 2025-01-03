@@ -22,12 +22,7 @@
     - ❔ Edit category names
 
 - Rules
-    - ❗ canBeAffectedByOtherRules
-        - set original transaction to deleted? or remove it from list
-        - return it in addedTransactions
-        - split rules are always !canBeAffectedByOtherRules
-        - edit rules from the transaction page should be !canbeaffected by default
-        - always executes first
+    - ⚠️ show locksTransaction on create rule page
     - ⚠️ Rule form not cleared on close (keep form data on submit)
     - ⚠️ warnings for if rule affects removed source/category
     - ⚠️ setRuleOp fieldValues inputs do not take up whole width

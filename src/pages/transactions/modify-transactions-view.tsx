@@ -15,7 +15,6 @@ export function ModifyTransactionsView(props: {
     setRulesData: Function,
     sourceData: Source[],
 }) {
-    
     // const [ruleTests, setRuleTests] = useState(null);
     const [setRuleOp, setSetRuleOp] = useState(new SetRuleOp([[undefined, undefined]]));
     const [splitRuleOp, setSplitRuleOp] = useState(new SplitRuleOp([[undefined, undefined]]));
@@ -43,6 +42,7 @@ export function ModifyTransactionsView(props: {
                     new RuleTest(Field.Source, CheckOp.Equals, displayedTransaction.source)
                 ],
                 props.ruleOpType == RuleOpType.Set ? setRuleOp : splitRuleOp,
+                true,
                 true
             ));
         }

@@ -88,7 +88,8 @@ export function TransactionsView(props: {
                     new RuleTest(Field.Source, CheckOp.Equals, displayedTransaction.source)
                 ],
                 new SetRuleOp([[Field.Category, "DELETED"]]),
-                true
+                true,
+                true,
             ));
         }
         props.setRulesData(props.rulesData.concat(newDeleteRules));

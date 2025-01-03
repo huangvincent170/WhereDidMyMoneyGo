@@ -68,6 +68,10 @@ export class RuleTest {
     }
 
     static Test(test: RuleTest, transaction: Transaction): boolean {
+        if (transaction.locked) {
+            return false;
+        }
+
         let fieldValue: string | number;
         if (test.field == Field.Amount) {
             fieldValue = transaction.amount;
@@ -108,7 +112,7 @@ export class SetRuleOp implements RuleOp {
         this.setFieldValues = setFieldValues;
     }
 
-    static Execute(ruleOp: SetRuleOp, transaction: Transaction): Transaction[] {
+    static Execute(ruleOp: SetRuleOp, transaction: Transaction, locksTransaction: boolean): Transaction[] {
         for (let [field, value] of ruleOp.setFieldValues) {
             if (field == Field.Amount) {
                 transaction.amount = value as number;
@@ -123,6 +127,10 @@ export class SetRuleOp implements RuleOp {
             }
         }
 
+        if (locksTransaction) {
+            transaction.locked = true;
+        }
+
         return [];
     }
 }
@@ -134,16 +142,17 @@ export class SplitRuleOp implements RuleOp {
         this.splits = splits;
     }
 
-    static Execute(ruleOp: SplitRuleOp, transaction: Transaction): Transaction[] {
+    static Execute(ruleOp: SplitRuleOp, transaction: Transaction, locksTransaction: boolean): Transaction[] {
         transaction.category = "SPLIT";
+        transaction.locked = true;
 
-        // todo dont split if already split
         return ruleOp.splits.map((setValue: [string, number]) => new Transaction(
             transaction.sourceName,
             setValue[1],
             transaction.date,
             transaction.description,
-            setValue[0]
+            setValue[0],
+            locksTransaction,
         ));
     }
 }
@@ -154,8 +163,9 @@ export class Rule {
     // restoring data from storage wipes class data, so we need to separately store optype
     opType: RuleOpType;
     executesOnce: boolean;
+    locksTransaction: boolean;
 
-    constructor(tests: RuleTest[], op: RuleOp, executesOnce?: boolean) {
+    constructor(tests: RuleTest[], op: RuleOp, executesOnce?: boolean, locksTransaction?: boolean) {
         this.tests = tests;
         this.op = op;
         if (op instanceof SplitRuleOp) {
@@ -166,28 +176,44 @@ export class Rule {
             throw new Error(`unexpected rule op ${op}`);
         }
         this.executesOnce = executesOnce ?? false;
+        this.locksTransaction = locksTransaction ?? false;
     }
 
     static Execute(rules: Rule[], transactions: Transaction[]): Transaction[] {
         if (rules == null) {
             return transactions;
         }
+
+        function rulePriority(rule: Rule) {
+            let priority = 0;
+            if (rule.executesOnce) {
+                priority -= 1;
+            }
+            if (rule.locksTransaction) {
+                priority -= 2;
+            }
+            return priority;
+        }
+
+        rules.sort((r1, r2) => rulePriority(r1) - rulePriority(r2));
         const clonedTransactions = transactions.map((transaction) => Transaction.Clone(transaction));
         let addedTransactions: Transaction[] = [];
         for (let rule of rules) {
             for (let transaction of clonedTransactions) {
-                const shouldExecute: boolean = rule.tests
+                const shouldExecute: boolean =
+                    !transaction.locked &&
+                    rule.tests
                     .map((t: RuleTest) => RuleTest.Test(t, transaction))
                     .reduce((prev: boolean, cur: boolean) => prev && cur, true);
-                
+
                 if (!shouldExecute) {
                     continue;
                 }
 
                 if (rule.opType == RuleOpType.Set) {
-                    SetRuleOp.Execute(rule.op as SetRuleOp, transaction);
+                    SetRuleOp.Execute(rule.op as SetRuleOp, transaction, rule.locksTransaction);
                 } else if (rule.opType == RuleOpType.Split) {
-                    addedTransactions = addedTransactions.concat(SplitRuleOp.Execute(rule.op as SplitRuleOp, transaction));
+                    addedTransactions = addedTransactions.concat(SplitRuleOp.Execute(rule.op as SplitRuleOp, transaction, rule.locksTransaction));
                 } else {
                     throw new Error("unexpected ruleoptype");
                 }

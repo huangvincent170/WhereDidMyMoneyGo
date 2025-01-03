@@ -11,17 +11,20 @@ class DisplayedRule {
     actionString: string;
     ruleString: string;
     executesOnce: boolean;
+    locksTransaction: boolean;
 
     constructor(
         testsString: string,
         actionString: string,
         rule: Rule,
         executesOnce: boolean,
+        locksTransaction: boolean,
     ) {
         this.testsString = testsString;
         this.actionString = actionString;
         this.ruleString = JSON.stringify(rule);
         this.executesOnce = executesOnce;
+        this.locksTransaction = locksTransaction;
     }
 }
 
@@ -65,6 +68,7 @@ export function RulesView(props: {
                 `Then ${opStrings.join('and ')}`,
                 rule,
                 rule.executesOnce,
+                rule.locksTransaction,
             ));
         }
         return displayedRules;
@@ -86,23 +90,26 @@ export function RulesView(props: {
             field: "testsString",
             autoHeight: true,
             wrapText: true,
-            // cellStyle: {'whiteSpace': 'pre' },
-            flex: 2,
-            resizable: true,
+            flex: 5,
         },
         {
             headerName: "Operations",
             field: "actionString",
             autoHeight: true,
             wrapText: true,
-            // cellStyle: {'whiteSpace': 'pre' },
-            flex: 1
+            flex: 2,
         },
         {
-            headerName: "Executes Once",
+            headerName: "⏸️",
             field: "executesOnce",
-            width: 111,
-            resizable: false,
+            width: 45,
+            headerTooltip: "Rule will stop execution after affecting one transaction",
+        },
+        {
+            headerName: "🔒",
+            field: "locksTransaction",
+            width: 45,
+            headerTooltip: "Transactions affected by this rule cannot be affected by other rules",
         },
     ]);
 
@@ -138,7 +145,8 @@ export function RulesView(props: {
                         rowData={displayedRuleData}
                         columnDefs={colDefs}
                         ref={gridRef}
-                        rowSelection={{mode: 'multiRow'}}/>
+                        rowSelection={{mode: 'multiRow'}}
+                        tooltipShowDelay={0}/>
                 </div>
             </div>
         </div>

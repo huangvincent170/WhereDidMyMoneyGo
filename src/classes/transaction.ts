@@ -4,6 +4,7 @@ export class Transaction {
     description: string;
     category: string;
     amount: number;
+    locked: boolean;
 
     constructor(
         sourceName: string,
@@ -11,12 +12,14 @@ export class Transaction {
         date: string,
         description: string,
         category?: string,
+        locked?: boolean,
     ) {
         this.sourceName = sourceName;
         this.date = date;
         this.description = description;
         this.category = category ?? "UNCATEGORIZED";
         this.amount = amount;
+        this.locked = locked ?? false;
     }
 
     static IsHiddenCategory(categoryId: string): boolean {
