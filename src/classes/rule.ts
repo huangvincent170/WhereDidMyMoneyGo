@@ -17,6 +17,7 @@ export enum FieldType {
 
 export enum CheckOp {
     Contains = "contains substring",
+    DoesNotContain = "does not contain substring",
     Equals = "equals",
     // GreaterThan = "greater than",
     // LessThan = "less than",
@@ -41,7 +42,8 @@ export const ValidFieldTypeValidOps = {
     ],
     [FieldType.String]: [
         CheckOp.Equals,
-        CheckOp.Contains
+        CheckOp.Contains,
+        CheckOp.DoesNotContain,
     ],
 }
 
@@ -85,6 +87,8 @@ export class RuleTest {
             return test.value == fieldValue;
         } else if (test.checkOp == CheckOp.Contains) {
             return (fieldValue as string).toLocaleLowerCase().includes((test.value as string).toLocaleLowerCase());
+        } else if (test.checkOp == CheckOp.DoesNotContain) {
+            return !(fieldValue as string).toLocaleLowerCase().includes((test.value as string).toLocaleLowerCase());
         } else {
             throw Error(`Unimplemented op ${test.checkOp}`);
         }
