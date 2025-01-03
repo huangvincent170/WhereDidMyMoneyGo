@@ -54,8 +54,6 @@ export function CategoriesView(props: {transactionData: Transaction[], categoryD
     }
 
     function onRowSelected(e: RowSelectedEvent) {
-        // console.log(e);
-        // gridRef.current.api.getSelectedRows();
         if (e.node.isSelected()) {
             gridRef.current.api.forEachNode((node: IRowNode) => {
                 if (node.data.name.startsWith(e.data.name)) {
@@ -66,8 +64,6 @@ export function CategoriesView(props: {transactionData: Transaction[], categoryD
     }
 
     function onCellEditingStopped(e: CellEditingStoppedEvent<DisplayedCategory>) {
-        console.log(e);
-
         const validateError: string = validateCategoryId(e.newValue);
         if (validateError != null) {
             console.log(validateError);

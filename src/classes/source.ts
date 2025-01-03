@@ -29,17 +29,4 @@ export class Source {
         this.isDebt = isDebt;
         this.hasHeader = hasHeader;
     }
-
-    static fromFormData(formData: FormData): Source {
-        const formDataMap = new Map(formData.entries());
-        return new Source(
-            formDataMap.get('path') as string,
-            formDataMap.get('name') as string,
-            Number(formDataMap.get('amountIdx') as string),
-            Number(formDataMap.get('descriptionIdx') as string),
-            Number(formDataMap.get('dateIdx') as string),
-            Boolean(formDataMap.get('isDebt') as string),
-            Boolean(formDataMap.get('hasHeader') as string),
-        );
-    }
 }

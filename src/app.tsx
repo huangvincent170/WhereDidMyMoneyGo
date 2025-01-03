@@ -41,22 +41,26 @@ function App() {
 
     useEffect(() => {
         async function getDataAndRefreshAsync() {
-            const storedCategoryData: string[] = JSON.parse(await window.electronAPI.readUserData('category-data'));
-            if (storedCategoryData != null) {
-                setCategoryData(storedCategoryData);
+            const rawStoredCategoryData: string = await window.electronAPI.readUserData('category-data');
+            if (rawStoredCategoryData) {
+                setCategoryData(JSON.parse(rawStoredCategoryData));
             } else {
                 setAndStoreCategoryData([]);
             }
 
-            const storedSourceData: Source[] = JSON.parse(await window.electronAPI.readUserData('source-data'));
-            if (storedSourceData != null) {
+            const rawStoredSourceData: string = await window.electronAPI.readUserData('source-data');
+            let storedSourceData: Source[] = [];
+            if (rawStoredSourceData) {
+                storedSourceData = JSON.parse(rawStoredSourceData);
                 setSourceData(storedSourceData);
             } else {
                 setAndStoreSourceData([]);
             }
 
-            const storedRulesData: Rule[] = JSON.parse(await window.electronAPI.readUserData('rules-data'));
-            if (storedRulesData != null) {
+            const rawStoredRulesData: string = await window.electronAPI.readUserData('rules-data');
+            let storedRulesData: Rule[] = [];
+            if (rawStoredRulesData) {
+                storedRulesData = JSON.parse(rawStoredRulesData);
                 setRulesData(storedRulesData);
             } else {
                 setAndStoreRulesData([]);
@@ -85,7 +89,8 @@ function App() {
             <Route path="/sources" element={
                 <SourcesView
                     sourceData={sourceData}
-                    setSourceData={(sourceData: Source[]) => setAndStoreSourceData(sourceData)}/>
+                    setSourceData={(sourceData: Source[]) => setAndStoreSourceData(sourceData)}
+                    transactionsData={transactionsData}/>
             }/>
             <Route path="/categories" element={
                 <CategoriesView

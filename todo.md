@@ -14,7 +14,6 @@
     - ❔ Move displayedtransactions into classes
 
 - Sources
-    - ⚠️ Last time source was updated
     - 👍 Editing sources
     - 👍 show user warning when trying to submit form with errors/missing fields
 

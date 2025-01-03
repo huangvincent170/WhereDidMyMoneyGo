@@ -41,7 +41,6 @@ export default function ModifySourcesView(props: {
             formData.isDebt ?? false,
             formData.hasHeader ?? false,
         );
-        console.log(source);
 
         // todo validate data
 
