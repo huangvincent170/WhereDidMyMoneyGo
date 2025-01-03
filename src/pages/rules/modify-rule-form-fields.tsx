@@ -12,7 +12,7 @@ export function FieldSelector(props: {field: Field, setField: Function, hiddenFi
     return <select
         className="fieldSelector"
         onChange={(e) => props.setField(e.target.value)}
-        defaultValue={props.field ?? "_select"}>
+        value={props.field ?? "_select"}>
         <option hidden disabled key="_select" value="_select">select field</option>
         {
             Object.values(Field)
@@ -32,7 +32,7 @@ export function FieldOpSelector(props: {field: Field, checkOp: CheckOp, setCheck
     const validOps: CheckOp[] = props.field != null ? ValidFieldTypeValidOps[FieldToFieldType[props.field]] : Object.values(CheckOp);
     return <select
         className="fieldOpSelector"
-        defaultValue={props.checkOp ?? "_select"}
+        value={props.checkOp ?? "_select"}
         onChange={(e) => props.setCheckOp(e.target.value)}>
         <option hidden disabled key="_select" value="_select">select check</option>
         {
@@ -59,7 +59,7 @@ export function FieldValueInput(props: {
     if (props.field == Field.Category) {
         return <div className={props.className}>
             <select
-                defaultValue={props.fieldValue as string ?? "_select"}
+                value={props.fieldValue as string ?? "_select"}
                 onChange={(e) => props.setFieldValue(e.target.value)}>
                 <option hidden disabled key="_select" value="_select">select category</option>
                 <option key={'DELETED'} value={'DELETED'}>DELETED</option>
@@ -82,12 +82,12 @@ export function FieldValueInput(props: {
         return <div className={props.className}>
             <DatePicker
                 selected={dayjs(props.fieldValue, 'YYYY-MM-DD', true).isValid() ? new CalendarDate(props.fieldValue as string).toDateLocal() : null}
-                onChange={(date: Date) => props.setFieldValue(CalendarDate.fromDateUTC(date).toString())}/>
+                onChange={(date: Date) => date != null ? props.setFieldValue(CalendarDate.fromDateUTC(date).toString()) : null}/>
         </div>
     } else if (props.field == Field.Source) {
         return <div className={props.className}>
             <select
-                defaultValue={props.fieldValue as string ?? "_select"}
+                value={props.fieldValue as string ?? "_select"}
                 onChange={(e) => props.setFieldValue(e.target.value)}>
                 <option hidden disabled key="_select" value="_select">select source</option>
                 {
@@ -106,14 +106,14 @@ export function FieldValueInput(props: {
         return <div className={props.className}>
             <input
                 className={props.className}
-                defaultValue={props.fieldValue == null ? null : Number(props.fieldValue)}
+                value={props.fieldValue == null ? null : Number(props.fieldValue)}
                 onBlur={(e) => props.setFieldValue(Number(e.target.value))}/>
         </div>
     } else {
         return <div className={props.className}>
             <input
                 className={props.className}
-                defaultValue={(props.fieldValue) as string}
+                value={(props.fieldValue) as string}
                 onBlur={(e) => props.setFieldValue(e.target.value)}/>
         </div>
     }
@@ -122,7 +122,7 @@ export function FieldValueInput(props: {
 export function RuleOpTypeSelector(props: {ruleOpType: RuleOpType, setRuleOpType: Function}) {
     return <select
         onChange={(e) => props.setRuleOpType(e.target.value)}
-        defaultValue={props.ruleOpType ?? "_select"}>
+        value={props.ruleOpType ?? "_select"}>
         <option hidden disabled key="_select" value="_select">select op</option>
         {
             Object.values(RuleOpType).map((field) => 

@@ -84,7 +84,7 @@ export function AnalyticsSelector(props: {
                             checked={props.enabledCategories?.some((enabledCategory: string) => enabledCategory == category) ?? true}
                             onChange={() => toggleCategory(category)}
                             />
-                        &nbsp;{category}
+                        {category}
                     </div>
                 )
             }

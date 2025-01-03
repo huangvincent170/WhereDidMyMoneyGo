@@ -41,7 +41,6 @@ export function SidebarNav() {
                 return <li key={index} className="navText">
                     <Link to={item.path}>
                         {item.icon}
-                        &nbsp;
                         <span>{item.title}</span>
                     </Link>
                 </li>;

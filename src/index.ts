@@ -21,6 +21,9 @@ const createWindow = (): BrowserWindow => {
     const mainWindow = new BrowserWindow({
         webPreferences: {
             preload: MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY,
+            defaultEncoding: 'utf-8',
+            sandbox: false,
+            webSecurity: false,
         },
     });
 

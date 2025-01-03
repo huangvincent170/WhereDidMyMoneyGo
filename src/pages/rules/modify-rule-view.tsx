@@ -19,12 +19,18 @@ export function ModifyRulesView(props: {
     sourceData: Source[],
     transactionData: Transaction[],
 }) {
-    const [ruleTests, setRuleTests] = useState([new RuleTest(undefined, undefined, undefined)]);
-    const [ruleOpType, setRuleOpType] = useState(null);
-    const [setRuleOp, setSetRuleOp] = useState(new SetRuleOp([[undefined, undefined]]));
-    const [splitRuleOp, setSplitRuleOp] = useState(new SplitRuleOp([[undefined, undefined]]));
-    const [executesOnce, setExecutesOnce] = useState(false);
-    const [locksTransaction, setLocksTransaction] = useState(false);
+    function blankForm() {
+        return {
+            ruleTests: [new RuleTest(undefined, undefined, undefined)],
+            ruleOpType: undefined as RuleOpType,
+            setRuleOp: new SetRuleOp([[undefined, undefined]]),
+            splitRuleOp: new SplitRuleOp([[undefined, undefined]]),
+            executesOnce: false,
+            locksTransaction: false,
+        };
+    }
+
+    const [formData, setFormData] = useState(blankForm());
     const [displayedTransactions, setDisplayedTransactions] = useState(null);
     const [showExecutedTransactions, setShowExecutedTransactions] = useState(false);
     const gridRef = useRef(null);
@@ -58,25 +64,27 @@ export function ModifyRulesView(props: {
     ]);
 
     function handleSubmit() {
-        if (ruleOpType == null) {
+        if (formData.ruleOpType == null) {
             console.log("null ruleoptype!");
             return;
         }
 
         let ruleOp: RuleOp;
-        if (ruleOpType == RuleOpType.Set) {
-            if (setRuleOp.setFieldValues == null || setRuleOp.setFieldValues.some(_setFieldValue => _setFieldValue[0] == null || _setFieldValue[1] == null)) {
+        if (formData.ruleOpType == RuleOpType.Set) {
+            if (formData.setRuleOp.setFieldValues == null ||
+                formData.setRuleOp.setFieldValues.some(_setFieldValue => _setFieldValue[0] == null || _setFieldValue[1] == null)
+            ) {
                 console.log("null setRuleOp");
                 return;
             }
-            ruleOp = setRuleOp;
-        } else if (ruleOpType == RuleOpType.Split) {
-            ruleOp = splitRuleOp;
+            ruleOp = formData.setRuleOp;
+        } else if (formData.ruleOpType == RuleOpType.Split) {
+            ruleOp = formData.splitRuleOp;
         } else {
-            throw new Error(`unknown ruleOp ${ruleOpType}`)
+            throw new Error(`unknown ruleOp ${formData.ruleOpType}`)
         }
 
-        for (let ruleTest of ruleTests) {
+        for (let ruleTest of formData.ruleTests) {
             if (ruleTest.checkOp == null) {
                 console.log("null checkop!");
                 return;
@@ -89,7 +97,12 @@ export function ModifyRulesView(props: {
             }
         }
 
-        props.setRulesData(props.rulesData.concat(new Rule(ruleTests, ruleOp, executesOnce, locksTransaction)));
+        props.setRulesData(props.rulesData.concat(new Rule(
+            formData.ruleTests,
+            ruleOp,
+            formData.executesOnce,
+            formData.locksTransaction
+        )));
     }
 
     function populateChecksFromSelected() {
@@ -97,9 +110,14 @@ export function ModifyRulesView(props: {
         if (selectedTransactions.length != 1) {
             throw Error('expected only 1 selected transaction!');
         }
-        setRuleTests(DisplayedTransaction.createMatchingRuleTests(selectedTransactions[0]));
-        setExecutesOnce(true);
-        setLocksTransaction(true);
+        setFormData(
+            {
+                ...formData,
+                ruleTests: DisplayedTransaction.createMatchingRuleTests(selectedTransactions[0]),
+                executesOnce: true,
+                locksTransaction: true,
+            }
+        );
     }
 
     useEffect(() => {
@@ -107,43 +125,53 @@ export function ModifyRulesView(props: {
             return;
         }
 
-        const validRuleTests = ruleTests.filter((ruleTest) => RuleTest.isValid(ruleTest));
+        const validRuleTests = formData.ruleTests.filter((ruleTest) => RuleTest.isValid(ruleTest));
         const filteredTransactions = props.transactionData.filter((transaction) => validRuleTests.every((ruleTest) => RuleTest.Test(ruleTest, transaction)));
         let executedTransactions = null;
 
-        if (showExecutedTransactions && ruleOpType != null) {
-            if (ruleOpType == RuleOpType.Set) {
-                const validSetFieldValues = setRuleOp.setFieldValues.filter(([field, value]) => field != null && value != null && value != '');
-                executedTransactions = Rule.Execute([new Rule(validRuleTests, new SetRuleOp(validSetFieldValues), executesOnce, locksTransaction)], filteredTransactions);
-            } else if (ruleOpType == RuleOpType.Split) {
-                const validSplitFieldValues = splitRuleOp.splits.filter(([cat, value]) => cat != null && cat != '' && value != null);
-                executedTransactions = Rule.Execute([new Rule(validRuleTests, new SplitRuleOp(validSplitFieldValues), executesOnce, locksTransaction)], filteredTransactions);
+        if (showExecutedTransactions && formData.ruleOpType != null) {
+            let ruleOp: RuleOp = null;
+            if (formData.ruleOpType == RuleOpType.Set) {
+                const validSetFieldValues = formData.setRuleOp.setFieldValues.filter(([field, value]) => field != null && value != null && value != '');
+                ruleOp = new SetRuleOp(validSetFieldValues);
+            } else if (formData.ruleOpType == RuleOpType.Split) {
+                const validSplitFieldValues = formData.splitRuleOp.splits.filter(([cat, value]) => cat != null && cat != '' && value != null);
+                ruleOp = new SplitRuleOp(validSplitFieldValues);
+            } else {
+                throw Error('unexpected ruleOp');
             }
+
+            executedTransactions = Rule.Execute([new Rule(
+                validRuleTests,
+                ruleOp,
+                formData.executesOnce,
+                formData.locksTransaction
+            )], filteredTransactions);
         }
 
         const newDisplayedTransactions = DisplayedTransaction.createDisplayedTransactions(executedTransactions ?? filteredTransactions);
         setDisplayedTransactions(newDisplayedTransactions);
         gridRef.current.api?.setGridOption('rowData', newDisplayedTransactions);
-    }, [props.transactionData, ruleTests, ruleOpType, setRuleOp, splitRuleOp, showExecutedTransactions, executesOnce, locksTransaction]);
+    }, [props.transactionData, formData]);
 
     return <div className="addView ruleAddView" hidden={!props.showModifyRules}>
         <div className="addViewMain">
             <p className="ruleViewCheckText">If all of the following conditions match:</p>
             <ModifyRuleCheck
                 categoryData={props.categoryData}
-                ruleTests={ruleTests}
-                setRuleTests={setRuleTests}
+                ruleTests={formData.ruleTests}
+                setRuleTests={(ruleTests: RuleTest[]) => setFormData({...formData, ruleTests: ruleTests})}
                 sourceData={props.sourceData}
                 heightPercent={16}/>
             <p className="ruleViewOpText">Then perform the following actions:</p>
             <ModifyRuleOp
                 categoryData={props.categoryData}
-                ruleOpType={ruleOpType}
-                setRuleOpType={setRuleOpType}
-                setRuleOp={setRuleOp}
-                setSetRuleOp={setSetRuleOp}
-                splitRuleOp={splitRuleOp}
-                setSplitRuleOp={setSplitRuleOp}
+                ruleOpType={formData.ruleOpType}
+                setRuleOpType={(ruleOpType: RuleOpType) => setFormData({...formData, ruleOpType: ruleOpType})}
+                setRuleOp={formData.setRuleOp}
+                setSetRuleOp={(setRuleOp: SetRuleOp) => setFormData({...formData, setRuleOp: setRuleOp})}
+                splitRuleOp={formData.splitRuleOp}
+                setSplitRuleOp={(splitRuleOp: SplitRuleOp) => setFormData({...formData, splitRuleOp: splitRuleOp})}
                 showRuleOpSelector={true}
                 heightPercent={16}
                 hiddenFields={[Field.Source]}/>
@@ -174,8 +202,8 @@ export function ModifyRulesView(props: {
                 <input
                     className="inputCheckbox"
                     type="checkbox"
-                    checked={executesOnce}
-                    onChange={() => setExecutesOnce(!executesOnce)}/>
+                    checked={formData.executesOnce}
+                    onChange={() => setFormData({...formData, executesOnce: !formData.executesOnce})}/>
                 <p className="tooltip">
                     ⛓️‍💥
                     <p className="tooltipText">Rule will stop execution after affecting one transaction</p>
@@ -183,8 +211,8 @@ export function ModifyRulesView(props: {
                 <input
                     className="inputCheckbox"
                     type="checkbox"
-                    checked={locksTransaction}
-                    onChange={() => setLocksTransaction(!locksTransaction)}/>
+                    checked={formData.locksTransaction}
+                    onChange={() => setFormData({...formData, locksTransaction: !formData.locksTransaction})}/>
                 <p className="tooltip">
                     🔒
                     <p className="tooltipText">Transactions affected by this rule cannot be affected by other rules</p>

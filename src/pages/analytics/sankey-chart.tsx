@@ -26,7 +26,6 @@ export function SankeyChart(props: {
         return <></>;
     }
 
-    // const sortedCategoryAmountMap = [...categoryAmountMap.entries()].sort();
     const transactionNodeNames: any[] = [{name: 'Transactions', depth: 0}];
     const links: any[] = [];
     for (let [categoryId, dateMap] of displayedCategoriesMap) {

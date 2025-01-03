@@ -81,5 +81,6 @@ export function LineChart(props: {
         },
         series: series,
     }
+
     return <ReactECharts option={options} style={{width: '100%', height: '100%'}} notMerge={true}/>;
 }
