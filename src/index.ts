@@ -1,5 +1,5 @@
 import { app, BrowserWindow, ipcMain, dialog } from 'electron';
-import { Dirent, readdirSync, readFileSync } from 'original-fs';
+import { Dirent, existsSync, readdirSync, readFileSync, writeFileSync } from 'original-fs';
 import { Transaction } from './classes/transaction';
 import { parse } from 'csv-parse/sync';
 import { Source } from './classes/source';
@@ -43,6 +43,21 @@ async function handleOpenSelectDirDialog(): Promise<string> {
         ]
     })
     return filePaths != null && filePaths.length > 0 ? filePaths[0] : null;
+}
+
+async function handleReadUserData(filePath: string): Promise<string> {
+    const userDataDir = app.getPath('userData');
+    const qualifiedFilePath = `${userDataDir}\\${filePath}`;
+    if (existsSync(qualifiedFilePath)) {
+        return readFileSync(qualifiedFilePath, 'utf-8');
+    }
+    return '';
+}
+
+async function handleWriteUserData(filePath: string, data: string) {
+    const userDataDir = app.getPath('userData');
+    const qualifiedFilePath = `${userDataDir}\\${filePath}`;
+    writeFileSync(qualifiedFilePath, data);
 }
 
 async function handleReadDataFromDir(
@@ -95,13 +110,11 @@ function handleReadDataFromSources(sources: Source[]): Transaction[] {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
     const mainWindow: BrowserWindow = createWindow();
+    ipcMain.handle('openSelectDirDialog', handleOpenSelectDirDialog);
     ipcMain.handle('readDataFromDir', (_event, dirPath: string, readSingleFile: boolean, hasHeader: boolean) => handleReadDataFromDir(dirPath, readSingleFile, hasHeader));
     ipcMain.handle('readDataFromSources', (_event, sources: Source[]) => handleReadDataFromSources(sources));
-    ipcMain.handle('openSelectDirDialog', handleOpenSelectDirDialog)
-    // ipcMain.handle('handleOpenDialogReadCsvs', handleOpenDialogReadCsvs);
-    // ipcMain.handle('dialog:openDialogSelectDir', handleOpenDialogSelectDir);
-    // ipcMain.handle('fs:readFile', (_event, path: string) => handleReadFile(path));
-    // ipcMain.handle('fs:readDir', (_event, path: string) => handleReadDir(path));
+    ipcMain.handle('readUserData', (_event, filePath: string) => handleReadUserData(filePath));
+    ipcMain.handle('writeUserData', (_event, filePath: string, data: string) => handleWriteUserData(filePath, data));
 });
 
 // Quit when all windows are closed, except on macOS. There, it's common

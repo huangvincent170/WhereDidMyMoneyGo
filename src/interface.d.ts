@@ -3,16 +3,14 @@ import { Transaction } from "./classes/transaction";
 import { Source } from "./classes/source";
 
 export interface IElectronAPI {
-    // openDialogSelectDir: () => Promise<string>,
-    // readFile: (path: string) => Promise<string>,
-    // readDir: (path: string) => Promise<Dirent[]>,
-    // handleOpenDialogReadCsvs: () => Promise<Transaction[]>
+    onAppLoaded: (callback: Function) => void,
+    openSelectDirDialog: () => Promise<string>,
     readDataFromDir: (dirPath: string, readSingleFile: boolean, hasHeader: boolean,) => Promise<string[][]>,
     readDataFromSources: (sourceData: Source[]) => Promise<Transaction[]>,
-    openSelectDirDialog: () => Promise<string>,
-    onAppLoaded: (callback: Function) => void,
+    readUserData: (filePath: string) => Promise<string>,
+    writeUserData: (filePath: string, data: string) => void,
 }
-  
+
 declare global {
     interface Window {
         electronAPI: IElectronAPI

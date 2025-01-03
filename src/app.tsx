@@ -9,7 +9,6 @@ import { SidebarNav } from "./components/sidebar-nav";
 import { RulesView } from './pages/rules/rules-view';
 import { CategoriesView } from './pages/categories/categories-view';
 import { AnalyticsView } from './pages/analytics/analytics-view';
-import localStorage = require('local-storage');
 import { Rule } from './classes/rule';
 
 function App() {
@@ -18,19 +17,19 @@ function App() {
     const [sourceData, setSourceData] = useState<Source[]>(null);
     const [transactionsData, setTransactionsData] = useState<Transaction[]>(null);
 
-    function setAndStoreCategoryData(categoryData: string[]) {
+    async function setAndStoreCategoryData(categoryData: string[]) {
         setCategoryData(categoryData);
-        localStorage.set('category-data', JSON.stringify(categoryData));
+        await window.electronAPI.writeUserData('category-data', JSON.stringify(categoryData));
     }
 
-    function setAndStoreRulesData(rulesData: Rule[]) {
+    async function setAndStoreRulesData(rulesData: Rule[]) {
         setRulesData(rulesData);
-        localStorage.set('rules-data', JSON.stringify(rulesData));
+        await window.electronAPI.writeUserData('rules-data', JSON.stringify(rulesData));
     }
 
-    function setAndStoreSourceData(sourceData: Source[]) {
+    async function setAndStoreSourceData(sourceData: Source[]) {
         setSourceData(sourceData);
-        localStorage.set('source-data', JSON.stringify(sourceData));
+        await window.electronAPI.writeUserData('source-data', JSON.stringify(sourceData));
     }
 
     async function refreshTransactionData(sourceData: Source[], rulesData: Rule[]) {
@@ -42,22 +41,21 @@ function App() {
 
     useEffect(() => {
         async function getDataAndRefreshAsync() {
-            // localStorage.clear();
-            const storedCategoryData: string[] = JSON.parse(localStorage.get('category-data'));
+            const storedCategoryData: string[] = JSON.parse(await window.electronAPI.readUserData('category-data'));
             if (storedCategoryData != null) {
                 setCategoryData(storedCategoryData);
             } else {
                 setAndStoreCategoryData([]);
             }
 
-            const storedSourceData: Source[] = JSON.parse(localStorage.get('source-data'));
+            const storedSourceData: Source[] = JSON.parse(await window.electronAPI.readUserData('source-data'));
             if (storedSourceData != null) {
                 setSourceData(storedSourceData);
             } else {
                 setAndStoreSourceData([]);
             }
 
-            const storedRulesData: Rule[] = JSON.parse(localStorage.get('rules-data'));
+            const storedRulesData: Rule[] = JSON.parse(await window.electronAPI.readUserData('rules-data'));
             if (storedRulesData != null) {
                 setRulesData(storedRulesData);
             } else {
@@ -65,7 +63,6 @@ function App() {
             }
 
             await refreshTransactionData(storedSourceData, storedRulesData);
-            // calculateGraphData(transactionsData, categoryData)
         };
 
         window.electronAPI.onAppLoaded(async () => {
