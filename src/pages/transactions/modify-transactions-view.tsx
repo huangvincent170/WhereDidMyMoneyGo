@@ -75,7 +75,19 @@ export function ModifyTransactionsView(props: {
                     type="checkbox"
                     checked={true}
                     disabled={true}/>
-                <span style={{color: 'grey'}}>Rule executes once</span>
+                <p className="tooltip">
+                    ⛓️‍💥
+                    <p className="tooltipText">Rule will stop execution after affecting one transaction</p>
+                </p>
+                <input
+                    className="inputCheckbox"
+                    type="checkbox"
+                    checked={true}
+                    disabled={true}/>
+                <p className="tooltip">
+                    🔒
+                    <p className="tooltipText">Transactions affected by this rule cannot be affected by other rules</p>
+                </p>
             </div>
             <div className="addViewFooterRight">
                 <button onClick={handleSubmit}>Save Changes</button>

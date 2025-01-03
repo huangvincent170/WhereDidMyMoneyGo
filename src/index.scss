@@ -75,6 +75,28 @@ input:focus {
     opacity: 0.2;
 }
 
+.tooltip {
+    .tooltiptext {
+        display: none;
+        // width: 120px;
+        background-color: rgba(30, 32, 34, 0.87);
+        color: #fff;
+        text-align: center;
+        padding: 5px;
+        border-radius: 5px;
+
+        /* Position the tooltip text - see examples below! */
+        position: absolute;
+        z-index: 1;
+    }
+}
+
+.tooltip:hover {
+    .tooltiptext {
+        display: block;
+    }
+}
+
 ::-webkit-scrollbar {
     width: 10px;
 }
@@ -495,18 +517,6 @@ select {
         height: 25px;
     }
 }
-
-.tooltip {
-    background-color: rgba(175, 175, 175, 0.4);
-    border-radius: 5px;
-    padding: 5px;
-
-    p {
-        font-size: small;
-        color: $textColor;
-    }
-}
-
 
 .navMenu {
     background-color: $backgroundColor3;

@@ -7,9 +7,8 @@
 
 - Transactions
     - ⚠️ Edit/split forms not cleared on submit/close
-    - ⚠️ Show locksTransaction on editpage
-    - 👍 Options to show/hide columns in dropdown
     - 👍 Error handling for reading transactions from source to check type of Dates/Numbers/strings/etc
+    - ❔ Options to show/hide columns in dropdown
     - ❔ Option to see deleted/split transactions
     - ❔ Option to hide uncategorized transactions
     - ❔ Move displayedtransactions into classes
@@ -24,12 +23,10 @@
     - ❔ Edit category names
 
 - Rules
-    - ⚠️ Rule form not cleared on close (keep form data on submit)
-    - ⚠️ warnings for if rule affects removed source/category
+    - ⚠️ Rule form should cleare on close (but keep form data on submit)
+    - ⚠️ warnings for if rule affects removed source/category, should not crash program
     - ⚠️ setRuleOp fieldValues inputs do not take up whole width
-    - 👍 Dropdown menu to set checks to affect only a singular transaction from selected
-    - 👍 Editing Rule
-    - 👍 transactions after rule has been executed preview window
+    - ⚠️ Editing Rule
     - 👍 no duplicate rules
     - 👍 Rules which only execute once executed first (after preprocess)
     - 👍 fields on add rule incorrect length
@@ -49,10 +46,10 @@
         - Types
             - 👍 bar graph split
             - 👍 pie graph
-    - ⚠️ Color coding for categories
     - ⚠️ Fix yearly displaying month
     - ⚠️ lifetime should not display x axis tick for time
     - ⚠️ Bar chart overflows y axis
+    - ⚠️ Color coding for categories
     - ⚠️ Table totals for each month/category
     - 👍 short text month displayed on charts
     - ❔ Better way to display categories

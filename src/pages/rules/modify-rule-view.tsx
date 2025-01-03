@@ -176,13 +176,19 @@ export function ModifyRulesView(props: {
                     type="checkbox"
                     checked={executesOnce}
                     onChange={() => setExecutesOnce(!executesOnce)}/>
-                <p>Rule executes once</p>
+                <p className="tooltip">
+                    ⛓️‍💥
+                    <p className="tooltipText">Rule will stop execution after affecting one transaction</p>
+                </p>
                 <input
                     className="inputCheckbox"
                     type="checkbox"
                     checked={locksTransaction}
                     onChange={() => setLocksTransaction(!locksTransaction)}/>
-                <p>Rule locks transaction</p>
+                <p className="tooltip">
+                    🔒
+                    <p className="tooltipText">Transactions affected by this rule cannot be affected by other rules</p>
+                </p>
             </div>
             <div className="addViewFooterRight">
                 <button onClick={handleSubmit}>Save Changes</button>

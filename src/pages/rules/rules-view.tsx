@@ -102,7 +102,7 @@ export function RulesView(props: {
             filter: true,
         },
         {
-            headerName: "⏸️",
+            headerName: "⛓️‍💥",
             field: "executesOnce",
             width: 60,
             filter: true,
